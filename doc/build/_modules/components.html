@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>components &mdash; ChaosProjectile 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="top" title="ChaosProjectile 0.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">ChaosProjectile 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for components</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: components</span>
+<span class="sd">    :platform: Unix, Windows</span>
+<span class="sd">    :synopsis: All game component used.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c">#from enum import Enum</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd"># Enumarations: http://legacy.python.org/dev/peps/pep-0435/</span>
+<span class="sd">class Types(Enum):</span>
+<span class="sd">    position = 1</span>
+<span class="sd">    appearance = 2</span>
+<span class="sd">    collider = 3</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">def enum(*sequential, **named):</span>
+<span class="sd">    enums = dict(zip(sequential, range(len(sequential))), **named)</span>
+<span class="sd">    return type(&#39;Enum&#39;, (), enums)</span>
+
+<span class="sd">Types = enum(&#39;position&#39;, &#39;appearance&#39;, &#39;collider&#39;, &#39;velocity&#39;)</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Collider"><a class="viewcode-back" href="../components.html#components.Collider">[docs]</a><span class="k">class</span> <span class="nc">Collider</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Collider class is equal a hitbox of an entity, also stores position of entity.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="c">#pygame.Rect.__init__(self, x-width/2, y-height/2, width, height)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Velocity"><a class="viewcode-back" href="../components.html#components.Velocity">[docs]</a><span class="k">class</span> <span class="nc">Velocity</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Velocity of an entity is a simple list with two components.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</div>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">class Health():</span>
+<span class="sd">    def __init__(self, hp):</span>
+<span class="sd">        self.hitpoints = hp</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Appearance"><a class="viewcode-back" href="../components.html#components.Appearance">[docs]</a><span class="k">class</span> <span class="nc">Appearance</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Sprite</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Appearance class contains all images and animations of an entity, black is assumed to be transparent color.</span>
+<span class="sd">    Extends pygame.sprite.Sprite.</span>
+<span class="sd">    </span>
+<span class="sd">    :Attributes:</span>
+<span class="sd">        - *flip* (boolean): all images faced right, should this be flipped</span>
+<span class="sd">        - *angle* (float): rotation angle of an image</span>
+<span class="sd">        - *frames* (int list): for each animation of an entity stores amount of frames</span>
+<span class="sd">        - *delay_between_frames* (int list): for each animation of an entity stores delay between frames in 1/60 seconds</span>
+<span class="sd">        - *time* (int list): for each animation of an entity stores animation duration in 1/60 seonds</span>
+<span class="sd">        - *current_frame_x* (int): current frame</span>
+<span class="sd">        - *current_animation* (int): number of current animation</span>
+<span class="sd">        - *counter* (int):counter of CPU ticks expired</span>
+<span class="sd">        - *image_frames* (dictionary animation : number): all frames of all animations</span>
+<span class="sd">        - *original* (pygame.Surface): stores original image of current frame without rotation or flip applied</span>
+<span class="sd">        - *rect* (pygame.Rect): reference of current image rectangle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sprite_sheet</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">animations</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param sprite_sheet: sprite sheet</span>
+<span class="sd">        :type sprite_sheet: pygame.Surface</span>
+<span class="sd">        :param width: width of one single sprite or frame in pixel</span>
+<span class="sd">        :type width: int</span>
+<span class="sd">        :param height: height of one single sprite or frame in pixel</span>
+<span class="sd">        :type height: int</span>
+<span class="sd">        :param animations: contains amount of frames of each animation</span>
+<span class="sd">        :type animations: int list</span>
+<span class="sd">        :param time: contains duration of each animation in 1/60 seconds</span>
+<span class="sd">        :type time: int list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">Sprite</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">flip</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c">#If there is no animation and the resolution is not set </span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">width</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="n">sprite_sheet</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">height</span><span class="p">:</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="n">sprite_sheet</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delay_between_frames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">=</span> <span class="n">animations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
+        
+        <span class="c">#Compute delay between frames for each animation</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delay_between_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="n">f</span><span class="p">]))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_frame_x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_animation</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_frames</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c">#Initialize single sprites from the sprite sheet</span>
+        <span class="k">for</span> <span class="n">animation_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">animations</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">image_frames</span><span class="p">[</span><span class="n">animation_number</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">animations</span><span class="p">[</span><span class="n">animation_number</span><span class="p">]):</span>
+                <span class="c">#Create a new blank image for the sprite</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">([</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">])</span><span class="o">.</span><span class="n">convert</span><span class="p">()</span>
+                <span class="c">#Copy the sprite from the sprite sheet</span>
+                <span class="n">image</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">sprite_sheet</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">frame</span><span class="o">*</span><span class="n">width</span><span class="p">,</span>
+                                                  <span class="n">animation_number</span><span class="o">*</span><span class="n">height</span><span class="p">,</span>
+                                                  <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">image_frames</span><span class="p">[</span><span class="n">animation_number</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+                <span class="c">#Assuming black works as the transparent color</span>
+                <span class="n">image</span><span class="o">.</span><span class="n">set_colorkey</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+        <span class="c">#Set the image the entity starts with, here idle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_frames</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_frames</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c">#Set a reference to the image rectangle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Appearance.set_image"><a class="viewcode-back" href="../components.html#components.Appearance.set_image">[docs]</a>    <span class="k">def</span> <span class="nf">set_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets new image from the sprite sheet.</span>
+<span class="sd">        </span>
+<span class="sd">        :param x: frame of an animation</span>
+<span class="sd">        :type x: int</span>
+<span class="sd">        :param y: animation number</span>
+<span class="sd">        :type y: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">y</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_animation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_frames</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span>
+        <span class="c">#Transform if necessary</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original</span><span class="p">,</span>
+                                                 <span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">flip</span><span class="p">,</span>
+                                               <span class="bp">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">flip</span><span class="p">,</span>
+                                               <span class="bp">False</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Player"><a class="viewcode-back" href="../components.html#components.Player">[docs]</a><span class="k">class</span> <span class="nc">Player</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Marks an entity as a player character.</span>
+<span class="sd">    </span>
+<span class="sd">    :Attributes:</span>
+<span class="sd">        - *name* (string): name of the character</span>
+<span class="sd">        - *orb_ID* (int): reference to the orb entity, that belongs this player</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">orb_ID</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param name: name of the character</span>
+<span class="sd">        :type name: string</span>
+<span class="sd">        :param orb_ID: reference to the orb entity, that belongs this player</span>
+<span class="sd">        :type orb_ID: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orb_ID</span> <span class="o">=</span> <span class="n">orb_ID</span>
+</div>
+<div class="viewcode-block" id="Direction"><a class="viewcode-back" href="../components.html#components.Direction">[docs]</a><span class="k">class</span> <span class="nc">Direction</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Direction of an entity is a simple list with two components.</span>
+<span class="sd">    </span>
+<span class="sd">    For an character entity it is its view direction and for an orb -- its aim direction.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="State"><a class="viewcode-back" href="../components.html#components.State">[docs]</a><span class="k">class</span> <span class="nc">State</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Various states of an entity.</span>
+<span class="sd">    Necessary for AI or for animation system to show appropriate animation.</span>
+<span class="sd">    </span>
+<span class="sd">    :Attributes:</span>
+<span class="sd">        - *grounded* (boolean): true if entity stays on the ground</span>
+<span class="sd">        - *walking* (boolean): true if entity is moving horizontally</span>
+<span class="sd">        - *jumping* (boolean): true if entity is jumping or is on the air</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grounded</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walking</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jumping</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="c">#self.aim_direction = 0</span>
+        
+        <span class="c">#self.walk_left = False</span>
+        <span class="c">#self.walk_right = False</span>
+        </div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">ChaosProjectile 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Anna Dorokhova.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

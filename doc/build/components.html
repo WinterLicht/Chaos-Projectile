@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>components &mdash; ChaosProjectile 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="top" title="ChaosProjectile 0.0.1 documentation" href="index.html" />
+    <link rel="next" title="gameWorld" href="gameWorld.html" />
+    <link rel="prev" title="events" href="events.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gameWorld.html" title="gameWorld"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="events.html" title="events"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">ChaosProjectile 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-components">
+<span id="components"></span><h1><a class="reference internal" href="#module-components" title="components: All game component used. (Unix, Windows)"><tt class="xref py py-mod docutils literal"><span class="pre">components</span></tt></a><a class="headerlink" href="#module-components" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-components"></span><dl class="class">
+<dt id="components.Appearance">
+<em class="property">class </em><tt class="descclassname">components.</tt><tt class="descname">Appearance</tt><big>(</big><em>sprite_sheet, width=None, height=None, animations=[1], time=[0]</em><big>)</big><a class="reference internal" href="_modules/components.html#Appearance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.Appearance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appearance class contains all images and animations of an entity, black is assumed to be transparent color.
+Extends pygame.sprite.Sprite.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><ul class="first last simple">
+<li><em>flip</em> (boolean): all images faced right, should this be flipped</li>
+<li><em>angle</em> (float): rotation angle of an image</li>
+<li><em>frames</em> (int list): for each animation of an entity stores amount of frames</li>
+<li><em>delay_between_frames</em> (int list): for each animation of an entity stores delay between frames in 1/60 seconds</li>
+<li><em>time</em> (int list): for each animation of an entity stores animation duration in 1/60 seonds</li>
+<li><em>current_frame_x</em> (int): current frame</li>
+<li><em>current_animation</em> (int): number of current animation</li>
+<li><em>counter</em> (int):counter of CPU ticks expired</li>
+<li><em>image_frames</em> (dictionary animation : number): all frames of all animations</li>
+<li><em>original</em> (pygame.Surface): stores original image of current frame without rotation or flip applied</li>
+<li><em>rect</em> (pygame.Rect): reference of current image rectangle</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="components.Appearance.set_image">
+<tt class="descname">set_image</tt><big>(</big><em>x</em>, <em>y=None</em><big>)</big><a class="reference internal" href="_modules/components.html#Appearance.set_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.Appearance.set_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets new image from the sprite sheet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>int</em>) &#8211; frame of an animation</li>
+<li><strong>y</strong> (<em>int</em>) &#8211; animation number</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="components.Collider">
+<em class="property">class </em><tt class="descclassname">components.</tt><tt class="descname">Collider</tt><big>(</big><em>x</em>, <em>y</em>, <em>width</em>, <em>height</em><big>)</big><a class="reference internal" href="_modules/components.html#Collider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.Collider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collider class is equal a hitbox of an entity, also stores position of entity.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="components.Direction">
+<em class="property">class </em><tt class="descclassname">components.</tt><tt class="descname">Direction</tt><a class="reference internal" href="_modules/components.html#Direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.Direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Direction of an entity is a simple list with two components.</p>
+<p>For an character entity it is its view direction and for an orb &#8211; its aim direction.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="components.Player">
+<em class="property">class </em><tt class="descclassname">components.</tt><tt class="descname">Player</tt><big>(</big><em>name</em>, <em>orb_ID</em><big>)</big><a class="reference internal" href="_modules/components.html#Player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.Player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks an entity as a player character.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><ul class="first last simple">
+<li><em>name</em> (string): name of the character</li>
+<li><em>orb_ID</em> (int): reference to the orb entity, that belongs this player</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="components.State">
+<em class="property">class </em><tt class="descclassname">components.</tt><tt class="descname">State</tt><a class="reference internal" href="_modules/components.html#State"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.State" title="Permalink to this definition">¶</a></dt>
+<dd><p>Various states of an entity.
+Necessary for AI or for animation system to show appropriate animation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><ul class="first last simple">
+<li><em>grounded</em> (boolean): true if entity stays on the ground</li>
+<li><em>walking</em> (boolean): true if entity is moving horizontally</li>
+<li><em>jumping</em> (boolean): true if entity is jumping or is on the air</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="components.Velocity">
+<em class="property">class </em><tt class="descclassname">components.</tt><tt class="descname">Velocity</tt><a class="reference internal" href="_modules/components.html#Velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.Velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Velocity of an entity is a simple list with two components.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="events.html"
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">events</span></tt></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gameWorld.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">gameWorld</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/components.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gameWorld.html" title="gameWorld"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="events.html" title="events"
+             >previous</a> |</li>
+        <li><a href="index.html">ChaosProjectile 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Anna Dorokhova.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

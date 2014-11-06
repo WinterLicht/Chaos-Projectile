@@ -1,0 +1,7 @@
+.. _chaosprojectile_credits:
+    
+=========
+ Credits
+=========
+
+grafics in data directory by Anna Dorokhova

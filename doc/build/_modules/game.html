@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>game &mdash; ChaosProjectile 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="top" title="ChaosProjectile 0.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">ChaosProjectile 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for game</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: game</span>
+<span class="sd">    :platform: Unix, Windows</span>
+<span class="sd">    :synopsis: The main game module contains CPUSpiner to control CPU-ticks and the main game loop.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">import</span> <span class="nn">events</span>
+<span class="kn">import</span> <span class="nn">gameWorld</span>
+<span class="kn">import</span> <span class="nn">systemManager</span>
+<span class="kn">import</span> <span class="nn">controller</span>
+
+
+<div class="viewcode-block" id="CPUSpinner"><a class="viewcode-back" href="../game.html#game.CPUSpinner">[docs]</a><span class="k">class</span> <span class="nc">CPUSpinner</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Handles CPU Ticks. Every 1/60 second a Tick Event will be sent.</span>
+
+<span class="sd">    :Attributes:</span>
+<span class="sd">        - *event_manager*: event manager</span>
+<span class="sd">        - *keep_going*: used to stop the CPUSpinner.</span>
+<span class="sd">        - *clock*: timer</span>
+<span class="sd">        - *fps*: frames per second</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_manager</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param event_manager: event manager</span>
+<span class="sd">        :type event_manager: events.EventManager</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_manager</span> <span class="o">=</span> <span class="n">event_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_manager</span><span class="o">.</span><span class="n">register_listener</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_going</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fps</span> <span class="o">=</span> <span class="mi">60</span>  <span class="c"># in milliseconds</span>
+
+<div class="viewcode-block" id="CPUSpinner.run"><a class="viewcode-back" href="../game.html#game.CPUSpinner.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run CPUSpinner and send tick events.&quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_going</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fps</span><span class="p">)</span>
+            <span class="sd">&#39;&#39;&#39; ??? dt = self.clock.tick(60) / 1000. &#39;&#39;&#39;</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">TickEvent</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">event_manager</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="CPUSpinner.notify"><a class="viewcode-back" href="../game.html#game.CPUSpinner.notify">[docs]</a>    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Notify, when event occurs and stop CPUSpinner when it&#39;s quit event.</span>
+<span class="sd">        </span>
+<span class="sd">        :param event: occurred event</span>
+<span class="sd">        :type event: events.Event</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">QuitEvent</span><span class="p">):</span>
+            <span class="c">#This will stop the while loop of run() method from running</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keep_going</span> <span class="o">=</span> <span class="bp">False</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Main program loop.&quot;&quot;&quot;</span>
+    <span class="c">#Initialize PyGame and create an game window </span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s">&#39;Chaos Projectile&#39;</span><span class="p">)</span>
+    <span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">RESIZABLE</span><span class="p">)</span>
+
+    <span class="c">#Create event manager</span>
+    <span class="n">evManager</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">EventManager</span><span class="p">()</span>
+    
+    <span class="c">#Create game world</span>
+    <span class="n">game</span> <span class="o">=</span> <span class="n">gameWorld</span><span class="o">.</span><span class="n">GameWorld</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+    <span class="n">systemMngr</span> <span class="o">=</span> <span class="n">systemManager</span><span class="o">.</span><span class="n">SystemManager</span><span class="p">(</span><span class="n">evManager</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+    
+    <span class="c">#Create input controller</span>
+    <span class="n">input_control</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">InputController</span><span class="p">(</span><span class="n">evManager</span><span class="p">)</span>
+    
+    <span class="c">#CPU Tick Event</span>
+    <span class="n">spinner</span> <span class="o">=</span> <span class="n">CPUSpinner</span><span class="p">(</span><span class="n">evManager</span><span class="p">)</span>
+    <span class="n">spinner</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">ChaosProjectile 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Anna Dorokhova.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

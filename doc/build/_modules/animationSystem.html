@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>animationSystem &mdash; ChaosProjectile 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="top" title="ChaosProjectile 0.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">ChaosProjectile 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for animationSystem</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: animationSystem</span>
+<span class="sd">    :platform: Unix, Windows</span>
+<span class="sd">    :synopsis: Computes which frame of animation should be displayed.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">events</span>
+
+<div class="viewcode-block" id="AnimationSystem"><a class="viewcode-back" href="../animationSystem.html#animationSystem.AnimationSystem">[docs]</a><span class="k">class</span> <span class="nc">AnimationSystem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes which frame of animation should be displayed.</span>
+<span class="sd">    </span>
+<span class="sd">    :Attributes:</span>
+<span class="sd">        - *evManager*: event manager </span>
+<span class="sd">        - *world*: game world</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_manager</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param event_manager: event manager</span>
+<span class="sd">        :type event_manager: events.EventManager</span>
+<span class="sd">        :param world: game world</span>
+<span class="sd">        :type world: gameWorld.GameWorld</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">world</span> <span class="o">=</span> <span class="n">world</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_manager</span> <span class="o">=</span> <span class="n">event_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_manager</span><span class="o">.</span><span class="n">register_listener</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AnimationSystem.notify"><a class="viewcode-back" href="../animationSystem.html#animationSystem.AnimationSystem.notify">[docs]</a>    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Notify, when event occurs. </span>
+<span class="sd">        </span>
+<span class="sd">        :param event: occured event</span>
+<span class="sd">        :type event: events.Event</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">TickEvent</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_animations</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">PlayerMoved</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle_player_moved_event</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">PlayerStoppedMovement</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle_player_stopped_movement_event</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">UpdateImagePosition</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_image_position</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">entity_ID</span><span class="p">,</span>
+                                       <span class="n">event</span><span class="o">.</span><span class="n">new_position</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AnimationSystem.run_animations"><a class="viewcode-back" href="../animationSystem.html#animationSystem.AnimationSystem.run_animations">[docs]</a>    <span class="k">def</span> <span class="nf">run_animations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes which animation frame should be displayed.</span>
+<span class="sd">        Every CPU tick checks if new frame should be displayed. Therefore there is a counter for each animation that measures time. When time equal delay between frames passed, next frame will be displayed.</span>
+<span class="sd">        </span>
+<span class="sd">        :param dt: time passed</span>
+<span class="sd">        :type dt: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">animation</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="o">.</span><span class="n">itervalues</span><span class="p">():</span>
+            <span class="c">#For every animation</span>
+            <span class="k">if</span> <span class="n">animation</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="n">animation</span><span class="o">.</span><span class="n">current_animation</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">animation</span><span class="o">.</span><span class="n">counter</span> <span class="o">%</span> <span class="n">animation</span><span class="o">.</span><span class="n">delay_between_frames</span><span class="p">[</span><span class="n">animation</span><span class="o">.</span><span class="n">current_animation</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c">#Time equal delay between frames passed, so next frame</span>
+                    <span class="k">if</span> <span class="n">animation</span><span class="o">.</span><span class="n">current_frame_x</span> <span class="o">&lt;</span> <span class="n">animation</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="n">animation</span><span class="o">.</span><span class="n">current_animation</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">animation</span><span class="o">.</span><span class="n">current_frame_x</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">current_frame_x</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c">#Animation ended, begin from 0</span>
+                        <span class="n">animation</span><span class="o">.</span><span class="n">current_frame_x</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">animation</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">animation</span><span class="o">.</span><span class="n">set_image</span><span class="p">(</span><span class="n">animation</span><span class="o">.</span><span class="n">current_frame_x</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">animation</span><span class="o">.</span><span class="n">set_image</span><span class="p">(</span><span class="n">animation</span><span class="o">.</span><span class="n">current_frame_x</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AnimationSystem.handle_player_stopped_movement_event"><a class="viewcode-back" href="../animationSystem.html#animationSystem.AnimationSystem.handle_player_stopped_movement_event">[docs]</a>    <span class="k">def</span> <span class="nf">handle_player_stopped_movement_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;When player doesn&#39;t move or attack, then show his idle animation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">player</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">player</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c">#Flip sprite:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">flip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">player</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>
+        <span class="n">current_animation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">current_animation</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">grounded</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">current_animation</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c">#Idle animation is 0</span>
+                <span class="c">#Reset to idle, if it&#39;s not already played</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">current_animation</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">current_frame_x</span> <span class="o">=</span> <span class="mi">0</span>
+</div>
+<div class="viewcode-block" id="AnimationSystem.handle_player_moved_event"><a class="viewcode-back" href="../animationSystem.html#animationSystem.AnimationSystem.handle_player_moved_event">[docs]</a>    <span class="k">def</span> <span class="nf">handle_player_moved_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;When player moves and doesn&#39;t attack, show walk or jump animation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">player</span>
+        <span class="n">current_animation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">current_animation</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">player</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c">#Flip sprite:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">flip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">player</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">grounded</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">current_animation</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c">#Walk animation is 1</span>
+            <span class="c">#Reset to this when player moves, is grounded</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">current_animation</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">current_frame_x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">grounded</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">current_animation</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c">#Jump animation is 2</span>
+            <span class="c">#Reset to this when player isn&#39;t grounded</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">current_animation</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">current_frame_x</span> <span class="o">=</span> <span class="mi">0</span>
+</div>
+<div class="viewcode-block" id="AnimationSystem.update_image_position"><a class="viewcode-back" href="../animationSystem.html#animationSystem.AnimationSystem.update_image_position">[docs]</a>    <span class="k">def</span> <span class="nf">update_image_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_ID</span><span class="p">,</span> <span class="n">new_position</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update image position, when corresponding entity moved.</span>
+<span class="sd">        </span>
+<span class="sd">        :param entity_ID: entity</span>
+<span class="sd">        :type entity_ID: int</span>
+<span class="sd">        :param new_position: new position of the entity</span>
+<span class="sd">        :type new_position: int tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">entity_ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">entity_ID</span><span class="p">]</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">new_position</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">ChaosProjectile 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Anna Dorokhova.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
