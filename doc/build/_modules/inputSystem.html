@@ -92,6 +92,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">handle_hat_moved</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">AxisMoved</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">handle_joystick</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y_axis</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">MouseButtonDown</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle_mousebutton_down</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="InputSystem.handle_hat_moved"><a class="viewcode-back" href="../inputSystem.html#inputSystem.InputSystem.handle_hat_moved">[docs]</a>    <span class="k">def</span> <span class="nf">handle_hat_moved</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Hat controlls player movement.</span>
@@ -162,6 +164,17 @@
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_d</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">player</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 </div>
+    <span class="k">def</span> <span class="nf">handle_mousebutton_down</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">player_ID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">player</span>
+        <span class="n">orb_ID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">charakters</span><span class="p">[</span><span class="n">player_ID</span><span class="p">]</span><span class="o">.</span><span class="n">orb_ID</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">orb_ID</span><span class="p">]</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">life</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">velocity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">acceleration</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">create_particle_emitter</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">life</span><span class="p">,</span>
+                                           <span class="n">velocity</span><span class="p">,</span> <span class="n">acceleration</span><span class="p">)</span>
+
 <div class="viewcode-block" id="InputSystem.handle_mouse_move"><a class="viewcode-back" href="../inputSystem.html#inputSystem.InputSystem.handle_mouse_move">[docs]</a>    <span class="k">def</span> <span class="nf">handle_mouse_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mouse_x</span><span class="p">,</span> <span class="n">mouse_y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Position of the mouse cursor controlls aim and attack direction.</span>
 <span class="sd">        </span>

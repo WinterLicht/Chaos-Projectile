@@ -41,8 +41,8 @@ class RenderSystem(object):
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer,
                                             default_layer=2)
         #Add other sprites
-        for image in self.world.appearance:
-            self.group.add(self.world.appearance[image])
+        #for image in self.world.appearance:
+        #    self.group.add(self.world.appearance[image])
 
     def notify(self, event):
         """Notify, when event occurs and stop CPUSpinner when it's quit event. 
@@ -55,12 +55,22 @@ class RenderSystem(object):
         if isinstance(event, events.ResizeWindowEvent):
             self.resize(event.width, event.height)
 
+    def update(self):
+        """Updates group, so new entities can be added and dead removed.
+        
+        Every update the default layer,where all game entities will be drawn, should be cleaned and reassigned.
+        """
+        self.group.remove_sprites_of_layer(2)
+        for image in self.world.appearance:
+            self.group.add(self.world.appearance[image])
+
     def draw(self, dt):
         """Draw everything on the screen.
         
         :param dt: CPU tick
         :type dt: int
         """
+        self.update()
         self.group.update(dt)
         #Center the map/screen on the single player
         self.group.center(self.world.collider[self.world.player].center)

@@ -41,8 +41,7 @@ class CollisionSystem(object):
             self.compute()
 
     def compute(self):
-        """Moves object, checks collision, sends events for collision handling and updates image position of moved objects.
-        """
+        """Moves object, checks collision, sends events for collision handling and updates image position of moved objects."""
         #List of moving objects
         collider_IDs = list()
         #List of objects with which collision can occur

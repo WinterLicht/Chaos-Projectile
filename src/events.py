@@ -90,6 +90,12 @@ class KeyReleased(Event):
         self.name = "Key Released Event"
         self.key = key
 
+class MouseButtonDown(Event):
+    """Mouse button down event."""
+    
+    def __init__(self):
+        self.name = "Mouse button down"
+
 class MouseMoved(Event):
     """Mouse moved event stores new position of mouse pointer on the screen.
     

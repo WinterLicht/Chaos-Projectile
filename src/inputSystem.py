@@ -42,6 +42,8 @@ class InputSystem(object):
             self.handle_hat_moved(event.x, event.y)
         if isinstance(event, events.AxisMoved):
             self.handle_joystick(event.x_axis, event.y_axis)
+        if isinstance(event, events.MouseButtonDown):
+            self.handle_mousebutton_down()
 
     def handle_hat_moved(self, x, y):
         """Hat controlls player movement.
@@ -111,6 +113,17 @@ class InputSystem(object):
             self.world.velocity[self.world.player][0] = 0
         if key == pygame.K_d:
             self.world.velocity[self.world.player][0] = 0
+
+    def handle_mousebutton_down(self):
+        player_ID = self.world.player
+        orb_ID = self.world.charakters[player_ID].orb_ID
+        position = self.world.appearance[orb_ID].rect.center
+        amount = 1
+        life = 10
+        velocity = [1, 0]
+        acceleration = [0, 0]
+        self.world.create_particle_emitter(position, amount, life,
+                                           velocity, acceleration)
 
     def handle_mouse_move(self, mouse_x, mouse_y):
         """Position of the mouse cursor controlls aim and attack direction.

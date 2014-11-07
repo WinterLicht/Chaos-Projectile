@@ -11,6 +11,8 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
+#
+# compile with: sphinx-build -b html ./source ./build
 
 import sys
 import os

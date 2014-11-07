@@ -4,4 +4,4 @@
  Credits
 =========
 
-grafics in data directory by Anna
+grafics in data directory by Anna Dorokhova

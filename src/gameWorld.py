@@ -8,6 +8,7 @@ import os
 import pygame
 import level
 import components
+import chaosparticle
 
 class GameWorld(object):
     """ Container of all entities in game.
@@ -43,6 +44,7 @@ class GameWorld(object):
         self.charakters = {}
         self.state = {}
         self.player = None
+        self.emitter = {}
         
         #Create all game entities
         
@@ -87,11 +89,35 @@ class GameWorld(object):
             c = (coll,)
             self.create_entity(c)
 
+    def create_particle_emitter(self, position, amount, life,
+                                 velocity, acceleration):
+        #Set velocity
+        vel = components.Velocity(self.direction[self.charakters[self.player].orb_ID])
+        vel = [vel[0]*4, vel[1]*4]
+        particle_emitter = chaosparticle.Emitter(position, amount, life,
+                                            vel, acceleration)
+        emitter_ID = self.get_empty_entity()
+        self.emitter[emitter_ID] = particle_emitter
+        for particle in particle_emitter.particles:
+            #Get a sprite for the particle
+            temp = pygame.image.load(os.path.join('data', 'orb.png'))
+            orb_sprite = components.Appearance(temp.convert_alpha())
+            #Set position of collider
+            coll = components.Collider(100, 100, 32, 32)
+            coll.center = particle.position
+            orb_sprite.rect.center = particle.position
+            #Set velocity
+            vel = components.Velocity(particle.velocity)
+            #Components of the particle
+            c = (coll, vel, orb_sprite, components.State())
+            self.create_entity(c)
+
     def create_entity(self, c):
         """Adds an entity to the game world.
         
         :param c: all components of new entity
         :type c: components list
+        :rtype: ID of the new entity
         """
         entity = self.get_empty_entity()
         for component in c:
@@ -113,7 +139,10 @@ class GameWorld(object):
         return entity
 
     def get_empty_entity(self):
-        """Gets not used index as an ID for new entity."""
+        """Gets not used index as an ID for new entity.
+        
+        :rtype: ID of an empty entity
+        """
         for entity in range(len(self.mask)):
             #There is unused ID, if there are no assigned
             if self.mask[entity] == 0:

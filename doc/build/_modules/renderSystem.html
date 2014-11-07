@@ -91,8 +91,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="n">pyscroll</span><span class="o">.</span><span class="n">PyscrollGroup</span><span class="p">(</span><span class="n">map_layer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">map_layer</span><span class="p">,</span>
                                             <span class="n">default_layer</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="c">#Add other sprites</span>
-        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">image</span><span class="p">])</span>
+        <span class="c">#for image in self.world.appearance:</span>
+        <span class="c">#    self.group.add(self.world.appearance[image])</span>
 
 <div class="viewcode-block" id="RenderSystem.notify"><a class="viewcode-back" href="../renderSystem.html#renderSystem.RenderSystem.notify">[docs]</a>    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Notify, when event occurs and stop CPUSpinner when it&#39;s quit event. </span>
@@ -105,12 +105,22 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">ResizeWindowEvent</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
 </div>
+<div class="viewcode-block" id="RenderSystem.update"><a class="viewcode-back" href="../renderSystem.html#renderSystem.RenderSystem.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Updates group, so new entities can be added and dead removed.</span>
+<span class="sd">        </span>
+<span class="sd">        Every update the default layer,where all game entities will be drawn, should be cleaned and reassigned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">remove_sprites_of_layer</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">image</span><span class="p">])</span>
+</div>
 <div class="viewcode-block" id="RenderSystem.draw"><a class="viewcode-back" href="../renderSystem.html#renderSystem.RenderSystem.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Draw everything on the screen.</span>
 <span class="sd">        </span>
 <span class="sd">        :param dt: CPU tick</span>
 <span class="sd">        :type dt: int</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
         <span class="c">#Center the map/screen on the single player</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">collider</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">center</span><span class="p">)</span>
