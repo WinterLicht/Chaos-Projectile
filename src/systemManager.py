@@ -8,6 +8,7 @@ import renderSystem
 import collisionSystem
 import inputSystem
 import animationSystem
+import combatsystem
 
 class SystemManager(object):
     """System manager is a container of all game systems.
@@ -27,3 +28,4 @@ class SystemManager(object):
         self.systems.append(animationSystem.AnimationSystem(event_manager, gameWorld))
         self.systems.append(inputSystem.InputSystem(event_manager, gameWorld))
         self.systems.append(renderSystem.RenderSystem(event_manager, gameWorld))
+        self.systems.append(combatsystem.CombatSystem(event_manager, gameWorld))

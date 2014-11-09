@@ -61,8 +61,13 @@ class RenderSystem(object):
         Every update the default layer,where all game entities will be drawn, should be cleaned and reassigned.
         """
         self.group.remove_sprites_of_layer(2)
+        #Add all game components
         for image in self.world.appearance:
             self.group.add(self.world.appearance[image])
+        #Add all particles
+        for attack in self.world.attacks:
+            for projectile in attack.particles:
+                self.group.add(projectile)
 
     def draw(self, dt):
         """Draw everything on the screen.

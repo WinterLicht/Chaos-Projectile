@@ -6,6 +6,7 @@
 
 #from enum import Enum
 import pygame
+import chaosparticle
 
 '''
 # Enumarations: http://legacy.python.org/dev/peps/pep-0435/
@@ -21,6 +22,83 @@ def enum(*sequential, **named):
 
 Types = enum('position', 'appearance', 'collider', 'velocity')
 '''
+
+class Projectile(chaosparticle.Particle):
+    """All projectiles are here particles even melee attacks are short living particles.
+    
+    :Attributes:
+        - *character_ID* (int): this character fired the projectile
+        - *damage* (int): damage of the projectile
+    """
+    
+    def __init__(self, character_ID, damage, sprite_sheet, life, position, velocity,
+                 acceleration):
+        """
+        :param character_ID: this character fired the projectile
+        :type character_ID: int
+        :param damage: damage of the projectile
+        :type damage: int
+        :param sprite_sheet: graphical representation for the particle may be one image or a sprite sheet for animated particle
+        :type sprite_sheet: type may vary on Your implementation
+        :param life: life time of the projectile
+        :type life: int
+        :param position: vector for position of a projectile
+        :type position: 2d list
+        :param velocity: velocity vector
+        :type velocity: 2d list
+        :param acceleration: acceleration vector
+        :type acceleration: 2d list
+        """
+        chaosparticle.Particle.__init__(self, sprite_sheet, life,
+                                        position, velocity,
+                                        acceleration)
+        self.damage = damage
+        self.character_ID = character_ID
+
+
+class Attack(chaosparticle.Emitter):
+    """All attacks are here particle emitters.
+    
+    :Attributes:
+        - *particles* (list): array of projectiles
+        - *life*: life time of the projectiles
+        - *position*: spawn position of projectiles
+    """
+    
+    def __init__(self, character_ID, damage, position, amount,
+                 sprite_sheet, life, velocity, acceleration):
+        """
+        :param character_ID: this character fired the projectile
+        :type character_ID: int
+        :param damage: damage of the projectile
+        :type damage: int
+        :param position: spawn position of particles
+        :type position: 2d list
+        :param amount: amount of spawned particles
+        :type amount: positive int
+        :param sprite_sheet: graphical representation for the particle may be one image or a sprite sheet for animated particle
+        :type sprite_sheet: type may vary on Your implementation
+        :param life: life time of all particles
+        :type life: int
+        :param velocity: velocity vector shows middle direction of all particles
+        :type velocity: 2d list
+        :param acceleration: acceleration vector
+        :type acceleration: 2d list
+        """
+        chaosparticle.Emitter.__init__(self, position, amount, 
+                                       sprite_sheet, life, velocity,
+                                       acceleration)
+        #Convert all the particles to projectiles
+        temp = list()
+        for particle in self.particles:
+            projectile = Projectile(character_ID, damage,
+                                    particle.sprite_sheet,
+                                    particle.life, particle.position,
+                                    particle.velocity,
+                                    particle.acceleration)
+            temp.append(projectile)
+        self.particles = temp
+
 
 class Collider(pygame.Rect):
     """Collider class is equal a hitbox of an entity, also stores position of entity."""

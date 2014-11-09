@@ -30,6 +30,7 @@ Contents:
    collisionSystem
    inputSystem
    renderSystem
+   combatSystem
    chaosparticle
 
 Indices and tables

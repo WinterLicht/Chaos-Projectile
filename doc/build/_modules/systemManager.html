@@ -58,6 +58,7 @@
 <span class="kn">import</span> <span class="nn">collisionSystem</span>
 <span class="kn">import</span> <span class="nn">inputSystem</span>
 <span class="kn">import</span> <span class="nn">animationSystem</span>
+<span class="kn">import</span> <span class="nn">combatsystem</span>
 
 <div class="viewcode-block" id="SystemManager"><a class="viewcode-back" href="../systemManager.html#systemManager.SystemManager">[docs]</a><span class="k">class</span> <span class="nc">SystemManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;System manager is a container of all game systems.</span>
@@ -76,7 +77,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">collisionSystem</span><span class="o">.</span><span class="n">CollisionSystem</span><span class="p">(</span><span class="n">event_manager</span><span class="p">,</span> <span class="n">gameWorld</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">animationSystem</span><span class="o">.</span><span class="n">AnimationSystem</span><span class="p">(</span><span class="n">event_manager</span><span class="p">,</span> <span class="n">gameWorld</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inputSystem</span><span class="o">.</span><span class="n">InputSystem</span><span class="p">(</span><span class="n">event_manager</span><span class="p">,</span> <span class="n">gameWorld</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">renderSystem</span><span class="o">.</span><span class="n">RenderSystem</span><span class="p">(</span><span class="n">event_manager</span><span class="p">,</span> <span class="n">gameWorld</span><span class="p">))</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">renderSystem</span><span class="o">.</span><span class="n">RenderSystem</span><span class="p">(</span><span class="n">event_manager</span><span class="p">,</span> <span class="n">gameWorld</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">combatsystem</span><span class="o">.</span><span class="n">CombatSystem</span><span class="p">(</span><span class="n">event_manager</span><span class="p">,</span> <span class="n">gameWorld</span><span class="p">))</span></div>
 </pre></div>
 
           </div>

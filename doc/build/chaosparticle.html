@@ -53,7 +53,7 @@
 <span id="chaosparticle"></span><h1><a class="reference internal" href="#module-chaosparticle" title="chaosparticle: Two dimensional particle system. (Unix, Windows)"><tt class="xref py py-mod docutils literal"><span class="pre">chaosparticle</span></tt></a><a class="headerlink" href="#module-chaosparticle" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-chaosparticle"></span><dl class="class">
 <dt id="chaosparticle.Emitter">
-<em class="property">class </em><tt class="descclassname">chaosparticle.</tt><tt class="descname">Emitter</tt><big>(</big><em>position</em>, <em>amount</em>, <em>life</em>, <em>velocity</em>, <em>acceleration</em><big>)</big><a class="reference internal" href="_modules/chaosparticle.html#Emitter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chaosparticle.Emitter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">chaosparticle.</tt><tt class="descname">Emitter</tt><big>(</big><em>position</em>, <em>amount</em>, <em>sprite_sheet</em>, <em>life</em>, <em>velocity</em>, <em>acceleration</em><big>)</big><a class="reference internal" href="_modules/chaosparticle.html#Emitter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chaosparticle.Emitter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Particle emitter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -74,38 +74,24 @@
 <dd><p>Moves and updates every attribute of particles of this emitter.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="chaosparticle.Emitter.update_life">
-<tt class="descname">update_life</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chaosparticle.html#Emitter.update_life"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chaosparticle.Emitter.update_life" title="Permalink to this definition">¶</a></dt>
-<dd><p>Only updates life of the particle.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="chaosparticle.Emitter.update_position">
-<tt class="descname">update_position</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chaosparticle.html#Emitter.update_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chaosparticle.Emitter.update_position" title="Permalink to this definition">¶</a></dt>
-<dd><p>Only updates position of the particles, also moves them.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="chaosparticle.Emitter.update_velocity">
-<tt class="descname">update_velocity</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/chaosparticle.html#Emitter.update_velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chaosparticle.Emitter.update_velocity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Only updates velocity of the particles.</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="chaosparticle.Particle">
-<em class="property">class </em><tt class="descclassname">chaosparticle.</tt><tt class="descname">Particle</tt><big>(</big><em>life</em>, <em>position</em>, <em>velocity</em>, <em>acceleration</em><big>)</big><a class="reference internal" href="_modules/chaosparticle.html#Particle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chaosparticle.Particle" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">chaosparticle.</tt><tt class="descname">Particle</tt><big>(</big><em>sprite_sheet</em>, <em>life</em>, <em>position</em>, <em>velocity</em>, <em>acceleration</em><big>)</big><a class="reference internal" href="_modules/chaosparticle.html#Particle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#chaosparticle.Particle" title="Permalink to this definition">¶</a></dt>
 <dd><p>One Particle.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body">#- <em>sprite_sheet</em>: graphical representation for the particle may be one image or a sprite sheet for animated particle
-- <em>position</em> (list): 2d vector for position of a particle
-- <em>velocity</em> (list): velocity vector
-- <em>acceleration</em> (list): acceleration vector can be used as gravity as well</td>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><ul class="first last simple">
+<li><em>sprite_sheet</em> (pygame.Surface): graphical representation for the particle may be one image or a sprite sheet for animated particle</li>
+<li><em>life</em> (int):</li>
+<li><em>position</em> (list): 2d vector for position of a particle</li>
+<li><em>velocity</em> (list): velocity vector</li>
+<li><em>acceleration</em> (list): acceleration vector can be used as gravity as well</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>

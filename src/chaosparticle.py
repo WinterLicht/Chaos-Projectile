@@ -8,7 +8,8 @@
 
 import math
 import numpy as np
-#import pygame
+
+import pygame
 
 def get_normalized(vector):
     """Returns normalized vector or None, if vector is (0, 0).
@@ -43,21 +44,22 @@ def get_rotated_vector(vector, angle):
     return result
 
 
-class Particle():
+class Particle(pygame.sprite.Sprite):
     """One Particle.
     
     :Attributes:
-        #- *sprite_sheet*: graphical representation for the particle may be one image or a sprite sheet for animated particle
+        - *sprite_sheet* (pygame.Surface): graphical representation for the particle may be one image or a sprite sheet for animated particle
+        - *life* (int):
         - *position* (list): 2d vector for position of a particle
         - *velocity* (list): velocity vector
         - *acceleration* (list): acceleration vector can be used as gravity as well
     """
-    def __init__(self, life, position, velocity, acceleration):
+    def __init__(self, sprite_sheet, life, position, velocity, acceleration):
         """
+        :param sprite_sheet: graphical representation for the particle may be one image or a sprite sheet for animated particle
+        :type sprite_sheet: pygame.Surface
         :param life: life time of the particle
         :type life: int
-        #:param sprite_sheet: graphical representation for the particle may be one image or a sprite sheet for animated particle
-        #:type sprite_sheet: type may vary on Your implementation
         :param position: vector for position of a particle
         :type position: 2d list
         :param velocity: velocity vector
@@ -65,8 +67,11 @@ class Particle():
         :param acceleration: acceleration vector
         :type acceleration: 2d list
         """
+        pygame.sprite.Sprite.__init__(self)
+        self.image = sprite_sheet
+        self.rect = self.image.get_rect()
         self.life = life
-        #self.sprite_sheet = sprite_sheet
+        self.sprite_sheet = sprite_sheet
         self.position = position
         self.velocity = velocity
         self.acceleration = acceleration
@@ -80,16 +85,16 @@ class Emitter():
         - *life*: life time of the particles
         - *position*: spawn position of particles
     """
-    def __init__(self, position, amount, life, velocity, acceleration):
+    def __init__(self, position, amount, sprite_sheet, life, velocity, acceleration):
         """
         :param position: spawn position of particles
         :type position: 2d list
         :param amount: amount of spawned particles
         :type amount: positive int
+        :param sprite_sheet: graphical representation for the particle may be one image or a sprite sheet for animated particle
+        :type sprite_sheet: pygame.Surface
         :param life: life time of all particles
         :type life: int
-        #:param sprite_sheet: graphical representation for the particle may be one image or a sprite sheet for animated particle
-        #:type sprite_sheet: pygame.Surface
         :param velocity: velocity vector shows middle direction of all particles
         :type velocity: 2d list
         :param acceleration: acceleration vector
@@ -98,25 +103,35 @@ class Emitter():
         self.particles = list()
         self.life = life
         self.position = position
-        #self.velocity = velocity
 
         for p in range(amount):
             #30 is angle between particle velocities
-            angle = 30*p#(360 / amount) * p
+            angle = 10*p#(360 / amount) * p
             #so velocity vector is middle direction
-            angle = angle - ((30*(amount-1)) / 2)
+            angle = angle - ((10*(amount-1)) / 2)
+            print(angle)
             #Direction of each particle is a bit rotated
             vel = get_rotated_vector(velocity, angle)
-            self.particles.append(Particle(life, position, vel, acceleration))
+            print(vel)
+            self.particles.append(Particle(sprite_sheet, life, position,
+                                           vel, acceleration))
 
     def update(self):
         """Moves and updates every attribute of particles of this emitter."""
-        
+
         self.life = self.life - 1
         for particle in self.particles:
-            particle.move()
+            #Move particle
+            particle.velocity = np.array(particle.velocity) + \
+                                np.array(particle.acceleration)
+            particle.position = np.array(particle.position) + \
+                                np.array(particle.velocity)
+            #Update life time
             particle.life = particle.life - 1
+            #Update position of the image of the particle
+            particle.rect.center = particle.position
 
+'''
     def update_velocity(self):
         """Only updates velocity of the particles."""
         
@@ -136,3 +151,4 @@ class Emitter():
         
         for particle in self.particles:
             particle.life = particle.life - 1
+'''

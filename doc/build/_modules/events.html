@@ -65,6 +65,7 @@
 <span class="sd">            - *name* (string): Type of the event as a name</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Generic Event&quot;</span>
+
 </div>
 <div class="viewcode-block" id="TickEvent"><a class="viewcode-back" href="../events.html#events.TickEvent">[docs]</a><span class="k">class</span> <span class="nc">TickEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;CPU Tick event will be send every frame.</span>
@@ -80,6 +81,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;CPU Tick Event&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+
 </div>
 <div class="viewcode-block" id="ResizeWindowEvent"><a class="viewcode-back" href="../events.html#events.ResizeWindowEvent">[docs]</a><span class="k">class</span> <span class="nc">ResizeWindowEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Resize Window Event.</span>
@@ -100,6 +102,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Resize Window Event&quot;</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+
 </div>
 <div class="viewcode-block" id="QuitEvent"><a class="viewcode-back" href="../events.html#events.QuitEvent">[docs]</a><span class="k">class</span> <span class="nc">QuitEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Programm Quit Event.</span>
@@ -108,6 +111,7 @@
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Program Quit Event&quot;</span>
+
 </div>
 <div class="viewcode-block" id="KeyPressed"><a class="viewcode-back" href="../events.html#events.KeyPressed">[docs]</a><span class="k">class</span> <span class="nc">KeyPressed</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This event stores the pressed key.</span>
@@ -124,6 +128,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Key Down Event&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+
 </div>
 <div class="viewcode-block" id="KeyReleased"><a class="viewcode-back" href="../events.html#events.KeyReleased">[docs]</a><span class="k">class</span> <span class="nc">KeyReleased</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This event stores the released key.</span>
@@ -139,12 +144,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Key Released Event&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+
 </div>
 <div class="viewcode-block" id="MouseButtonDown"><a class="viewcode-back" href="../events.html#events.MouseButtonDown">[docs]</a><span class="k">class</span> <span class="nc">MouseButtonDown</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Mouse button down event.&quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Mouse button down&quot;</span>
+
 </div>
 <div class="viewcode-block" id="MouseMoved"><a class="viewcode-back" href="../events.html#events.MouseMoved">[docs]</a><span class="k">class</span> <span class="nc">MouseMoved</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Mouse moved event stores new position of mouse pointer on the screen.</span>
@@ -164,6 +171,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Mouse Moved Event&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+
 </div>
 <div class="viewcode-block" id="AxisMoved"><a class="viewcode-back" href="../events.html#events.AxisMoved">[docs]</a><span class="k">class</span> <span class="nc">AxisMoved</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This event stores position of a game pad axis.</span>
@@ -184,6 +192,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Controller Axis Moved Event&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_axis</span> <span class="o">=</span> <span class="n">x_axis_pos</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y_axis</span> <span class="o">=</span> <span class="n">y_axis_pos</span>
+
 </div>
 <div class="viewcode-block" id="HatMoved"><a class="viewcode-back" href="../events.html#events.HatMoved">[docs]</a><span class="k">class</span> <span class="nc">HatMoved</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This event stores position of a game pad hat.</span>
@@ -204,6 +213,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Controller Hat Moved Event&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+
 </div>
 <div class="viewcode-block" id="UpdateImagePosition"><a class="viewcode-back" href="../events.html#events.UpdateImagePosition">[docs]</a><span class="k">class</span> <span class="nc">UpdateImagePosition</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Occurs when entity has moved and image position has to be updated.</span>
@@ -223,6 +233,27 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Update Image Position&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entity_ID</span> <span class="o">=</span> <span class="n">entity_ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_position</span> <span class="o">=</span> <span class="n">new_position</span>
+
+</div>
+<div class="viewcode-block" id="CollisionOccured"><a class="viewcode-back" href="../events.html#events.CollisionOccured">[docs]</a><span class="k">class</span> <span class="nc">CollisionOccured</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This event is sent when two objects collide.</span>
+<span class="sd">    </span>
+<span class="sd">    :Attributes:</span>
+<span class="sd">        - *collider_ID* (int): Collider ID</span>
+<span class="sd">        - *collidee_ID* (int): Collidee ID</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collider_ID</span><span class="p">,</span> <span class="n">collidee_ID</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param collider_ID: Collider ID</span>
+<span class="sd">        :type collider_ID: int</span>
+<span class="sd">        :type collidee_ID: Collidee ID</span>
+<span class="sd">        :type collidee_ID: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Collision occured&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collider_ID</span> <span class="o">=</span> <span class="n">collider_ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collidee_ID</span> <span class="o">=</span> <span class="n">collidee_ID</span>
+
 </div>
 <div class="viewcode-block" id="PlayerMoved"><a class="viewcode-back" href="../events.html#events.PlayerMoved">[docs]</a><span class="k">class</span> <span class="nc">PlayerMoved</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This event is sent every time when player moves.</span>
@@ -239,6 +270,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Player Moved Event&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_position</span> <span class="o">=</span> <span class="n">new_position</span>
+
 </div>
 <div class="viewcode-block" id="PlayerStoppedMovement"><a class="viewcode-back" href="../events.html#events.PlayerStoppedMovement">[docs]</a><span class="k">class</span> <span class="nc">PlayerStoppedMovement</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This event is sent when player stops movement.</span>
@@ -247,6 +279,7 @@
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Player Stopped Movement&quot;</span>
+
 </div>
 <div class="viewcode-block" id="EventManager"><a class="viewcode-back" href="../events.html#events.EventManager">[docs]</a><span class="k">class</span> <span class="nc">EventManager</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;This class is responsible for coordinating most communication between the game systems.</span>

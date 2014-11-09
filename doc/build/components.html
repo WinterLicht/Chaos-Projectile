@@ -102,6 +102,25 @@ Extends pygame.sprite.Sprite.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="components.Attack">
+<em class="property">class </em><tt class="descclassname">components.</tt><tt class="descname">Attack</tt><big>(</big><em>character_ID</em>, <em>damage</em>, <em>position</em>, <em>amount</em>, <em>sprite_sheet</em>, <em>life</em>, <em>velocity</em>, <em>acceleration</em><big>)</big><a class="reference internal" href="_modules/components.html#Attack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.Attack" title="Permalink to this definition">¶</a></dt>
+<dd><p>All attacks are here particle emitters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><ul class="first last simple">
+<li><em>particles</em> (list): array of projectiles</li>
+<li><em>life</em>: life time of the projectiles</li>
+<li><em>position</em>: spawn position of projectiles</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
 <dt id="components.Collider">
 <em class="property">class </em><tt class="descclassname">components.</tt><tt class="descname">Collider</tt><big>(</big><em>x</em>, <em>y</em>, <em>width</em>, <em>height</em><big>)</big><a class="reference internal" href="_modules/components.html#Collider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.Collider" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collider class is equal a hitbox of an entity, also stores position of entity.</p>
@@ -125,6 +144,24 @@ Extends pygame.sprite.Sprite.</p>
 <tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><ul class="first last simple">
 <li><em>name</em> (string): name of the character</li>
 <li><em>orb_ID</em> (int): reference to the orb entity, that belongs this player</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="components.Projectile">
+<em class="property">class </em><tt class="descclassname">components.</tt><tt class="descname">Projectile</tt><big>(</big><em>character_ID</em>, <em>damage</em>, <em>sprite_sheet</em>, <em>life</em>, <em>position</em>, <em>velocity</em>, <em>acceleration</em><big>)</big><a class="reference internal" href="_modules/components.html#Projectile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.Projectile" title="Permalink to this definition">¶</a></dt>
+<dd><p>All projectiles are here particles even melee attacks are short living particles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><ul class="first last simple">
+<li><em>character_ID</em> (int): this character fired the projectile</li>
+<li><em>damage</em> (int): damage of the projectile</li>
 </ul>
 </td>
 </tr>

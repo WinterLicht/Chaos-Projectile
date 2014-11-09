@@ -8,7 +8,6 @@ import os
 import pygame
 import level
 import components
-import chaosparticle
 
 class GameWorld(object):
     """ Container of all entities in game.
@@ -44,7 +43,7 @@ class GameWorld(object):
         self.charakters = {}
         self.state = {}
         self.player = None
-        self.emitter = {}
+        self.attacks = list()
         
         #Create all game entities
         
@@ -89,28 +88,18 @@ class GameWorld(object):
             c = (coll,)
             self.create_entity(c)
 
-    def create_particle_emitter(self, position, amount, life,
-                                 velocity, acceleration):
-        #Set velocity
+    def create_particle_emitter(self, position):
         vel = components.Velocity(self.direction[self.charakters[self.player].orb_ID])
-        vel = [vel[0]*4, vel[1]*4]
-        particle_emitter = chaosparticle.Emitter(position, amount, life,
-                                            vel, acceleration)
-        emitter_ID = self.get_empty_entity()
-        self.emitter[emitter_ID] = particle_emitter
-        for particle in particle_emitter.particles:
-            #Get a sprite for the particle
-            temp = pygame.image.load(os.path.join('data', 'orb.png'))
-            orb_sprite = components.Appearance(temp.convert_alpha())
-            #Set position of collider
-            coll = components.Collider(100, 100, 32, 32)
-            coll.center = particle.position
-            orb_sprite.rect.center = particle.position
-            #Set velocity
-            vel = components.Velocity(particle.velocity)
-            #Components of the particle
-            c = (coll, vel, orb_sprite, components.State())
-            self.create_entity(c)
+        #vel = [vel[0]*4, vel[1]*4]
+        orb_sprite = pygame.image.load(os.path.join('data', 'orb.png'))
+        #
+        acceleration = [0, 0]
+        life = 10
+        amount = 5
+        particle_emitter = components.Attack(self.player, 10, position,
+                                             amount, orb_sprite, life,
+                                             vel, acceleration)
+        self.attacks.append(particle_emitter)
 
     def create_entity(self, c):
         """Adds an entity to the game world.
@@ -144,7 +133,7 @@ class GameWorld(object):
         :rtype: ID of an empty entity
         """
         for entity in range(len(self.mask)):
-            #There is unused ID, if there are no assigned
+            #There is unused ID, if there are no components assigned
             if self.mask[entity] == 0:
                 return entity
         #If mask isn't long enough, add new element
@@ -152,7 +141,19 @@ class GameWorld(object):
         self.mask.append(0)
         return entity
 
-    # Noch die Dict Eintraege leeren!! Nicht getestet
-    #def destroyEntity(self, entity):
-        #self.mask[entity] = 0
-        # Alle Dictionaries leeren!!
+    def destroy_entity(self, entity_ID):
+        self.mask[entity_ID] = 0
+        #Clear dictionaries
+        if entity_ID in self.appearance:
+            del self.appearance[entity_ID]
+        if entity_ID in self.collider:
+            del self.collider[entity_ID]
+        if entity_ID in self.velocity:
+            del self.velocity[entity_ID]
+        if entity_ID in self.direction:
+            del self.direction[entity_ID]
+        if entity_ID in self.charakters:
+            del self.charakters[entity_ID]
+        if entity_ID in self.state:
+            del self.state[entity_ID]
+

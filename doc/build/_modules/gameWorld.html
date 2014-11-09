@@ -58,7 +58,6 @@
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">import</span> <span class="nn">level</span>
 <span class="kn">import</span> <span class="nn">components</span>
-<span class="kn">import</span> <span class="nn">chaosparticle</span>
 
 <div class="viewcode-block" id="GameWorld"><a class="viewcode-back" href="../gameWorld.html#gameWorld.GameWorld">[docs]</a><span class="k">class</span> <span class="nc">GameWorld</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Container of all entities in game.</span>
@@ -94,7 +93,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">charakters</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">emitter</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attacks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         
         <span class="c">#Create all game entities</span>
         
@@ -139,28 +138,18 @@
             <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">coll</span><span class="p">,)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">create_entity</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">create_particle_emitter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">life</span><span class="p">,</span>
-                                 <span class="n">velocity</span><span class="p">,</span> <span class="n">acceleration</span><span class="p">):</span>
-        <span class="c">#Set velocity</span>
+    <span class="k">def</span> <span class="nf">create_particle_emitter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
         <span class="n">vel</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">Velocity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">charakters</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">orb_ID</span><span class="p">])</span>
-        <span class="n">vel</span> <span class="o">=</span> <span class="p">[</span><span class="n">vel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">vel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">]</span>
-        <span class="n">particle_emitter</span> <span class="o">=</span> <span class="n">chaosparticle</span><span class="o">.</span><span class="n">Emitter</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">life</span><span class="p">,</span>
-                                            <span class="n">vel</span><span class="p">,</span> <span class="n">acceleration</span><span class="p">)</span>
-        <span class="n">emitter_ID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_empty_entity</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">emitter</span><span class="p">[</span><span class="n">emitter_ID</span><span class="p">]</span> <span class="o">=</span> <span class="n">particle_emitter</span>
-        <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="n">particle_emitter</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
-            <span class="c">#Get a sprite for the particle</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="s">&#39;orb.png&#39;</span><span class="p">))</span>
-            <span class="n">orb_sprite</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">Appearance</span><span class="p">(</span><span class="n">temp</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">())</span>
-            <span class="c">#Set position of collider</span>
-            <span class="n">coll</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">Collider</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
-            <span class="n">coll</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">particle</span><span class="o">.</span><span class="n">position</span>
-            <span class="n">orb_sprite</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">particle</span><span class="o">.</span><span class="n">position</span>
-            <span class="c">#Set velocity</span>
-            <span class="n">vel</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">Velocity</span><span class="p">(</span><span class="n">particle</span><span class="o">.</span><span class="n">velocity</span><span class="p">)</span>
-            <span class="c">#Components of the particle</span>
-            <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">coll</span><span class="p">,</span> <span class="n">vel</span><span class="p">,</span> <span class="n">orb_sprite</span><span class="p">,</span> <span class="n">components</span><span class="o">.</span><span class="n">State</span><span class="p">())</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">create_entity</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="c">#vel = [vel[0]*4, vel[1]*4]</span>
+        <span class="n">orb_sprite</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="s">&#39;orb.png&#39;</span><span class="p">))</span>
+        <span class="c">#</span>
+        <span class="n">acceleration</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">life</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">particle_emitter</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">Attack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span>
+                                             <span class="n">amount</span><span class="p">,</span> <span class="n">orb_sprite</span><span class="p">,</span> <span class="n">life</span><span class="p">,</span>
+                                             <span class="n">vel</span><span class="p">,</span> <span class="n">acceleration</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">particle_emitter</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GameWorld.create_entity"><a class="viewcode-back" href="../gameWorld.html#gameWorld.GameWorld.create_entity">[docs]</a>    <span class="k">def</span> <span class="nf">create_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Adds an entity to the game world.</span>
@@ -194,19 +183,30 @@
 <span class="sd">        :rtype: ID of an empty entity</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">)):</span>
-            <span class="c">#There is unused ID, if there are no assigned</span>
+            <span class="c">#There is unused ID, if there are no components assigned</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">entity</span>
         <span class="c">#If mask isn&#39;t long enough, add new element</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">entity</span>
-
-    <span class="c"># Noch die Dict Eintraege leeren!! Nicht getestet</span>
-    <span class="c">#def destroyEntity(self, entity):</span>
-        <span class="c">#self.mask[entity] = 0</span>
-        <span class="c"># Alle Dictionaries leeren!!</span></div></div>
-</pre></div>
+</div>
+    <span class="k">def</span> <span class="nf">destroy_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_ID</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><span class="n">entity_ID</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c">#Clear dictionaries</span>
+        <span class="k">if</span> <span class="n">entity_ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">appearance</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">appearance</span><span class="p">[</span><span class="n">entity_ID</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">entity_ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collider</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">collider</span><span class="p">[</span><span class="n">entity_ID</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">entity_ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">[</span><span class="n">entity_ID</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">entity_ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">[</span><span class="n">entity_ID</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">entity_ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">charakters</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">charakters</span><span class="p">[</span><span class="n">entity_ID</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">entity_ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">entity_ID</span><span class="p">]</span>
+</pre></div></div>
 
           </div>
         </div>

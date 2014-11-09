@@ -16,6 +16,7 @@ class Event:
         """
         self.name = "Generic Event"
 
+
 class TickEvent(Event):
     """CPU Tick event will be send every frame.
     
@@ -30,6 +31,7 @@ class TickEvent(Event):
         """
         self.name = "CPU Tick Event"
         self.dt = dt
+
 
 class ResizeWindowEvent(Event):
     """Resize Window Event.
@@ -51,6 +53,7 @@ class ResizeWindowEvent(Event):
         self.width = width
         self.height = height
 
+
 class QuitEvent(Event):
     """Programm Quit Event.
     Is send when event of type pygame.QUIT is occurs.
@@ -58,6 +61,7 @@ class QuitEvent(Event):
     
     def __init__(self):
         self.name = "Program Quit Event"
+
 
 class KeyPressed(Event):
     """This event stores the pressed key.
@@ -75,6 +79,7 @@ class KeyPressed(Event):
         self.name = "Key Down Event"
         self.key = key
 
+
 class KeyReleased(Event):
     """This event stores the released key.
     
@@ -90,11 +95,13 @@ class KeyReleased(Event):
         self.name = "Key Released Event"
         self.key = key
 
+
 class MouseButtonDown(Event):
     """Mouse button down event."""
     
     def __init__(self):
         self.name = "Mouse button down"
+
 
 class MouseMoved(Event):
     """Mouse moved event stores new position of mouse pointer on the screen.
@@ -114,6 +121,7 @@ class MouseMoved(Event):
         self.name = "Mouse Moved Event"
         self.x = x
         self.y = y
+
 
 class AxisMoved(Event):
     """This event stores position of a game pad axis.
@@ -135,6 +143,7 @@ class AxisMoved(Event):
         self.x_axis = x_axis_pos
         self.y_axis = y_axis_pos
 
+
 class HatMoved(Event):
     """This event stores position of a game pad hat.
     Position of the hat are two values which can be 0, 1 or -1. A value of -1 means left/down and a value of 1 means right/up.
@@ -155,6 +164,7 @@ class HatMoved(Event):
         self.x = x
         self.y = y
 
+
 class UpdateImagePosition(Event):
     """Occurs when entity has moved and image position has to be updated.
     
@@ -174,6 +184,27 @@ class UpdateImagePosition(Event):
         self.entity_ID = entity_ID
         self.new_position = new_position
 
+
+class CollisionOccured(Event):
+    """This event is sent when two objects collide.
+    
+    :Attributes:
+        - *collider_ID* (int): Collider ID
+        - *collidee_ID* (int): Collidee ID
+    """
+
+    def __init__(self, collider_ID, collidee_ID):
+        """
+        :param collider_ID: Collider ID
+        :type collider_ID: int
+        :type collidee_ID: Collidee ID
+        :type collidee_ID: int
+        """
+        self.name = "Collision occured"
+        self.collider_ID = collider_ID
+        self.collidee_ID = collidee_ID
+
+
 class PlayerMoved(Event):
     """This event is sent every time when player moves.
     Is used in enemy AI and animation system.
@@ -190,6 +221,7 @@ class PlayerMoved(Event):
         self.name = "Player Moved Event"
         self.new_position = new_position
 
+
 class PlayerStoppedMovement(Event):
     """This event is sent when player stops movement.
     Is used in enemy AI and animation system.
@@ -197,6 +229,7 @@ class PlayerStoppedMovement(Event):
     
     def __init__(self):
         self.name = "Player Stopped Movement"
+
 
 class EventManager:
     """This class is responsible for coordinating most communication between the game systems.

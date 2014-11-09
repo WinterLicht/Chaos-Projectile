@@ -44,20 +44,16 @@ class CollisionSystem(object):
         """Moves object, checks collision, sends events for collision handling and updates image position of moved objects."""
         #List of moving objects
         collider_IDs = list()
-        #List of objects with which collision can occur
-        collidee_IDs = list()
         #Filter collider, they have velocity vector and filter collidees
         #collider have a hit box.
         for entity_ID in range(len(self.world.mask)):
             if entity_ID in self.world.collider and entity_ID in self.world.velocity:
                 collider_IDs.append(entity_ID)
-            if entity_ID in self.world.collider:
-                collidee_IDs.append(entity_ID)
         #Check collision
         for collider_ID in collider_IDs:
             old_position = self.world.collider[collider_ID].center 
-            self.calculate_collision_x(collider_ID, collidee_IDs)
-            self.calculate_collision_y(collider_ID, collidee_IDs)
+            self.calculate_collision_x(collider_ID)
+            self.calculate_collision_y(collider_ID)
             #Update image position of moved object
             ev = events.UpdateImagePosition(collider_ID, self.world.collider[collider_ID].center)
             self.event_manager.post(ev)
@@ -79,41 +75,41 @@ class CollisionSystem(object):
                     ev = events.PlayerStoppedMovement()
                     self.event_manager.post(ev)
 
-    def calculate_collision_x(self, collider_ID, collidee_IDs_list):
+    def calculate_collision_x(self, collider_ID):
         """Move collider in x direction and check collision between collider and all other collidees.
         
         :param collider_ID: collider id
         :type collider_ID: int
-        :param collidee_IDs_list: list that contains ids of all objects, with which a collision can occur
-        :type collidee_IDs_list: list (int)
         """
         #Move collider in x direction.
         self.world.collider[collider_ID] = self.world.collider[collider_ID].move(self.world.velocity[collider_ID][0], 0)
-        #Filter overlapping hit boxes with collider 
-        hit_list = filter(lambda x:
-                         self.world.collider[collider_ID].colliderect(x) and 
-                         not self.world.collider[collider_ID] == x,
-                         self.world.collider.itervalues())
-        for element in hit_list:
+        #Filter overlapping hit boxes with collider
+        hit_list_IDs = filter(lambda x:
+                              self.world.collider[collider_ID].colliderect(self.world.collider[x]) and
+                              not collider_ID == x,
+                              self.world.collider)
+        for element_ID in hit_list_IDs:
             #If we are moving right, set our right side to the left side
             #of the item we hit
             if self.world.velocity[collider_ID][0] > 0:
-                self.world.collider[collider_ID].right = element.left
-                
+                self.world.collider[collider_ID].right = self.world.collider[element_ID].left
+
             elif self.world.velocity[collider_ID][0] < 0:
             #Otherwise if we are moving left, do the opposite
-                self.world.collider[collider_ID].left = element.right
+                self.world.collider[collider_ID].left = self.world.collider[element_ID].right
+        #Send an event for each collision
+        for element_ID in hit_list_IDs:
+            ev = events.CollisionOccured(collider_ID, element_ID)
+            self.event_manager.post(ev)
         #Set new position and cast to int before, because position is in
         #pixel coordinates
         self.world.collider[collider_ID].center = map(int, self.world.collider[collider_ID].center)
 
-    def calculate_collision_y(self, colliderID, collideeIDsList):
+    def calculate_collision_y(self, colliderID):
         """Move collider in y direction and check collision between collider and all other collidees.
         
         :param colliderID: collider id
         :type colliderID: int
-        :param collideeIDsList: list that contains ids of all objects, with which a collision can occur
-        :type collideeIDsList: list (int)
         """
         #Consider gravity
         self.world.state[colliderID].grounded = False
@@ -125,18 +121,18 @@ class CollisionSystem(object):
         #further than collider. This is necessary because of pixel
         #coordinates of the detected, if collider was moved 0.4 further
         temp = self.world.collider[colliderID].move(0, 1)
-        hit_list = filter(lambda x:
-                         temp.colliderect(x) and 
-                         not self.world.collider[colliderID] == x,
-                         self.world.collider.itervalues())
-        for element in hit_list:
+        hit_list_IDs = filter(lambda x:
+                         temp.colliderect(self.world.collider[x]) and 
+                         not colliderID == x,
+                         self.world.collider)
+        for element_ID in hit_list_IDs:
             #Reset our position based on the top/bottom of the object
             if self.world.velocity[colliderID][1] > 0:
-                self.world.collider[colliderID].bottom = element.top
+                self.world.collider[colliderID].bottom = self.world.collider[element_ID].top
                 if colliderID in self.world.state:
                     self.world.state[colliderID].grounded = True
             elif self.world.velocity[colliderID][1] < 0:
-                self.world.collider[colliderID].top = element.bottom
+                self.world.collider[colliderID].top = self.world.collider[element_ID].bottom
             #Reset velocity in y direction, so gravity will not be added
             #every new frame
             self.world.velocity[colliderID][1] = 0
