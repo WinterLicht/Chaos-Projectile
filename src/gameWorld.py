@@ -93,7 +93,7 @@ class GameWorld(object):
         vel = [vel[0]*3, vel[1]*3]
         orb_sprite = pygame.image.load(os.path.join('data', 'orb.png'))
         acceleration = [0, 0]
-        life = 10
+        life = 60
         amount = 5
         particle_emitter = components.Attack(self.player, 10, position,
                                              amount, orb_sprite, life,

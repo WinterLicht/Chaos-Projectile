@@ -76,18 +76,41 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">world</span> <span class="o">=</span> <span class="n">world</span>
 
-    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="CombatSystem.notify"><a class="viewcode-back" href="../combatSystem.html#combatsystem.CombatSystem.notify">[docs]</a>    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Notify, when event occurs. </span>
+<span class="sd">        </span>
+<span class="sd">        :param event: occured event</span>
+<span class="sd">        :type event: events.Event</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">TickEvent</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">CollisionOccured</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">handle_collision</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">collider_ID</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">collidee_ID</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c">#if isinstance(event, events.CollisionOccured):</span>
+        <span class="c">#    self.handle_collision(event.collider_ID, event.collidee_ID)</span>
+</div>
+<div class="viewcode-block" id="CombatSystem.update"><a class="viewcode-back" href="../combatSystem.html#combatsystem.CombatSystem.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update all particle emitters and remove dead objects&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">attack</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">attacks</span><span class="p">:</span>
             <span class="n">attack</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="c">#Remove dead projectiles</span>
+            <span class="k">for</span> <span class="n">projectile</span> <span class="ow">in</span> <span class="n">attack</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">projectile</span><span class="o">.</span><span class="n">life</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">attack</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">projectile</span><span class="p">)</span>
+            <span class="c">#Remove dead particle emitters</span>
+            <span class="k">if</span> <span class="n">attack</span><span class="o">.</span><span class="n">life</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">attacks</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">attack</span><span class="p">)</span>
+        <span class="c">#check for collision</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_projectile_collision</span><span class="p">()</span>
+</div>
+    <span class="k">def</span> <span class="nf">check_projectile_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">attack</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">attacks</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">projectile</span> <span class="ow">in</span> <span class="n">attack</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">collider_ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">collider</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">collider_ID</span> <span class="o">==</span> <span class="n">projectile</span><span class="o">.</span><span class="n">character_ID</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">collider</span><span class="p">[</span><span class="n">collider_ID</span><span class="p">]</span><span class="o">.</span><span class="n">colliderect</span><span class="p">(</span><span class="n">projectile</span><span class="o">.</span><span class="n">rect</span><span class="p">):</span>
+                            <span class="n">projectile</span><span class="o">.</span><span class="n">life</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
-    <span class="k">def</span> <span class="nf">handle_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collider_ID</span><span class="p">,</span> <span class="n">collidee_ID</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+<span class="c">#    def handle_collision(self, collider_ID, collidee_ID):</span>
+<span class="c">#        pass</span></div>
 </pre></div>
 
           </div>

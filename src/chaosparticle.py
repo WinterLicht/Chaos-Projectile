@@ -63,7 +63,7 @@ class Particle(pygame.sprite.Sprite):
         """
         :param sprite_sheet: graphical representation for the particle may be one image or a sprite sheet for animated particle
         :type sprite_sheet: pygame.Surface
-        :param life: life time of the particle
+        :param life: life time of the particle in frames
         :type life: int
         :param position: vector for position of a particle
         :type position: 2d list
@@ -98,7 +98,7 @@ class Emitter():
         :type amount: positive int
         :param sprite_sheet: graphical representation for the particle may be one image or a sprite sheet for animated particle
         :type sprite_sheet: pygame.Surface
-        :param life: life time of all particles
+        :param life: life time of all particles in frames
         :type life: int
         :param velocity: velocity vector shows middle direction of all particles
         :type velocity: 2d list
