@@ -70,9 +70,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">result</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">n</span> <span class="p">,</span> <span class="n">vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">n</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="c">#n = np.linalg.norm(vector)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">/</span><span class="n">n</span> <span class="p">,</span> <span class="n">y</span><span class="o">/</span><span class="n">n</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">result</span>
 </div>
 <div class="viewcode-block" id="get_rotated_vector"><a class="viewcode-back" href="../chaosparticle.html#chaosparticle.get_rotated_vector">[docs]</a><span class="k">def</span> <span class="nf">get_rotated_vector</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
@@ -84,6 +87,8 @@
 <span class="sd">    :type angle: float, grad</span>
 <span class="sd">    :rtype: rotated version of the vector</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c">#Convert angle</span>
+    <span class="n">angle</span> <span class="o">=</span> <span class="p">(</span><span class="n">angle</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="mi">180</span>
     <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
     <span class="n">nX</span><span class="p">,</span> <span class="n">nY</span> <span class="o">=</span> <span class="n">get_normalized</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
     <span class="n">sin_a</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
@@ -156,13 +161,11 @@
 
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">amount</span><span class="p">):</span>
             <span class="c">#30 is angle between particle velocities</span>
-            <span class="n">angle</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">p</span><span class="c">#(360 / amount) * p</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">p</span><span class="c">#     (360 / amount) * p</span>
             <span class="c">#so velocity vector is middle direction</span>
             <span class="n">angle</span> <span class="o">=</span> <span class="n">angle</span> <span class="o">-</span> <span class="p">((</span><span class="mi">10</span><span class="o">*</span><span class="p">(</span><span class="n">amount</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
             <span class="c">#Direction of each particle is a bit rotated</span>
             <span class="n">vel</span> <span class="o">=</span> <span class="n">get_rotated_vector</span><span class="p">(</span><span class="n">velocity</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">vel</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Particle</span><span class="p">(</span><span class="n">sprite_sheet</span><span class="p">,</span> <span class="n">life</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span>
                                            <span class="n">vel</span><span class="p">,</span> <span class="n">acceleration</span><span class="p">))</span>
 

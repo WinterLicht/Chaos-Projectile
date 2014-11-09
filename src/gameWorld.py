@@ -90,9 +90,8 @@ class GameWorld(object):
 
     def create_particle_emitter(self, position):
         vel = components.Velocity(self.direction[self.charakters[self.player].orb_ID])
-        #vel = [vel[0]*4, vel[1]*4]
+        vel = [vel[0]*3, vel[1]*3]
         orb_sprite = pygame.image.load(os.path.join('data', 'orb.png'))
-        #
         acceleration = [0, 0]
         life = 10
         amount = 5

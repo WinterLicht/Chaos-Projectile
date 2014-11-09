@@ -20,9 +20,12 @@ def get_normalized(vector):
     """
     
     result = None
-    if not (vector[0] == 0 and vector[1] == 0):
-        n = np.linalg.norm(vector)
-        result = [vector[0]/n , vector[1]/n]
+    x = vector[0]
+    y = vector[1]
+    if not (x == 0 and y == 0):
+        #n = np.linalg.norm(vector)
+        n = math.sqrt(x*x+y*y)
+        result = [x/n , y/n]
     return result
 
 def get_rotated_vector(vector, angle):
@@ -34,6 +37,8 @@ def get_rotated_vector(vector, angle):
     :type angle: float, grad
     :rtype: rotated version of the vector
     """
+    #Convert angle
+    angle = (angle * math.pi)/180
     length = np.linalg.norm(vector)
     nX, nY = get_normalized(vector)
     sin_a = math.sin(angle)
@@ -106,13 +111,11 @@ class Emitter():
 
         for p in range(amount):
             #30 is angle between particle velocities
-            angle = 10*p#(360 / amount) * p
+            angle = 10*p#     (360 / amount) * p
             #so velocity vector is middle direction
             angle = angle - ((10*(amount-1)) / 2)
-            print(angle)
             #Direction of each particle is a bit rotated
             vel = get_rotated_vector(velocity, angle)
-            print(vel)
             self.particles.append(Particle(sprite_sheet, life, position,
                                            vel, acceleration))
 
