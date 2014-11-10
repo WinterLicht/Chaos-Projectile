@@ -18,7 +18,7 @@ def get_normalized(vector):
     :type vector: 2d list
     :rtype: normalized version of the vector
     """
-    
+
     result = None
     x = vector[0]
     y = vector[1]
@@ -51,7 +51,7 @@ def get_rotated_vector(vector, angle):
 
 class Particle(pygame.sprite.Sprite):
     """One Particle.
-    
+
     :Attributes:
         - *sprite_sheet* (pygame.Surface): graphical representation for the particle may be one image or a sprite sheet for animated particle
         - *life* (int):
@@ -84,7 +84,7 @@ class Particle(pygame.sprite.Sprite):
 
 class Emitter():
     """Particle emitter.
-    
+
     :Attributes:
         - *particles* (list): array of particles
         - *cooldown* (int): time till new particles can be spawned in frames
@@ -93,9 +93,11 @@ class Emitter():
         - *particle_data* (Particle): stored data for particles of this emitter
         - *amount* (int): amount of particles per one spawn
         - *spread_angle* (int): angle between velocities of the particles in grad
+        - *fields* (list): list of fields
     """
-    
-    def __init__(self, cooldown, position, amount, sprite_sheet, life, velocity, acceleration, spread_angle=0):
+
+    def __init__(self, cooldown, position, amount, sprite_sheet, life,
+                 velocity, acceleration, spread_angle=0, fields=None):
         """
         :param cooldown: time till new particles can be spawned in frames
         :type cooldown: int
@@ -113,6 +115,8 @@ class Emitter():
         :type acceleration: 2d list
         :param spread_angle: angle between velocities of the particles in grad
         :type spread_angle: int
+        :param fields: list of fields
+        :type fields: list
         """
         self.cooldown = cooldown
         self.counter = 0
@@ -122,11 +126,15 @@ class Emitter():
                                       velocity, acceleration)
         self.amount = amount
         self.spread_angle = spread_angle
+        self.fields = list()
+        if fields:
+            self.fields = fields
 
     def update(self):
         """Moves, removes dead particles and updates every attribute of particles of this emitter."""
         #Update all particles
         for particle in self.particles:
+            self.submit_to_fields(particle)
             #Move particle
             particle.velocity = np.array(particle.velocity) + \
                                 np.array(particle.acceleration)
@@ -143,7 +151,7 @@ class Emitter():
 
     def spawn_particles(self, velocity=None, position=None):
         """Emitter spawns particles if its cooldown expired.
-        
+
         :param velocity: velocity of set of particles
         :type velocity: 2d list
         :param position: spawn position of particles
@@ -174,3 +182,51 @@ class Emitter():
         for particle in self.particles:
                 if particle.life < 0:
                     self.particles.remove(particle)
+
+    def submit_to_fields(self, particle):
+        """Update acceleration and velocity of the particle based on fields.
+
+        :param particle: particle that has to be updated
+        :type particle: Particle
+        """
+        if self.fields:
+            total_acceleration_x = 0
+            total_acceleration_y = 0
+            for field in self.fields:
+                #Find the distance between the particle and the field
+                dist_x = field.position[0] - particle.position[0]
+                dist_y = field.position[1] - particle.position[1]
+                #Calculate the force
+                force = field.mass / math.pow(dist_x*dist_x+dist_y*dist_y, 1.5)
+                #Add to the total acceleration the force adjusted by distance
+                total_acceleration_x += dist_x * force
+                total_acceleration_y += dist_y * force
+                #Update particle's acceleration
+                particle.acceleration = [total_acceleration_x, total_acceleration_y]
+
+    def add_field(self, field):
+        """Add new field.
+        
+        :param field: new field
+        :type field: Field
+        """
+        self.fields.append(field)
+
+
+class Field(pygame.sprite.Sprite):
+    """A point that attracts or repels particles.
+    
+    :Attributes:
+        - *position* (2d list): position of the field
+        - *mass* (int): positive mass attracts and negative repels
+    """
+
+    def __init__(self, position, mass):
+        """
+        :param position: position of the field
+        :type position: 2d list
+        :param mass: mass
+        :type mass: type
+        """
+        self.position = position
+        self.mass = mass

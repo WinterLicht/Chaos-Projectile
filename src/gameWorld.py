@@ -8,6 +8,7 @@ import os
 import pygame
 import level
 import components
+import chaosparticle
 
 class GameWorld(object):
     """ Container of all entities in game.
@@ -77,6 +78,7 @@ class GameWorld(object):
                             particle_emitter = components.Attack(self.player, damage, 30, position,
                                                                  5, orb_sprite, 60,
                                                                  [3, 0], [0, 0], 10)
+                            particle_emitter.add_field(chaosparticle.Field([x*64, y*64], -140))
                             #
                             c = (coll, vel, anim, player, components.State(), particle_emitter)
                             self.player = self.create_entity(c)
