@@ -87,11 +87,14 @@ class Emitter():
     
     :Attributes:
         - *particles* (list): array of particles
+        - *cooldown* (int): time till new particles can be spawned in frames
         - *life*: life time of the particles
         - *position*: spawn position of particles
     """
-    def __init__(self, position, amount, sprite_sheet, life, velocity, acceleration):
+    def __init__(self, cooldown, position, amount, sprite_sheet, life, velocity, acceleration):
         """
+        :param cooldown: time till new particles can be spawned in frames
+        :type cooldown: int
         :param position: spawn position of particles
         :type position: 2d list
         :param amount: amount of spawned particles
@@ -105,6 +108,7 @@ class Emitter():
         :param acceleration: acceleration vector
         :type acceleration: 2d list
         """
+        self.cooldown = cooldown
         self.particles = list()
         self.life = life
         self.position = position

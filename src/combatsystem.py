@@ -1,13 +1,13 @@
 """
 .. module:: combatsystem
     :platform: Unix, Windows
-    :synopsis: Handles collision between characters and projectiles etc.
+    :synopsis: Handles collision between characters and projectiles, handles attacks etc.
 """
 
 import events
 
 class CombatSystem():
-    """Handles collision between characters and projectiles etc.
+    """Handles collision between characters and projectiles, handles attacks etc.
     
     :Attributes:
         - *event_manager* (:class:`events.EventManager`): event manager
@@ -52,6 +52,7 @@ class CombatSystem():
         self.check_projectile_collision()
 
     def check_projectile_collision(self):
+        """Checks for collision between projectiles and other objects."""
         for attack in self.world.attacks:
             for projectile in attack.particles:
                 for collider_ID in self.world.collider:

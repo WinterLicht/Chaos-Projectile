@@ -95,7 +95,9 @@ class GameWorld(object):
         acceleration = [0, 0]
         life = 60
         amount = 5
-        particle_emitter = components.Attack(self.player, 10, position,
+        damage = 10
+        cooldown = 30
+        particle_emitter = components.Attack(self.player, damage, cooldown, position,
                                              amount, orb_sprite, life,
                                              vel, acceleration)
         self.attacks.append(particle_emitter)

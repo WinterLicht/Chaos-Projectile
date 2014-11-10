@@ -65,13 +65,15 @@ class Attack(chaosparticle.Emitter):
         - *position*: spawn position of projectiles
     """
     
-    def __init__(self, character_ID, damage, position, amount,
+    def __init__(self, character_ID, damage, cooldown, position, amount,
                  sprite_sheet, life, velocity, acceleration):
         """
         :param character_ID: this character fired the projectile
         :type character_ID: int
         :param damage: damage of the projectile
         :type damage: int
+        :param cooldown: time till new particles can be spawned in frames
+        :type cooldown: int
         :param position: spawn position of particles
         :type position: 2d list
         :param amount: amount of spawned particles
@@ -85,7 +87,7 @@ class Attack(chaosparticle.Emitter):
         :param acceleration: acceleration vector
         :type acceleration: 2d list
         """
-        chaosparticle.Emitter.__init__(self, position, amount, 
+        chaosparticle.Emitter.__init__(self, cooldown, position, amount, 
                                        sprite_sheet, life, velocity,
                                        acceleration)
         #Convert all the particles to projectiles
