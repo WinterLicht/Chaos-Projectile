@@ -61,12 +61,12 @@ class Attack(chaosparticle.Emitter):
     
     :Attributes:
         - *particles* (list): array of projectiles
-        - *life*: life time of the projectiles
         - *position*: spawn position of projectiles
     """
     
     def __init__(self, character_ID, damage, cooldown, position, amount,
-                 sprite_sheet, life, velocity, acceleration):
+                 sprite_sheet, life, velocity, acceleration,
+                 spread_angle=0):
         """
         :param character_ID: this character fired the projectile
         :type character_ID: int
@@ -86,10 +86,12 @@ class Attack(chaosparticle.Emitter):
         :type velocity: 2d list
         :param acceleration: acceleration vector
         :type acceleration: 2d list
+        :param spread_angle: angle between velocities of the particles in grad
+        :type spread_angle: int
         """
         chaosparticle.Emitter.__init__(self, cooldown, position, amount, 
                                        sprite_sheet, life, velocity,
-                                       acceleration)
+                                       acceleration, spread_angle)
         #Convert all the particles to projectiles
         temp = list()
         for particle in self.particles:

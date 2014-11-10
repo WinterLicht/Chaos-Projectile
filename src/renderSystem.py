@@ -65,7 +65,7 @@ class RenderSystem(object):
         for image in self.world.appearance:
             self.group.add(self.world.appearance[image])
         #Add all particles
-        for attack in self.world.attacks:
+        for attack in self.world.attack.itervalues():
             for projectile in attack.particles:
                 self.group.add(projectile)
 

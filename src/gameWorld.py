@@ -23,6 +23,7 @@ class GameWorld(object):
             - *direction* (dictionary ID : tuple): aim and attack direction (das aendern, in den Player rein!!!)
             - *characters* (dictionary ID : ): enemies and player (das besser aufplitten ??!!)
             - *state* (dictionary ID : components.State): states of entities
+            - *attacks* (dictionary ID : components.Attack): attacks of the charakters
             - *player* (int): ID of single player
     """
 
@@ -42,8 +43,8 @@ class GameWorld(object):
         self.direction = {}
         self.charakters = {}
         self.state = {}
+        self.attack = {}
         self.player = None
-        self.attacks = list()
         
         #Create all game entities
         
@@ -69,7 +70,15 @@ class GameWorld(object):
                                                          anim_time_list)
                             anim.rect.center = coll.center
                             player = components.Player(tile["name"], 0)
-                            c = (coll, vel, anim, player, components.State())
+                            #Create players attack
+                            orb_sprite = pygame.image.load(os.path.join('data', 'orb.png'))
+                            damage = 10
+                            position = coll.center
+                            particle_emitter = components.Attack(self.player, damage, 30, position,
+                                                                 5, orb_sprite, 60,
+                                                                 [3, 0], [0, 0], 10)
+                            #
+                            c = (coll, vel, anim, player, components.State(), particle_emitter)
                             self.player = self.create_entity(c)
 
                             #Now create the players orb
@@ -87,20 +96,6 @@ class GameWorld(object):
             coll = components.Collider(wall.x, wall.y, wall.width, wall.height)
             c = (coll,)
             self.create_entity(c)
-
-    def create_particle_emitter(self, position):
-        vel = components.Velocity(self.direction[self.charakters[self.player].orb_ID])
-        vel = [vel[0]*3, vel[1]*3]
-        orb_sprite = pygame.image.load(os.path.join('data', 'orb.png'))
-        acceleration = [0, 0]
-        life = 60
-        amount = 5
-        damage = 10
-        cooldown = 30
-        particle_emitter = components.Attack(self.player, damage, cooldown, position,
-                                             amount, orb_sprite, life,
-                                             vel, acceleration)
-        self.attacks.append(particle_emitter)
 
     def create_entity(self, c):
         """Adds an entity to the game world.
@@ -123,6 +118,8 @@ class GameWorld(object):
                 self.charakters[entity] = component
             elif isinstance(component, components.State):
                 self.state[entity] = component
+            elif isinstance(component, components.Attack):
+                self.attack[entity] = component
         #Set amount of components of new entity
         self.mask[entity] = len(c)
         #Return ID of new entity

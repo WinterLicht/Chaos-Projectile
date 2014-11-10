@@ -39,24 +39,18 @@ class CombatSystem():
 
     def update(self):
         """Update all particle emitters and remove dead objects"""
-        for attack in self.world.attacks:
+        for attack in self.world.attack.itervalues():
             attack.update()
             #Remove dead projectiles
-            for projectile in attack.particles:
-                if projectile.life < 0:
-                    attack.particles.remove(projectile)
-            #Remove dead particle emitters
-            if attack.life < 0:
-                self.world.attacks.remove(attack)
         #check for collision
         self.check_projectile_collision()
 
     def check_projectile_collision(self):
         """Checks for collision between projectiles and other objects."""
-        for attack in self.world.attacks:
-            for projectile in attack.particles:
+        for attack_ID in self.world.attack:
+            for projectile in self.world.attack[attack_ID].particles:
                 for collider_ID in self.world.collider:
-                    if not collider_ID == projectile.character_ID:
+                    if not collider_ID == attack_ID:
                         if self.world.collider[collider_ID].colliderect(projectile.rect):
                             projectile.life = -1
 

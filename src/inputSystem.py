@@ -118,7 +118,10 @@ class InputSystem(object):
         player_ID = self.world.player
         orb_ID = self.world.charakters[player_ID].orb_ID
         position = self.world.appearance[orb_ID].rect.center
-        self.world.create_particle_emitter(position)
+        #self.world.create_particle_emitter(position)
+        velocity = [self.world.direction[orb_ID][0] * 3,
+                    self.world.direction[orb_ID][1] * 3]
+        self.world.attack[player_ID].spawn_particles(velocity, position)
 
     def handle_mouse_move(self, mouse_x, mouse_y):
         """Position of the mouse cursor controlls aim and attack direction.
