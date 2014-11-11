@@ -224,14 +224,11 @@ class Player():
         - *orb_ID* (int): reference to the orb entity, that belongs this player
     """
 
-    def __init__(self, name, orb_ID):
+    def __init__(self, orb_ID):
         """
-        :param name: name of the character
-        :type name: string
         :param orb_ID: reference to the orb entity, that belongs this player
         :type orb_ID: int
         """
-        self.name = name
         self.orb_ID = orb_ID
 
 class Direction(list):
@@ -255,6 +252,7 @@ class State():
         self.grounded = False
         self.walking = False
         self.jumping = False
+        self.attacks = -1
         #self.aim_direction = 0
         
         #self.walk_left = False

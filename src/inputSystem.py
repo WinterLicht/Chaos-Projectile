@@ -60,7 +60,7 @@ class InputSystem(object):
             self.world.state[self.world.player].grounded = False
 
     def handle_joystick(self, x_axis, y_axis):
-        """Joystick controls aim and attack direction.
+        """Joystick controls aim and attacks direction.
         
         :param x_axis: x position of the axis
         :type x_axis: float
@@ -115,16 +115,11 @@ class InputSystem(object):
             self.world.velocity[self.world.player][0] = 0
 
     def handle_mousebutton_down(self):
-        player_ID = self.world.player
-        orb_ID = self.world.charakters[player_ID].orb_ID
-        position = self.world.appearance[orb_ID].rect.center
-        #self.world.create_particle_emitter(position)
-        velocity = [self.world.direction[orb_ID][0] * 3,
-                    self.world.direction[orb_ID][1] * 3]
-        self.world.attack[player_ID].spawn_particles(velocity, position)
+        #Execute players attacks number 0
+        self.world.state[self.world.player].attacks = 0
 
     def handle_mouse_move(self, mouse_x, mouse_y):
-        """Position of the mouse cursor controlls aim and attack direction.
+        """Position of the mouse cursor controlls aim and attacks direction.
         
         :param mouse_x: x mouse position in pixel in screen coordinates
         :type mouse_x: int

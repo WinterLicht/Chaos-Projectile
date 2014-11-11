@@ -65,9 +65,10 @@ class RenderSystem(object):
         for image in self.world.appearance:
             self.group.add(self.world.appearance[image])
         #Add all particles
-        for attack in self.world.attack.itervalues():
-            for projectile in attack.particles:
-                self.group.add(projectile)
+        for attacks in self.world.attacks.itervalues():
+            for attack in attacks:
+                for projectile in attack.particles:
+                    self.group.add(projectile)
 
     def draw(self, dt):
         """Draw everything on the screen.
