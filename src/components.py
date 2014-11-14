@@ -126,6 +126,7 @@ class Appearance(pygame.sprite.Sprite):
     
     :Attributes:
         - *flip* (boolean): all images faced right, should this be flipped
+        - *play_animation_till_end* (boolean): true if animation should be played once without interruption till it ends
         - *angle* (float): rotation angle of an image
         - *frames* (int list): for each animation of an entity stores amount of frames
         - *delay_between_frames* (int list): for each animation of an entity stores delay between frames in 1/60 seconds
@@ -155,6 +156,7 @@ class Appearance(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         self.flip = False
+        self.play_animation_till_end = False
         self.angle = 0
         #If there is no animation and the resolution is not set 
         if not width:

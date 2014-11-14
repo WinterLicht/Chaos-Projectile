@@ -94,10 +94,14 @@ class CollisionSystem(object):
             #of the item we hit
             if self.world.velocity[collider_ID][0] > 0:
                 self.world.collider[collider_ID].right = self.world.collider[element_ID].left
+                if self.world.state[collider_ID]:
+                    self.world.state[collider_ID].walk_right = False
 
             elif self.world.velocity[collider_ID][0] < 0:
             #Otherwise if we are moving left, do the opposite
                 self.world.collider[collider_ID].left = self.world.collider[element_ID].right
+                if self.world.state[collider_ID]:
+                    self.world.state[collider_ID].walk_left = False
         #Send an event for each collision
         for element_ID in hit_list_IDs:
             ev = events.CollisionOccured(collider_ID, element_ID)

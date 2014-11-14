@@ -156,8 +156,9 @@ class Emitter():
         :type velocity: 2d list
         :param position: spawn position of particles
         :type position: 2d list
+        :rtype: True if particles were spawned successfully
         """
-        #spawn particles, if cooldown expired
+        #Spawn particles, if cooldown expired
         if self.counter > self.cooldown:
             if not position:
                 position = self.position
@@ -176,6 +177,10 @@ class Emitter():
                                                self.particle_data.acceleration))
             #Reset counter, emitter is on the cooldown now
             self.counter = 0
+            return True
+        else:
+            #Cooldown not expired, no particles spawned
+            return False
 
     def remove_dead_particles(self):
         """Removes all particles, whose life is expired."""

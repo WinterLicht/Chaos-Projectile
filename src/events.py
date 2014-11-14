@@ -224,11 +224,24 @@ class PlayerMoved(Event):
 
 class PlayerStoppedMovement(Event):
     """This event is sent when player stops movement.
+
     Is used in enemy AI and animation system.
     """
-    
+
     def __init__(self):
         self.name = "Player Stopped Movement"
+
+
+class EntityAttacks(Event):
+    """Entity attacks.
+
+    :Attributes:
+        - *entity_ID* (int): ID of attacking entity 
+    """
+
+    def __init__(self, entity_ID):
+        self.name = "Attack"
+        self.entity_ID = entity_ID
 
 
 class EventManager:

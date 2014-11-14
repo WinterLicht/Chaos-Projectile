@@ -73,7 +73,11 @@ class CombatSystem():
             position = self.world.appearance[orb_ID].rect.center
             velocity = [self.world.direction[orb_ID][0] * 3,
                         self.world.direction[orb_ID][1] * 3]
-            self.world.attacks[entity_ID][attack_Nr].spawn_particles(velocity, position)
+            spawned = self.world.attacks[entity_ID][attack_Nr].spawn_particles(velocity, position)
+            if spawned:
+                #Post attack event
+                ev = events.EntityAttacks(entity_ID)
+                self.event_manager.post(ev)
         #Attack executed, so reset state
         self.world.state[entity_ID].attacks = -1
 
