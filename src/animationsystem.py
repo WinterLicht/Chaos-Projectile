@@ -94,6 +94,7 @@ class AnimationSystem(object):
                 self.world.appearance[entity_ID].current_frame_x = 0
             if state.attacks > -1:
                 #Attack animation is 2
+                #print("..")
                 self.world.appearance[entity_ID].play_animation_till_end = True
                 self.world.appearance[entity_ID].current_animation = 2
                 self.world.appearance[entity_ID].current_frame_x = 0

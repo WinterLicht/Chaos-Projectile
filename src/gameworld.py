@@ -26,6 +26,7 @@ class GameWorld(object):
             - *state* (dictionary ID : components.State): states of entities
             - *attacks* (dictionary ID : components.Attack): attacks of the charakters
             - *player* (int): ID of single player
+            - *enemies* (int list): IDs of enemies
     """
 
     def __init__(self, screen):
@@ -46,6 +47,7 @@ class GameWorld(object):
         self.state = {}
         self.attacks = {}
         self.player = None
+        self.enemies = list()
         
         #Create all game entities
         
@@ -59,6 +61,10 @@ class GameWorld(object):
                 tile = self.level.tmx_data.getTileProperties((x, y, 4))
                 if tile:
                     if "type" in tile:
+                        if tile["type"] == "enemy":
+                            #Create enemies
+                            position = (x*64+32, y*64+32)
+                            self.create_enemy(position)
                         if tile["type"] == "player":
                             #Create player
                             position = (x*64+32, y*64+32)
@@ -98,7 +104,7 @@ class GameWorld(object):
         :param position: position where player is created
         :type position: 2d list
         """
-        #Players hitbox, it ist 50 pixel width and 96 pixel height
+        #Players hitbox, it is 50 pixel width and 96 pixel height
         coll = components.Collider(position[0], position[1], 50, 96)
         vel = components.Velocity([0, 0])
         #Create players animations
@@ -125,11 +131,29 @@ class GameWorld(object):
         damage = 10
         position = coll.center
         particle_emitter = components.Attack(self.player, damage, 30, position,
-                                             25, temp, 120,
-                                             self.direction[orb_ID], [0, 0], 10)
+                                             5, temp, 120,
+                                             self.direction[orb_ID], [0, 0], 15)
         attack_list = list()
         attack_list.append(particle_emitter)
         self.add_component_to_entity(self.player, attack_list)
+
+    def create_enemy(self, position):
+        """Create an enemy.
+        
+        :param position: position where enemy is created
+        :type position: 2d list
+        """
+        #Enemy's hitbox, it is 50 pixel width and 96 pixel height
+        coll = components.Collider(position[0], position[1], 50, 96)
+        vel = components.Velocity([0, 0])
+        #Create enemy's animations
+        temp = pygame.image.load(os.path.join('data', 'char.png')).convert_alpha()
+        anim_list = [4, 10, 3]
+        anim_time_list = [240, 60, 44]
+        anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
+        anim.rect.center = coll.center
+        c = (coll, vel, anim, components.State())
+        self.enemies.append(self.create_entity(c))
 
     def add_component_to_entity(self, entity_ID, component):
         if isinstance(component, components.Collider):

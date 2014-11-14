@@ -27,6 +27,14 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="19" name="enemy_" tilewidth="64" tileheight="64">
+  <image source="enemy_.png" width="128" height="128"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="enemy"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="bg" width="50" height="50">
   <data encoding="base64" compression="zlib">
    eJztw8EJAAAMA6F7ZP+ZO0dBwVVTVVVVVVVVVVXV5w+SZScR
@@ -34,7 +42,7 @@
  </layer>
  <layer name="obj" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJztmYtuwyAMRZ1V6rI1//+9G9Ks3Vk2MWAnZMqVUF9p4Bg/gCxEtPyTdnU96eaYSTfHXLoix6fyncXx/t0eucMZkmSxOPj7VbQItggbvcRnj18tP//jV8lW43tTrv2gXxv18rzEf1viA3nk+2VgTK0qttmonwOFHPw5O18Uf+Q57fErrzLnpDCwP9biOUpR95JxxQyWrlg/NN0csRqtKWdzcA7a8/89HcWBOVOLX269tfEIDpkzM/anGRzS9pJhRNpat4g5IuoX5/zIcUvJdRWLOY5cH0VphffoVzPk315JDp4T9nHvHGXvu9ad32Wcc+5DH7d4MJ75+rN8U8tXVi7kMVrxHBnXaCOPbbz7waNiB+u73GPUdPa6hCXXJ7iHjpqPbFn1/irzoc2BFWclJmvzcjSHluOIfHmixlI7h4s6r8I10ajdLJa9czhPn7UaVeyx0d85yFDNPqPrLi1+s+Th6OkfGVCRfsr1uNzTy5Fxzotj8dyTY3ZTfvNyaC2Sh/vT9r4yv2n1ceRcNMPn8bxVvsr6iLE7mgetPNC6zkNpHNifVuez6iDm7dach+ffrf1lC30/Y4+SwWGdaRDl5YhIDsyLe7aP5ongaFm3onrjR9MIR+1stjUvj9qyhaPl2UpPbdF8rBZrqBn2gyhZ0+XzTEuzcfTKet5/hVbmCc+gvgDjNQno
+   eJztmYlqwzAMhp0V2mzN+z/vZpjgR0i2ZUk5Sn4wPXN8sg5bWUopy4eMq+tZbo4z6eY4l67I8SN8p3G8/sYj93Zc4iwaB32/sqGxvQz3EGGjN/s84lfL/3H0ytnq+FaO/VL+Szaa5XmzYy3xgTz8/eK4J6uqbbYyz4FCDvqcnS+qP9KczvjVqDLnpDKQP7biOUpR5+JxRQyarlg/JN0csfLWlKM5KAf1/L+nvTgwZ0rxS2O2Nu7BwXNmxv40g4PbnjN4JK11q4gjon5Rzo+8by6+riIRx57royit8B796gz5d1acg+aEfHx0jrL3XWvndx7nlPvQxzUejGf6/1G+KeUrLRfSPWrxHBnXaKMR24zuB/eKHazvfI/R0tHrEhJfn+AeOmo+sqXV+6vMhzQHWpzVmGzNy94cUo4rZSxPtFhafThPXwaFayKv3TSWXh9u5JqtGlXtsZV+n8urln286y4pfrM0wjFzfWRARfop1eN6zlGO0T6vVdjf6Z2TYnYTfhvlkEYkD11P2vvy/CbVR09fNMPnsd/KX3l9xNj15kEtD1jXeSiJA68n1fmsOoh525rzsP9tvV620Pcz9igZHFpPo5S8HBHJgXmxZ/tonggOy7oVNRs/kjwcrd6sNS97bWnhsDxbmaktko+1Yg11hv0gitd0/jxT09k4ZqU977/CqPOEPahfhb8J9Q==
   </data>
  </layer>
  <layer name="deco hinten" width="50" height="50">
@@ -49,7 +57,7 @@
  </layer>
  <layer name="charakters" width="50" height="50" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztzrENADAIwDAuoOX/Z8sJHZBYbCl7IgBmZXe2JwbcrrYnAAAAAAAAAAD49gB10AA/
+   eJztzsEJwCAQRNGtIBo06b9UtwRBFkJ4D/5tDhMBwNeNbG7srqwVfznxZO/Grmd38RcAAAAAAAAA4H8WqiYAkQ==
   </data>
  </layer>
  <objectgroup name="walls" width="50" height="50" visible="0">
@@ -144,7 +152,7 @@
   <object x="768" y="576" width="64" height="128"/>
   <object x="832" y="576" width="192" height="192"/>
   <object x="1024" y="576" width="64" height="128"/>
-  <object x="1088" y="576" width="64" height="192"/>
+  <object x="1088" y="512" width="64" height="256"/>
   <object x="1152" y="640" width="64" height="192"/>
   <object x="1216" y="768" width="64" height="128"/>
   <object name="Name" type="Typ" x="64" y="0" width="3136" height="64">
