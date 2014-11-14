@@ -1,5 +1,5 @@
 """
-.. module:: renderSystem
+.. module:: rendersystem
    :Platform: Unix, Windows
    :Synopsis: Render system
 """
@@ -7,6 +7,7 @@
 import pygame
 import events
 import pyscroll
+
 
 class RenderSystem(object):
     """Render system.

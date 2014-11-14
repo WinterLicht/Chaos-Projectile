@@ -1,5 +1,5 @@
 """
-.. module:: animationSystem
+.. module:: animationsystem
     :platform: Unix, Windows
     :synopsis: Computes which frame of animation should be displayed.
 """
@@ -19,7 +19,7 @@ class AnimationSystem(object):
         :param event_manager: event manager
         :type event_manager: events.EventManager
         :param world: game world
-        :type world: gameWorld.GameWorld
+        :type world: gameworld.GameWorld
         """
         self.world = world
         self.event_manager = event_manager
@@ -64,8 +64,7 @@ class AnimationSystem(object):
                 animation.set_image(animation.current_frame_x)
 
     def handle_player_stopped_movement_event(self):
-        """When player doesn't move or attack, then show his idle animation.
-        """
+        """When player doesn't move or attack, then show his idle animation."""
         player = self.world.player
         if not self.world.velocity[player][0] == 0:
             #Flip sprite:
@@ -78,8 +77,7 @@ class AnimationSystem(object):
                 self.world.appearance[player].current_frame_x = 0
 
     def handle_player_moved_event(self):
-        """When player moves and doesn't attack, show walk or jump animation.
-        """
+        """When player moves and doesn't attack, show walk or jump animation."""
         player = self.world.player
         current_animation = self.world.appearance[player].current_animation
         if not self.world.velocity[player][0] == 0:

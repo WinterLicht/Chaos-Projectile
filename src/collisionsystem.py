@@ -1,10 +1,11 @@
 """
-.. module:: collisionSystem
+.. module:: collisionsystem
     :platform: Unix, Windows
     :synopsis: Collision system.
 """
 
 import events
+
 
 class CollisionSystem(object):
     """Moves object, checks collision, sends events for collision handling and updates image position of moved objects.

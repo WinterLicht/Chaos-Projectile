@@ -1,5 +1,5 @@
-:mod:`systemManager`
+:mod:`collisionsystem`
 ============================================
 
-.. automodule:: systemManager
+.. automodule:: collisionsystem
    :members:

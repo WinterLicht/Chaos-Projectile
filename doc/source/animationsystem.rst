@@ -1,5 +1,5 @@
-:mod:`inputSystem`
+:mod:`animationsystem`
 ============================================
 
-.. automodule:: inputSystem
+.. automodule:: animationsystem
    :members:

@@ -1,5 +1,5 @@
 """
-.. module:: gameWorld
+.. module:: gameworld
     :platform: Unix, Windows
     :synopsis: Container of all entities in game.
 """
@@ -125,7 +125,7 @@ class GameWorld(object):
         damage = 10
         position = coll.center
         particle_emitter = components.Attack(self.player, damage, 30, position,
-                                             5, temp, 120,
+                                             25, temp, 120,
                                              self.direction[orb_ID], [0, 0], 10)
         attack_list = list()
         attack_list.append(particle_emitter)

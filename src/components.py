@@ -243,6 +243,7 @@ class State():
     Necessary for AI or for animation system to show appropriate animation.
     
     :Attributes:
+        - *attacks* (int): index of an attack that will be executed, -1 means there will be no attack executed
         - *grounded* (boolean): true if entity stays on the ground
         - *walking* (boolean): true if entity is moving horizontally
         - *jumping* (boolean): true if entity is jumping or is on the air
@@ -255,6 +256,6 @@ class State():
         self.attacks = -1
         #self.aim_direction = 0
         
-        #self.walk_left = False
-        #self.walk_right = False
+        self.walk_left = False
+        self.walk_right = False
         

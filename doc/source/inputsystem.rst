@@ -1,5 +1,5 @@
-:mod:`collisionSystem`
+:mod:`inputsystem`
 ============================================
 
-.. automodule:: collisionSystem
+.. automodule:: inputsystem
    :members:

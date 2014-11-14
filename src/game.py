@@ -6,8 +6,8 @@
 
 import pygame
 import events
-import gameWorld
-import systemManager
+import gameworld
+import systemmanager
 import controller
 
 
@@ -62,8 +62,8 @@ if __name__ == "__main__":
     evManager = events.EventManager()
     
     #Create game world
-    game = gameWorld.GameWorld(screen)
-    systemMngr = systemManager.SystemManager(evManager, game)
+    game = gameworld.GameWorld(screen)
+    systemMngr = systemmanager.SystemManager(evManager, game)
     
     #Create input controller
     input_control = controller.InputController(evManager)

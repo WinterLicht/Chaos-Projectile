@@ -1,5 +1,5 @@
-:mod:`animationSystem`
+:mod:`systemmanager`
 ============================================
 
-.. automodule:: animationSystem
+.. automodule:: systemmanager
    :members:

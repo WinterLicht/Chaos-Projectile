@@ -7,9 +7,10 @@
 import pygame
 import events
 
+
 class InputSystem(object):
     """Gets events from controllers and translates this to actions
-    
+
     :Attributes:
         - *world* (gameWorld.GameWorld): game world
         - *event_manager* (events.EventManager): event manager
@@ -28,7 +29,7 @@ class InputSystem(object):
 
     def notify(self, event):
         """Notify, when event occurs. 
-        
+
         :param event: occured event
         :type event: events.Event
         """
@@ -47,7 +48,7 @@ class InputSystem(object):
 
     def handle_hat_moved(self, x, y):
         """Hat controlls player movement.
-        
+
         :param x: x position
         :type x: int
         :param y: y position
@@ -61,7 +62,7 @@ class InputSystem(object):
 
     def handle_joystick(self, x_axis, y_axis):
         """Joystick controls aim and attacks direction.
-        
+
         :param x_axis: x position of the axis
         :type x_axis: float
         :param y_axis: y position of the axis
@@ -86,33 +87,32 @@ class InputSystem(object):
 
     def handle_key_pressed(self, key):
         """Keys A, D and W controll players movement.
-        
+
         :param key: key pressed
         :type key: pygame constant
         """
-        #Players walk velocity is 7 pixels per frame and jump velocity is 14
-        vel = 7
         if key == pygame.K_a:
             #Walk left
-            self.world.velocity[self.world.player][0] = -vel
+            self.world.state[self.world.player].walk_left = True
         if key == pygame.K_d:
             #Walk right
-            self.world.velocity[self.world.player][0] = vel
-        if key == pygame.K_w and self.world.state[self.world.player].grounded:
+            self.world.state[self.world.player].walk_right = True
+        if key == pygame.K_w:
             #Jump
-            self.world.velocity[self.world.player][1] = -14
-            self.world.state[self.world.player].grounded = False
+            self.world.state[self.world.player].jumping = True
 
     def handle_key_released(self, key):
         """Player stops movement, when key is released.
-        
+
         :param key: key pressed
         :type key: pygame constant
         """
         if key == pygame.K_a:
-            self.world.velocity[self.world.player][0] = 0
+            self.world.state[self.world.player].walk_left = False
         if key == pygame.K_d:
-            self.world.velocity[self.world.player][0] = 0
+            self.world.state[self.world.player].walk_right = False
+        if key == pygame.K_w:
+            self.world.state[self.world.player].jumping = False
 
     def handle_mousebutton_down(self):
         #Execute players attacks number 0
@@ -120,18 +120,18 @@ class InputSystem(object):
 
     def handle_mouse_move(self, mouse_x, mouse_y):
         """Position of the mouse cursor controlls aim and attacks direction.
-        
+
         :param mouse_x: x mouse position in pixel in screen coordinates
         :type mouse_x: int
         :param mouse_y: y mouse position in pixel in screen coordinates
         :type mouse_x: int
         """
-        #subtract offset, so mouse coordinates are relative to screen middle
+        #Subtract offset, so mouse coordinates are relative to screen middle
         mouse_x = mouse_x - pygame.display.Info().current_w / 2
         mouse_y = mouse_y - pygame.display.Info().current_h / 2
 
-        #calculate in which octant is mouse cursor
-        #small offset between octants
+        #Calculate in which octant is mouse cursor
+        #Small offset between octants
         epsilon = 30
         if epsilon > mouse_x and mouse_x > -epsilon:
             direction_x = 0
@@ -152,9 +152,9 @@ class InputSystem(object):
 
     def move_orb(self, x, y):
         """Moves and rotates the orb according players aim input.
-        
+
         No rotation is when aim direction is right from the player.
-        
+
         :param x: x position in octant
         :type x: int
         :param y: y position in octant

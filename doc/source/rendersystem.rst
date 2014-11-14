@@ -1,5 +1,5 @@
-:mod:`renderSystem`
+:mod:`rendersystem`
 ============================================
 
-.. automodule:: renderSystem
+.. automodule:: rendersystem
    :members:

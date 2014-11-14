@@ -25,12 +25,13 @@ Contents:
    gameWorld
    level
    controller
-   systemManager
-   animationSystem
-   collisionSystem
-   inputSystem
-   renderSystem
-   combatSystem
+   systemmanager
+   animationsystem
+   collisionsystem
+   inputsystem
+   rendersystem
+   combatsystem
+   statesystem
    chaosparticle
 
 Indices and tables
