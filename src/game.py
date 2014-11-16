@@ -62,7 +62,7 @@ if __name__ == "__main__":
     evManager = events.EventManager()
     
     #Create game world
-    game = gameworld.GameWorld(screen)
+    game = gameworld.GameWorld(screen, evManager)
     systemMngr = systemmanager.SystemManager(evManager, game)
     
     #Create input controller

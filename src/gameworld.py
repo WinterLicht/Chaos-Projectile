@@ -9,6 +9,7 @@ import pygame
 import level
 import components
 import chaosparticle
+import ai
 
 class GameWorld(object):
     """ Container of all entities in game.
@@ -24,18 +25,21 @@ class GameWorld(object):
             - *direction* (dictionary ID : tuple): aim and attacks direction (das aendern, in den Player rein!!!)
             - *characters* (dictionary ID : ): enemies and player (das besser aufplitten ??!!)
             - *state* (dictionary ID : components.State): states of entities
-            - *attacks* (dictionary ID : components.Attack): attacks of the charakters
+            - *attacks* (dictionary ID : components.Attack): attacks of the characters
             - *player* (int): ID of single player
-            - *enemies* (int list): IDs of enemies
+            - *ai* (dictionary ID : ai): all AI for  enemies
     """
 
-    def __init__(self, screen):
+    def __init__(self, screen, event_manager):
         """
         :param screen: game screen
         :type screen: python.Surface
+        :param event_managere: event manager
+        :type event_manager: events.EventManager
         """
         self.level = level.Level()
         self.screen = screen
+        self.event_manager = event_manager
 
         #Components and entities
         self.mask = list()
@@ -47,7 +51,7 @@ class GameWorld(object):
         self.state = {}
         self.attacks = {}
         self.player = None
-        self.enemies = list()
+        self.ai = {}
         
         #Create all game entities
         
@@ -153,7 +157,9 @@ class GameWorld(object):
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         c = (coll, vel, anim, components.State())
-        self.enemies.append(self.create_entity(c))
+        enemy_ID = self.create_entity(c)
+        enemy_AI = ai.AI_1(self.event_manager, self, enemy_ID)
+        self.add_component_to_entity(enemy_ID, enemy_AI)
 
     def add_component_to_entity(self, entity_ID, component):
         if isinstance(component, components.Collider):
@@ -171,6 +177,8 @@ class GameWorld(object):
         elif isinstance(component, list):
             if isinstance(component[0], components.Attack):
                 self.attacks[entity_ID] = component
+        elif isinstance(component, ai.AI):
+            self.ai[entity_ID] = component
         #Increase amount of components of the entity
         self.mask[entity_ID] += 1
 

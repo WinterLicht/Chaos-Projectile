@@ -33,6 +33,7 @@ Contents:
    combatsystem
    statesystem
    chaosparticle
+   ai
 
 Indices and tables
 ==================

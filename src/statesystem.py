@@ -1,15 +1,14 @@
 """
 .. module:: statesystem
     :platform: Unix, Windows
-    :synopsis: Handles states of an entity and AI.
+    :synopsis: Handles states of an entity and calls it's AI.
 """
 
-import random
 import events
 
 
 class StateSystem():
-    """Handles states of an entity and AI.
+    """Handles states of an entity and calls it's AI.
 
     :Attributes:
         - *event_manager* (:class:`events.EventManager`): event manager
@@ -40,8 +39,8 @@ class StateSystem():
     def update(self):
         vel = 7
         #Handle AI
-        for enemy_ID in self.world.enemies:
-            self.cruise(enemy_ID)
+        for enemy_ID in self.world.ai:
+            self.world.ai[enemy_ID].current_action
         #Move entities
         for entity_ID in self.world.state:
             if self.world.velocity[entity_ID]:
@@ -57,34 +56,3 @@ class StateSystem():
                     self.world.velocity[self.world.player][1] = -vel*2
                     self.world.state[self.world.player].grounded = False
 
-    def random(self, minimum, maximum=None):
-        """Random integer between minimum and maximum.
-
-        If maximum is not given, than it's assumed, that random value is between 0 and one given parameter
-
-        :param minimum: Minimum
-        :type minimum: int
-        :param maximum: Maximum
-        :type maximum: int
-        :rtype: random integer between minimum and maximum 
-        """
-
-        if not maximum:
-            maximum = minimum
-            minimum = 0
-        difference = maximum - minimum
-        result =  int(random.random() * difference) + minimum
-        return result
-
-    def cruise(self, entity_ID):
-        """Function for simple enemy AI implements cruising logic.
-        
-        Enemy is walking on the level.
-        """
-        random_number = self.random(50)
-        if random_number == 1:
-            self.world.state[entity_ID].walk_left = True
-            self.world.state[entity_ID].walk_right = False
-        if random_number == 2:
-            self.world.state[entity_ID].walk_left = False
-            self.world.state[entity_ID].walk_right = True
