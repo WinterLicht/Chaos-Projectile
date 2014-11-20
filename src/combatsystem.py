@@ -6,6 +6,7 @@
 
 import events
 
+
 class CombatSystem():
     """Handles collision between characters and projectiles, handles attacks etc.
     
@@ -68,16 +69,19 @@ class CombatSystem():
         :param attack_Nr: number of the attacks that is executed
         :type attack_Nr: int
         """
-        if entity_ID == self.world.player:
-            orb_ID = self.world.charakters[entity_ID].orb_ID
+        if entity_ID in self.world.players:
+            orb_ID = self.world.players[entity_ID].orb_ID
             position = self.world.appearance[orb_ID].rect.center
-            velocity = [self.world.direction[orb_ID][0] * 3,
-                        self.world.direction[orb_ID][1] * 3]
-            spawned = self.world.attacks[entity_ID][attack_Nr].spawn_particles(velocity, position)
-            if spawned:
-                #Post attack event
-                ev = events.EntityAttacks(entity_ID)
-                self.event_manager.post(ev)
+        else:
+            position = self.world.appearance[entity_ID].rect.center
+        direction = self.world.direction[entity_ID]
+        velocity = [direction[0] * 3,
+                    direction[1] * 3]
+        spawned = self.world.attacks[entity_ID][attack_Nr].spawn_particles(velocity, position)
+        if spawned:
+            #Post attack event
+            ev = events.EntityAttacks(entity_ID)
+            self.event_manager.post(ev)
         #Attack executed, so reset state
         self.world.state[entity_ID].attacks = -1
 

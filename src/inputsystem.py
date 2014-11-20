@@ -162,23 +162,32 @@ class InputSystem(object):
         """
         angle = 0
         if x == 1 and y == -1:
+            x = 0.75
+            y = -0.75
             angle = 45
         elif x == 0 and y == -1:
             angle = 90
         elif x == -1 and y == -1:
+            x = -0.75
+            y = -0.75
             angle = 135
         elif x == -1 and y == 0:
             angle = 180
         elif x == -1 and y == 1:
+            x = -0.75
+            y = 0.75
             angle = 225
         elif x == 0 and y == 1:
             angle = 270
         elif x == 1 and y == 1:
+            x = 0.75
+            y = 0.75
             angle = 315
         if not (x == 0 and y == 0):
             #Axis moved, so update orb position
-            orb_ID = self.world.charakters[self.world.player].orb_ID
-            self.world.direction[orb_ID] = [x, y]
+            player_ID = self.world.player
+            orb_ID = self.world.players[self.world.player].orb_ID
+            self.world.direction[player_ID] = [x, y]
             #Move orb
             self.world.appearance[orb_ID].rect.center = (x*64 + self.world.collider[self.world.player].center[0] ,
                                                         y*64 + self.world.collider[self.world.player].center[1])

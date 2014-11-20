@@ -47,7 +47,7 @@ class GameWorld(object):
         self.collider = {}
         self.velocity = {}
         self.direction = {}
-        self.charakters = {}
+        self.players = {}
         self.state = {}
         self.attacks = {}
         self.player = None
@@ -56,7 +56,7 @@ class GameWorld(object):
         #Create all game entities
         
         #Create characters
-        #layer = self.level.tmx_data.getTileLayerByName("charakters")
+        #layer = self.level.tmx_data.getTileLayerByName("players")
         '''LayerWeite und Breite auslesen!! Sowie die Nummer'''
         #Temp list to store fields
         fields = list()
@@ -117,26 +117,26 @@ class GameWorld(object):
         anim_time_list = [240, 60, 44]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
+        direction = components.Direction([1, 0])
         player = components.Player(0)
-        c = (coll, vel, anim, player, components.State())
+        c = (direction, coll, vel, anim, player, components.State())
         self.player = self.create_entity(c)
         #Now create the players orb
         #It is created afterward, so orb will be
         #displayed over players sprite
-        orb_direction = components.Direction([1, 0])
         temp = pygame.image.load(os.path.join('data', 'orb.png'))
         orb_sprite = components.Appearance(temp.convert_alpha())
-        c_orb = (orb_direction, orb_sprite)
+        c_orb = (orb_sprite,)
         orb_ID = self.create_entity(c_orb)
         #Set orb ID
-        self.charakters[self.player].orb_ID = orb_ID
+        self.players[self.player].orb_ID = orb_ID
         #Create players attacks
         #attack 1
         damage = 10
         position = coll.center
         particle_emitter = components.Attack(self.player, damage, 30, position,
                                              5, temp, 120,
-                                             self.direction[orb_ID], [0, 0], 15)
+                                             self.direction[self.player], [0, 0], 15)
         attack_list = list()
         attack_list.append(particle_emitter)
         self.add_component_to_entity(self.player, attack_list)
@@ -156,10 +156,25 @@ class GameWorld(object):
         anim_time_list = [240, 60, 44]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
-        c = (coll, vel, anim, components.State())
+        character = components.Player(0)
+        direction = components.Direction([1, 0])
+        c = (coll, direction, vel, anim, character, components.State())
         enemy_ID = self.create_entity(c)
+
         enemy_AI = ai.AI_1(self.event_manager, self, enemy_ID)
         self.add_component_to_entity(enemy_ID, enemy_AI)
+
+        projectile_image = pygame.image.load(os.path.join('data', 'orb.png'))
+        #Create players attacks
+        #attack 1
+        damage = 10
+        position = coll.center
+        particle_emitter = components.Attack(enemy_ID, damage, 10, position,
+                                             1, projectile_image, 120,
+                                             self.direction[enemy_ID], [0, 0], 15)
+        attack_list = list()
+        attack_list.append(particle_emitter)
+        self.add_component_to_entity(enemy_ID, attack_list)
 
     def add_component_to_entity(self, entity_ID, component):
         if isinstance(component, components.Collider):
@@ -171,7 +186,7 @@ class GameWorld(object):
         elif isinstance(component, components.Direction):
             self.direction[entity_ID] = component
         elif isinstance(component, components.Player):
-            self.charakters[entity_ID] = component
+            self.players[entity_ID] = component
         elif isinstance(component, components.State):
             self.state[entity_ID] = component
         elif isinstance(component, list):
@@ -221,8 +236,8 @@ class GameWorld(object):
             del self.velocity[entity_ID]
         if entity_ID in self.direction:
             del self.direction[entity_ID]
-        if entity_ID in self.charakters:
-            del self.charakters[entity_ID]
+        if entity_ID in self.players:
+            del self.players[entity_ID]
         if entity_ID in self.state:
             del self.state[entity_ID]
 '''

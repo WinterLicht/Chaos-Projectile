@@ -234,10 +234,7 @@ class Player():
         self.orb_ID = orb_ID
 
 class Direction(list):
-    """Direction of an entity is a simple list with two components.
-    
-    For an character entity it is its view direction and for an orb -- its aim direction.
-    """
+    """Direction of an entity is a simple list with two components that shows its aim/view direction."""
     pass
 
 class State():

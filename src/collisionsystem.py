@@ -10,7 +10,7 @@ import events
 class CollisionSystem(object):
     """Moves object, checks collision, sends events for collision handling and updates image position of moved objects.
     
-    Implementation is inspired by the `Pygame Platformer Examples <http://programarcadegames.com/index.php?lang=en&chapter=example_code_platformer>`_.
+    Characters does not collide with each other. Implementation is inspired by the `Pygame Platformer Examples <http://programarcadegames.com/index.php?lang=en&chapter=example_code_platformer>`_.
     
     :Attributes:
         - *event_manager* (:class:`events.EventManager`): event manager
@@ -62,9 +62,9 @@ class CollisionSystem(object):
             if self.world.player == collider_ID:
                 #Update orb direction correspondent aim direction and
                 #player position
-                orb_ID = self.world.charakters[collider_ID].orb_ID
-                directionX = self.world.direction[orb_ID][0]
-                directionY = self.world.direction[orb_ID][1]
+                orb_ID = self.world.players[collider_ID].orb_ID
+                directionX = self.world.direction[collider_ID][0]
+                directionY = self.world.direction[collider_ID][1]
                 self.world.appearance[orb_ID].rect.center = (directionX*64 + self.world.collider[self.world.player].center[0] ,
                                                         directionY*64 + self.world.collider[self.world.player].center[1])
                 if not old_position == self.world.collider[collider_ID].center:
@@ -87,7 +87,9 @@ class CollisionSystem(object):
         #Filter overlapping hit boxes with collider
         hit_list_IDs = filter(lambda x:
                               self.world.collider[collider_ID].colliderect(self.world.collider[x]) and
-                              not collider_ID == x,
+                              not collider_ID == x and
+                              not ((collider_ID in self.world.ai or collider_ID in self.world.players) and
+                                   (x in self.world.ai or x in self.world.players)),
                               self.world.collider)
         for element_ID in hit_list_IDs:
             #If we are moving right, set our right side to the left side
@@ -110,37 +112,39 @@ class CollisionSystem(object):
         #pixel coordinates
         self.world.collider[collider_ID].center = map(int, self.world.collider[collider_ID].center)
 
-    def calculate_collision_y(self, colliderID):
+    def calculate_collision_y(self, collider_ID):
         """Move collider in y direction and check collision between collider and all other collidees.
         
-        :param colliderID: collider id
-        :type colliderID: int
+        :param collider_ID: collider id
+        :type collider_ID: int
         """
         #Consider gravity
-        self.world.state[colliderID].grounded = False
-        self.world.velocity[colliderID][1] += self.gravity[1]
+        self.world.state[collider_ID].grounded = False
+        self.world.velocity[collider_ID][1] += self.gravity[1]
         #Move collider in y direction.
-        self.world.collider[colliderID] = self.world.collider[colliderID].move(0, self.world.velocity[colliderID][1])
+        self.world.collider[collider_ID] = self.world.collider[collider_ID].move(0, self.world.velocity[collider_ID][1])
         #Filter overlapping hit boxes with collider
         #Overlapping is checked with a temp, which was moved 1 pixel
         #further than collider. This is necessary because of pixel
         #coordinates of the detected, if collider was moved 0.4 further
-        temp = self.world.collider[colliderID].move(0, 1)
+        temp = self.world.collider[collider_ID].move(0, 1)
         hit_list_IDs = filter(lambda x:
                          temp.colliderect(self.world.collider[x]) and 
-                         not colliderID == x,
+                         not collider_ID == x and
+                         not ((collider_ID in self.world.ai or collider_ID in self.world.players) and
+                         (x in self.world.ai or x in self.world.players)),
                          self.world.collider)
         for element_ID in hit_list_IDs:
             #Reset our position based on the top/bottom of the object
-            if self.world.velocity[colliderID][1] > 0:
-                self.world.collider[colliderID].bottom = self.world.collider[element_ID].top
-                if colliderID in self.world.state:
-                    self.world.state[colliderID].grounded = True
-            elif self.world.velocity[colliderID][1] < 0:
-                self.world.collider[colliderID].top = self.world.collider[element_ID].bottom
+            if self.world.velocity[collider_ID][1] > 0:
+                self.world.collider[collider_ID].bottom = self.world.collider[element_ID].top
+                if collider_ID in self.world.state:
+                    self.world.state[collider_ID].grounded = True
+            elif self.world.velocity[collider_ID][1] < 0:
+                self.world.collider[collider_ID].top = self.world.collider[element_ID].bottom
             #Reset velocity in y direction, so gravity will not be added
             #every new frame
-            self.world.velocity[colliderID][1] = 0
+            self.world.velocity[collider_ID][1] = 0
         #Set new position and cast to int before, because position is in
         #pixel coordinates
-        self.world.collider[colliderID].center = map(int, self.world.collider[colliderID].center)
+        self.world.collider[collider_ID].center = map(int, self.world.collider[collider_ID].center)
