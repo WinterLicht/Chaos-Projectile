@@ -96,13 +96,6 @@ class KeyReleased(Event):
         self.key = key
 
 
-class MouseButtonDown(Event):
-    """Mouse button down event."""
-    
-    def __init__(self):
-        self.name = "Mouse button down"
-
-
 class MouseMoved(Event):
     """Mouse moved event stores new position of mouse pointer on the screen.
     
@@ -121,6 +114,13 @@ class MouseMoved(Event):
         self.name = "Mouse Moved Event"
         self.x = x
         self.y = y
+
+
+class PlayerAttackRequest(Event):
+    """Player attack request."""
+
+    def __init__(self):
+        self.name = "Attack Request"
 
 
 class AxisMoved(Event):

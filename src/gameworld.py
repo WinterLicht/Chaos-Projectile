@@ -170,7 +170,7 @@ class GameWorld(object):
         damage = 10
         position = coll.center
         particle_emitter = components.Attack(enemy_ID, damage, 10, position,
-                                             1, projectile_image, 120,
+                                             1, projectile_image, 60,
                                              self.direction[enemy_ID], [0, 0], 15)
         attack_list = list()
         attack_list.append(particle_emitter)

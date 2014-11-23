@@ -43,8 +43,8 @@ class InputSystem(object):
             self.handle_hat_moved(event.x, event.y)
         if isinstance(event, events.AxisMoved):
             self.handle_joystick(event.x_axis, event.y_axis)
-        if isinstance(event, events.MouseButtonDown):
-            self.handle_mousebutton_down()
+        if isinstance(event, events.PlayerAttackRequest):
+            self.handle_attack_request()
 
     def handle_hat_moved(self, x, y):
         """Hat controlls player movement.
@@ -54,11 +54,20 @@ class InputSystem(object):
         :param y: y position
         :type y: int
         """
-        #Players walk velocity is 7 pixels per frame and jump is 14
-        self.world.velocity[self.world.player][0] = 7 * x
+        if x < 0:
+            #Walk left
+            self.world.state[self.world.player].walk_left = True
+        elif x > 0:
+            #Walk right
+            self.world.state[self.world.player].walk_right = True
+        else:
+            self.world.state[self.world.player].walk_right = False
+            self.world.state[self.world.player].walk_left = False
         if y > 0 and self.world.state[self.world.player].grounded:
-            self.world.velocity[self.world.player][1] = -14
-            self.world.state[self.world.player].grounded = False
+            #Jump
+            self.world.state[self.world.player].jumping = True
+        else:
+            self.world.state[self.world.player].jumping = False
 
     def handle_joystick(self, x_axis, y_axis):
         """Joystick controls aim and attacks direction.
@@ -114,7 +123,7 @@ class InputSystem(object):
         if key == pygame.K_w:
             self.world.state[self.world.player].jumping = False
 
-    def handle_mousebutton_down(self):
+    def handle_attack_request(self):
         #Execute players attacks number 0
         self.world.state[self.world.player].attacks = 0
 
