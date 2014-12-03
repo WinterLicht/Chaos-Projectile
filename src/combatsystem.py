@@ -58,7 +58,9 @@ class CombatSystem():
                 for projectile in attack.particles:
                     for collider_ID in self.world.collider:
                         if not collider_ID == attacks_ID:
-                            if self.world.collider[collider_ID].colliderect(projectile.rect):
+                            #Collision between walls
+                            hit_items = self.world.tree.hit(projectile.rect)
+                            if hit_items:
                                 projectile.life = -1
 
     def execute_attack(self, entity_ID, attack_Nr):

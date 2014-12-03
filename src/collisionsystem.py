@@ -45,14 +45,14 @@ class CollisionSystem(object):
         """Moves object, checks collision, sends events for collision handling and updates image position of moved objects."""
         #List of moving objects
         collider_IDs = list()
-        #Filter collider, they have velocity vector and filter collidees
+        #Filter collider, they have velocity vector
         #collider have a hit box.
         for entity_ID in range(len(self.world.mask)):
-            if entity_ID in self.world.collider and entity_ID in self.world.velocity:
+            if entity_ID in self.world.velocity:#in self.world.collider and entity_ID in self.world.velocity:
                 collider_IDs.append(entity_ID)
         #Check collision
         for collider_ID in collider_IDs:
-            old_position = self.world.collider[collider_ID].center 
+            old_position = self.world.collider[collider_ID].center
             self.calculate_collision_x(collider_ID)
             self.calculate_collision_y(collider_ID)
             #Update image position of moved object
@@ -77,47 +77,28 @@ class CollisionSystem(object):
                     self.event_manager.post(ev)
 
     def calculate_collision_x(self, collider_ID):
-        """Move collider in x direction and check collision between collider and all other collidees.
-        
-        :param collider_ID: collider id
-        :type collider_ID: int
-        """
         #Move collider in x direction.
         self.world.collider[collider_ID] = self.world.collider[collider_ID].move(self.world.velocity[collider_ID][0], 0)
         #Filter overlapping hit boxes with collider
-        hit_list_IDs = filter(lambda x:
-                              self.world.collider[collider_ID].colliderect(self.world.collider[x]) and
-                              not collider_ID == x and
-                              not ((collider_ID in self.world.ai or collider_ID in self.world.players) and
-                                   (x in self.world.ai or x in self.world.players)),
-                              self.world.collider)
-        for element_ID in hit_list_IDs:
+        hit_items = self.world.tree.hit(self.world.collider[collider_ID])
+        for element in hit_items:
             #If we are moving right, set our right side to the left side
             #of the item we hit
             if self.world.velocity[collider_ID][0] > 0:
-                self.world.collider[collider_ID].right = self.world.collider[element_ID].left
+                self.world.collider[collider_ID].right = element.left
                 if self.world.state[collider_ID]:
                     self.world.state[collider_ID].walk_right = False
 
             elif self.world.velocity[collider_ID][0] < 0:
             #Otherwise if we are moving left, do the opposite
-                self.world.collider[collider_ID].left = self.world.collider[element_ID].right
+                self.world.collider[collider_ID].left = element.right
                 if self.world.state[collider_ID]:
                     self.world.state[collider_ID].walk_left = False
-        #Send an event for each collision
-        for element_ID in hit_list_IDs:
-            ev = events.CollisionOccured(collider_ID, element_ID)
-            self.event_manager.post(ev)
         #Set new position and cast to int before, because position is in
         #pixel coordinates
         self.world.collider[collider_ID].center = map(int, self.world.collider[collider_ID].center)
 
     def calculate_collision_y(self, collider_ID):
-        """Move collider in y direction and check collision between collider and all other collidees.
-        
-        :param collider_ID: collider id
-        :type collider_ID: int
-        """
         #Consider gravity
         self.world.state[collider_ID].grounded = False
         self.world.velocity[collider_ID][1] += self.gravity[1]
@@ -128,20 +109,15 @@ class CollisionSystem(object):
         #further than collider. This is necessary because of pixel
         #coordinates of the detected, if collider was moved 0.4 further
         temp = self.world.collider[collider_ID].move(0, 1)
-        hit_list_IDs = filter(lambda x:
-                         temp.colliderect(self.world.collider[x]) and 
-                         not collider_ID == x and
-                         not ((collider_ID in self.world.ai or collider_ID in self.world.players) and
-                         (x in self.world.ai or x in self.world.players)),
-                         self.world.collider)
-        for element_ID in hit_list_IDs:
+        hit_items = self.world.tree.hit(temp)
+        for element in hit_items:
             #Reset our position based on the top/bottom of the object
             if self.world.velocity[collider_ID][1] > 0:
-                self.world.collider[collider_ID].bottom = self.world.collider[element_ID].top
+                self.world.collider[collider_ID].bottom = element.top
                 if collider_ID in self.world.state:
                     self.world.state[collider_ID].grounded = True
             elif self.world.velocity[collider_ID][1] < 0:
-                self.world.collider[collider_ID].top = self.world.collider[element_ID].bottom
+                self.world.collider[collider_ID].top = element.bottom
             #Reset velocity in y direction, so gravity will not be added
             #every new frame
             self.world.velocity[collider_ID][1] = 0

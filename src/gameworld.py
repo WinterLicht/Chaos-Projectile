@@ -11,6 +11,8 @@ import components
 import chaosparticle
 import ai
 
+import quadTree
+
 class GameWorld(object):
     """ Container of all entities in game.
 
@@ -85,10 +87,15 @@ class GameWorld(object):
         for field in fields:
             self.create_field(field.position, field.mass)
         #Create walls
-        for wall in self.level.tmx_data.objects:
-            coll = components.Collider(wall.x, wall.y, wall.width, wall.height)
-            c = (coll,)
-            self.create_entity(c)
+        walls = []
+        for x in range(49):
+            for y in range(49):
+                tile = self.level.tmx_data.getTileImage(x, y, 1)
+                if tile:
+                    coll = components.Collider(x*64, y*64, 64, 64)
+                    walls.append(coll)
+        #Quad Tree
+        self.tree = quadTree.QuadTree(walls)
 
     def create_field(self, position, mass):
         """Adds field to all attacks.
@@ -134,8 +141,8 @@ class GameWorld(object):
         #attack 1
         damage = 10
         position = coll.center
-        particle_emitter = components.Attack(self.player, damage, 30, position,
-                                             5, temp, 120,
+        particle_emitter = components.Attack(self.player, damage, 10, position,
+                                             20, temp, 60,
                                              self.direction[self.player], [0, 0], 15)
         attack_list = list()
         attack_list.append(particle_emitter)
