@@ -55,6 +55,7 @@ class CollisionSystem(object):
             old_position = self.world.collider[collider_ID].center
             self.calculate_collision_x(collider_ID)
             self.calculate_collision_y(collider_ID)
+            #self.calculate_collision(collider_ID)
             #Update image position of moved object
             ev = events.UpdateImagePosition(collider_ID, self.world.collider[collider_ID].center)
             self.event_manager.post(ev)
@@ -76,6 +77,60 @@ class CollisionSystem(object):
                     ev = events.PlayerStoppedMovement()
                     self.event_manager.post(ev)
 
+    def calculate_collision(self, collider_ID):
+        #Move collider in x direction.
+        self.world.collider[collider_ID] = self.world.collider[collider_ID].move(self.world.velocity[collider_ID][0], 0)
+        #Consider gravity
+        self.world.state[collider_ID].grounded = False
+        self.world.velocity[collider_ID][1] += self.gravity[1]
+        #Move collider in y direction.
+        self.world.collider[collider_ID] = self.world.collider[collider_ID].move(0, self.world.velocity[collider_ID][1])
+        #Filter overlapping hit boxes with collider
+        #Overlapping is checked with a temp, which was moved 1 pixel
+        #further than collider. This is necessary because of pixel
+        #coordinates of the detected, if collider was moved 0.4 further
+        temp = self.world.collider[collider_ID].move(0, 1)
+        #Get Items which are collided:
+        hit_items = self.world.tree.hit(temp)
+        temp_rect = self.world.collider[collider_ID]
+        for element in hit_items:
+
+            if element.bottom < self.world.collider[collider_ID].top:
+                #Collided in x-direction
+                #If we are moving right, set our right side to the left side
+                #of the item we hit
+                if self.world.velocity[collider_ID][0] > 0 and \
+                element.left < self.world.collider[collider_ID].right:
+                    temp_rect.right = element.left
+                    if self.world.state[collider_ID]:
+                        self.world.state[collider_ID].walk_right = False
+                elif self.world.velocity[collider_ID][0] < 0 and \
+                element.right > self.world.collider[collider_ID].left:
+                #Otherwise if we are moving left, do the opposite
+                    temp_rect.left = element.right
+                    if self.world.state[collider_ID]:
+                        self.world.state[collider_ID].walk_left = False
+
+            #Collided in y-direction
+            #Reset our position based on the top/bottom of the object
+            if self.world.velocity[collider_ID][1] > 0 and \
+            element.top > self.world.collider[collider_ID].bottom:
+                #Movement down
+                temp_rect.bottom = element.top
+                if collider_ID in self.world.state:
+                    self.world.state[collider_ID].grounded = True
+            elif self.world.velocity[collider_ID][1] < 0 and \
+            element.bottom < self.world.collider[collider_ID].top:
+                #Movement up
+                temp_rect.top = element.bottom
+            #Reset velocity in y direction, so gravity will not be checked
+            #every new iteration
+            self.world.velocity[collider_ID][1] = 0
+
+        #Set new position and cast to int before, because position is in
+        #pixel coordinates
+        self.world.collider[collider_ID].center = map(int, temp_rect.center)
+
     def calculate_collision_x(self, collider_ID):
         #Move collider in x direction.
         self.world.collider[collider_ID] = self.world.collider[collider_ID].move(self.world.velocity[collider_ID][0], 0)
@@ -94,6 +149,9 @@ class CollisionSystem(object):
                 self.world.collider[collider_ID].left = element.right
                 if self.world.state[collider_ID]:
                     self.world.state[collider_ID].walk_left = False
+            #Post Event
+            ev = events.CollisionOccured(collider_ID, element)
+            self.event_manager.post(ev)
         #Set new position and cast to int before, because position is in
         #pixel coordinates
         self.world.collider[collider_ID].center = map(int, self.world.collider[collider_ID].center)
@@ -121,6 +179,9 @@ class CollisionSystem(object):
             #Reset velocity in y direction, so gravity will not be added
             #every new frame
             self.world.velocity[collider_ID][1] = 0
+            #Post Event
+            ev = events.CollisionOccured(collider_ID, element)
+            self.event_manager.post(ev)
         #Set new position and cast to int before, because position is in
         #pixel coordinates
         self.world.collider[collider_ID].center = map(int, self.world.collider[collider_ID].center)

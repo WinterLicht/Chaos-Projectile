@@ -2,6 +2,21 @@
 <map version="1.0" orientation="orthogonal" width="50" height="50" tilewidth="64" tileheight="64">
  <tileset firstgid="1" name="tileset" tilewidth="64" tileheight="64">
   <image source="tileset.png" width="192" height="192"/>
+  <tile id="1">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="10" name="saule_alle3" tilewidth="64" tileheight="64">
   <image source="saule_alle3.png" width="64" height="192"/>
@@ -42,7 +57,7 @@
  </layer>
  <layer name="obj" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJztmYlqwzAMhp0V2mzN+z/vZpjgR0i2ZUk5Sn4wPXN8sg5bWUopy4eMq+tZbo4z6eY4l67I8SN8p3G8/sYj93Zc4iwaB32/sqGxvQz3EGGjN/s84lfL/3H0ytnq+FaO/VL+Szaa5XmzYy3xgTz8/eK4J6uqbbYyz4FCDvqcnS+qP9KczvjVqDLnpDKQP7biOUpR5+JxRQyarlg/JN0csfLWlKM5KAf1/L+nvTgwZ0rxS2O2Nu7BwXNmxv40g4PbnjN4JK11q4gjon5Rzo+8by6+riIRx57royit8B796gz5d1acg+aEfHx0jrL3XWvndx7nlPvQxzUejGf6/1G+KeUrLRfSPWrxHBnXaKMR24zuB/eKHazvfI/R0tHrEhJfn+AeOmo+sqXV+6vMhzQHWpzVmGzNy94cUo4rZSxPtFhafThPXwaFayKv3TSWXh9u5JqtGlXtsZV+n8urln286y4pfrM0wjFzfWRARfop1eN6zlGO0T6vVdjf6Z2TYnYTfhvlkEYkD11P2vvy/CbVR09fNMPnsd/KX3l9xNj15kEtD1jXeSiJA68n1fmsOoh525rzsP9tvV620Pcz9igZHFpPo5S8HBHJgXmxZ/tonggOy7oVNRs/kjwcrd6sNS97bWnhsDxbmaktko+1Yg11hv0gitd0/jxT09k4ZqU977/CqPOEPahfhb8J9Q==
+   eJztWYtuwzAIJJu0ZWv+/3s3S0O9IvATHGfKSVZfad3jcWCyEdH2T9bV8UE3j5Vw81gLV+Txrbxn8fj8Xe+xf2cIkovFg9/fYXnx8rDRQ7yuiavt73t83Ru98stx1K79oqeNevk8xHdb8mMTz5kbr1lxmGxzUD8PhPTRjL4gxSP7tCeuaoE+4XjC1yP+Shw4HnP57AWv35J5xRwsXLF+aLh5+GK0ppzNgzWoFP8lzOKBmqnlL6/e2jiDh9TMiPNpBA9pe8lhBFqvm8A8PHoK1nzP/y0h+yoG85jZH3lhh+cYVyvoby8kD/YJx3itj6LPXXvhc5nnrH0Y4xYfzGe+/qzY1PTK0kLZy1pa6gG0UY1tas+Ds3IH67s8Y+Rwdl/CkP0Jn9M8/RENq95fxR+aD6w8K50nZ/PQNI6oTidyXHJzOK+ZFfZEo3azuJTmcDV75mpUssdBrz6IQM4+o32Xlr9RqOHRsz9yQHjGKc6WannUzkFbgfOd0m9yzh7KZ7U8tOXJh/fTzr5S37T6ODIXjYh5nLfKR1kfMXdHddDSgdY+D6HxwP20Oh9VB1G3WzUP59+t+0UDYz/ijBLBw5ppEMVphCcP1MWS7b35ePBo6VsRvfmjYYRHbjbbqsujtmzh0XJvpae2aDGWyzXECudBhKzp8n6mhdV49EK733+VlfyEM6gfW1cJ1Q==
   </data>
  </layer>
  <layer name="deco hinten" width="50" height="50">
@@ -57,7 +72,7 @@
  </layer>
  <layer name="charakters" width="50" height="50" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztzsEJwCAQRNGtIBo06b9UtwRBFkJ4D/5tDhMBwNeNbG7srqwVfznxZO/Grmd38RcAAAAAAAAA4H8WqiYAkQ==
+   eJzt0jsKwCAQBFBPkA8muf9Rs6WliwgK78F0U0wxpQCwuhp5Ev0jck7aMuKNfIn+FbknbaFP+73sD1fSfi/7QwAAAAAAAAD28QMtqgE1
   </data>
  </layer>
 </map>

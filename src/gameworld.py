@@ -54,6 +54,7 @@ class GameWorld(object):
         self.attacks = {}
         self.player = None
         self.ai = {}
+        self.tags = {}
         
         #Create all game entities
         
@@ -71,7 +72,7 @@ class GameWorld(object):
                             #Create enemies
                             position = (x*64+32, y*64+32)
                             self.create_enemy(position)
-                        if tile["type"] == "player":
+                        elif tile["type"] == "player":
                             #Create player
                             position = (x*64+32, y*64+32)
                             self.create_player(position)
@@ -87,12 +88,19 @@ class GameWorld(object):
         for field in fields:
             self.create_field(field.position, field.mass)
         #Create walls
-        walls = []
+        walls = list()
         for x in range(49):
             for y in range(49):
                 tile = self.level.tmx_data.getTileImage(x, y, 1)
+                tile_properties = self.level.tmx_data.getTileProperties((x, y, 1))
                 if tile:
-                    coll = components.Collider(x*64, y*64, 64, 64)
+                    tags = list()
+                    if tile_properties:
+                        if "type" in tile_properties:
+                            if tile_properties["type"] == "corner":
+                                #Tile is a corner
+                                tags.append("corner")
+                    coll = components.Collider(x*64, y*64, 64, 64, tags)
                     walls.append(coll)
         #Quad Tree
         self.tree = quadTree.QuadTree(walls)
@@ -163,16 +171,15 @@ class GameWorld(object):
         anim_time_list = [240, 60, 44]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
-        character = components.Player(0)
         direction = components.Direction([1, 0])
-        c = (coll, direction, vel, anim, character, components.State())
+        c = (coll, direction, vel, anim, components.State())
         enemy_ID = self.create_entity(c)
 
         enemy_AI = ai.AI_1(self.event_manager, self, enemy_ID)
         self.add_component_to_entity(enemy_ID, enemy_AI)
 
         projectile_image = pygame.image.load(os.path.join('data', 'orb.png'))
-        #Create players attacks
+        #Create enemies attacks
         #attack 1
         damage = 10
         position = coll.center

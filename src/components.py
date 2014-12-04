@@ -105,10 +105,17 @@ class Attack(chaosparticle.Emitter):
 
 
 class Collider(pygame.Rect):
-    """Collider class is equal a hitbox of an entity, also stores position of entity."""
-    def __init__(self, x, y, width, height):
+    """Collider class is equal a hitbox of an entity, also stores position of entity.
+    
+    It stores some Tags, that can be used for special collision hndling.
+    
+    :Attributes:
+        - *tags* (list): list of tags
+    """
+    def __init__(self, x, y, width, height, list_of_tags=None):
         #pygame.Rect.__init__(self, x-width/2, y-height/2, width, height)
         pygame.Rect.__init__(self, x, y, width, height)
+        self.tags = list_of_tags
 
 class Velocity(list):
     """Velocity of an entity is a simple list with two components."""

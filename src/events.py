@@ -190,19 +190,19 @@ class CollisionOccured(Event):
     
     :Attributes:
         - *collider_ID* (int): Collider ID
-        - *collidee_ID* (int): Collidee ID
+        - *tags* (list): Tags of Collidee
     """
 
-    def __init__(self, collider_ID, collidee_ID):
+    def __init__(self, collider_ID, collidee):
         """
         :param collider_ID: Collider ID
         :type collider_ID: int
-        :type collidee_ID: Collidee ID
-        :type collidee_ID: int
+        :type tags: Tags of Collidee
+        :type tags: list
         """
         self.name = "Collision occured"
         self.collider_ID = collider_ID
-        self.collidee_ID = collidee_ID
+        self.collidee = collidee
 
 
 class PlayerMoved(Event):

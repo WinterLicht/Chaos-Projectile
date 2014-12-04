@@ -65,17 +65,17 @@ class CombatSystem():
 
     def execute_attack(self, entity_ID, attack_Nr):
         """Entity executes one of its possible attacks if cooldown is ready.
-        
+
         :param entity_ID: entity
         :type entity_ID: int
         :param attack_Nr: number of the attacks that is executed
         :type attack_Nr: int
         """
+        position = (self.world.collider[entity_ID].center[0],
+                    self.world.collider[entity_ID].center[1])
         if entity_ID in self.world.players:
             orb_ID = self.world.players[entity_ID].orb_ID
             position = self.world.appearance[orb_ID].rect.center
-        else:
-            position = self.world.appearance[entity_ID].rect.center
         direction = self.world.direction[entity_ID]
         velocity = [direction[0] * 3,
                     direction[1] * 3]
