@@ -35,12 +35,14 @@ class RenderSystem(object):
         self.map_layer = pyscroll.BufferedRenderer(self.world.level.map_data,
                                                    (w, h),
                                                    clamp_camera=False)
-        #pyScroll supports layered rendering
-        #layers of the TMX map begin with 0
-        #we want the sprite to be on top of layer 2, we set the default
-        #layer for sprites as 2
+        #The sprite should to be on top of layer named "decoration behind"
+        #Find layer number of the layer named "decoration behind"
+        self.render_layer = 0
+        for layer_index in range(len(self.world.level.tmx_data.tilelayers)):
+            if self.world.level.tmx_data.tilelayers[layer_index].name == "decoration behind":
+                self.render_layer = layer_index
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer,
-                                            default_layer=2)
+                                            default_layer=self.render_layer)
         #Add other sprites
         #for image in self.world.appearance:
         #    self.group.add(self.world.appearance[image])
@@ -61,7 +63,7 @@ class RenderSystem(object):
         
         Every update the default layer,where all game entities will be drawn, should be cleaned and reassigned.
         """
-        self.group.remove_sprites_of_layer(2)
+        self.group.remove_sprites_of_layer(self.render_layer)
         #Add all game components
         for image in self.world.appearance:
             self.group.add(self.world.appearance[image])

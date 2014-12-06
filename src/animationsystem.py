@@ -77,26 +77,27 @@ class AnimationSystem(object):
             if not self.world.velocity[entity_ID][0] == 0:
                 self.world.appearance[entity_ID].flip = self.world.velocity[entity_ID][0] < 0
         if not self.world.appearance[entity_ID].play_animation_till_end:
-            if (state.walk_left or state.walk_right) and state.grounded and not current_animation == 1:
+            if state.attacks > -1:
+                #Attack animation is 2
+                self.world.appearance[entity_ID].play_animation_till_end = True
+                self.world.appearance[entity_ID].current_animation = 2
+                self.world.appearance[entity_ID].current_frame_x = 0
+            elif (state.walk_left or state.walk_right) and state.grounded and not current_animation == 1:
                 #Walk animation is 1
                 #Reset to this when player moves, is grounded
                 self.world.appearance[entity_ID].current_animation = 1
                 self.world.appearance[entity_ID].current_frame_x = 0
-            if (state.jumping or not state.grounded) and not current_animation == 2:
+            elif (state.jumping or not state.grounded) and not current_animation == 2:
                 #Jump animation is 2
                 #Reset to this when player isn't grounded
                 self.world.appearance[entity_ID].current_animation = 2
                 self.world.appearance[entity_ID].current_frame_x = 0
-            if not state.walk_left and not state.walk_right and self.world.state[entity_ID].grounded and not current_animation == 0:
+            elif not state.walk_left and not state.walk_right and \
+            self.world.state[entity_ID].grounded and \
+            not current_animation == 0:
                 #Idle animation is 0
                 #Reset to idle, if it's not already played
                 self.world.appearance[entity_ID].current_animation = 0
-                self.world.appearance[entity_ID].current_frame_x = 0
-            if state.attacks > -1:
-                #Attack animation is 2
-                #print("..")
-                self.world.appearance[entity_ID].play_animation_till_end = True
-                self.world.appearance[entity_ID].current_animation = 2
                 self.world.appearance[entity_ID].current_frame_x = 0
 
     def update_image_position(self, entity_ID, new_position):

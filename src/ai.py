@@ -211,6 +211,8 @@ class AI_1(AI):
         :type event: events.Event
         """
         if isinstance(event, events.TickEvent):
+            #Do not attack
+            self.stop_attack()
             self.stop_movement()
             self.counter -= 1
             if self.counter == 0:

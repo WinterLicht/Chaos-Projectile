@@ -61,47 +61,52 @@ class GameWorld(object):
         #Create characters
         #layer = self.level.tmx_data.getTileLayerByName("players")
         '''LayerWeite und Breite auslesen!! Sowie die Nummer'''
-        #Temp list to store fields
+        #Temp list
         fields = list()
-        for x in range(49):
-            for y in range(49):
-                tile = self.level.tmx_data.getTileProperties((x, y, 4))
-                if tile:
-                    if "type" in tile:
-                        if tile["type"] == "enemy":
-                            #Create enemies
-                            position = (x*64+32, y*64+32)
-                            self.create_enemy(position)
-                        elif tile["type"] == "player":
-                            #Create player
-                            position = (x*64+32, y*64+32)
-                            self.create_player(position)
-                tile = self.level.tmx_data.getTileProperties((x, y, 3))
-                if tile:
-                    if "type" in tile:
-                        if tile["type"] == "field":
-                            #Add fields
-                            mass = int(tile["mass"])
-                            position = (x*64+32, y*64+32)
-                            fields.append(chaosparticle.Field(position, mass))
+        walls = list()
+        #Get layer width and height in tiles
+        layer_width = len(self.level.tmx_data.tilelayers[0].data)
+        layer_height = len(self.level.tmx_data.tilelayers[0].data[0])
+        for layer_index in range(len(self.level.tmx_data.tilelayers)):
+            for x in range(layer_width):
+                for y in range(layer_height):
+                    if self.level.tmx_data.tilelayers[layer_index].name == "characters":
+                        tile = self.level.tmx_data.getTileProperties((x, y, layer_index))
+                        if tile:
+                            if "type" in tile:
+                                if tile["type"] == "enemy":
+                                    #Create enemies
+                                    position = (x*64+32, y*64+32)
+                                    self.create_enemy(position)
+                                elif tile["type"] == "player":
+                                    #Create player
+                                    position = (x*64+32, y*64+32)
+                                    self.create_player(position)
+                    if self.level.tmx_data.tilelayers[layer_index].name == "decoration front":
+                        tile = self.level.tmx_data.getTileProperties((x, y, layer_index))
+                        if tile:
+                            if "type" in tile:
+                                if tile["type"] == "field":
+                                    #Add fields
+                                    mass = int(tile["mass"])
+                                    position = (x*64+32, y*64+32)
+                                    fields.append(chaosparticle.Field(position, mass))
+                    #Create walls
+                    if self.level.tmx_data.tilelayers[layer_index].name == "walls":
+                        tile = self.level.tmx_data.getTileImage(x, y, layer_index)
+                        tile_properties = self.level.tmx_data.getTileProperties((x, y, layer_index))
+                        if tile:
+                            tags = list()
+                            if tile_properties:
+                                if "type" in tile_properties:
+                                    if tile_properties["type"] == "corner":
+                                        #Tile is a corner
+                                        tags.append("corner")
+                            coll = components.Collider(x*64, y*64, 64, 64, tags)
+                            walls.append(coll)
         #Characters and their attacks are created, so fields can be added
         for field in fields:
             self.create_field(field.position, field.mass)
-        #Create walls
-        walls = list()
-        for x in range(49):
-            for y in range(49):
-                tile = self.level.tmx_data.getTileImage(x, y, 1)
-                tile_properties = self.level.tmx_data.getTileProperties((x, y, 1))
-                if tile:
-                    tags = list()
-                    if tile_properties:
-                        if "type" in tile_properties:
-                            if tile_properties["type"] == "corner":
-                                #Tile is a corner
-                                tags.append("corner")
-                    coll = components.Collider(x*64, y*64, 64, 64, tags)
-                    walls.append(coll)
         #Quad Tree
         self.tree = quadTree.QuadTree(walls)
 
@@ -149,8 +154,8 @@ class GameWorld(object):
         #attack 1
         damage = 10
         position = coll.center
-        particle_emitter = components.Attack(self.player, damage, 10, position,
-                                             20, temp, 60,
+        particle_emitter = components.Attack(self.player, damage, 30, position,
+                                             5, temp, 60,
                                              self.direction[self.player], [0, 0], 15)
         attack_list = list()
         attack_list.append(particle_emitter)
@@ -183,8 +188,8 @@ class GameWorld(object):
         #attack 1
         damage = 10
         position = coll.center
-        particle_emitter = components.Attack(enemy_ID, damage, 10, position,
-                                             1, projectile_image, 60,
+        particle_emitter = components.Attack(enemy_ID, damage, 30, position,
+                                             3, projectile_image, 60,
                                              self.direction[enemy_ID], [0, 0], 15)
         attack_list = list()
         attack_list.append(particle_emitter)
