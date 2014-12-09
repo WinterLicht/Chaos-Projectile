@@ -68,6 +68,9 @@ class CollisionSystem(object):
                 directionY = self.world.direction[collider_ID][1]
                 self.world.appearance[orb_ID].rect.center = (directionX*64 + self.world.collider[self.world.player].center[0] ,
                                                         directionY*64 + self.world.collider[self.world.player].center[1])
+                #Update hp gui
+                hp_ID = self.world.players[collider_ID].hp_ID
+                self.world.appearance[hp_ID].rect.center = self.world.appearance[orb_ID].rect.center
                 if not old_position == self.world.collider[collider_ID].center:
                     #If player moved, send event 
                     ev = events.PlayerMoved(map(int, self.world.collider[collider_ID].center))

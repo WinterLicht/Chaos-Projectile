@@ -55,6 +55,7 @@ class GameWorld(object):
         self.player = None
         self.ai = {}
         self.tags = {}
+        self.hp = {}
         
         #Create all game entities
         
@@ -128,6 +129,11 @@ class GameWorld(object):
         :param position: position where player is created
         :type position: 2d list
         """
+        #Create players hp gui
+        temp = pygame.image.load(os.path.join('data', 'hp.png')).convert_alpha()
+        hp = components.Health(150, 3, temp)
+        c_hp = (hp, hp.current_image)
+        hp_ID = self.create_entity(c_hp)
         #Players hitbox, it is 50 pixel width and 96 pixel height
         coll = components.Collider(position[0], position[1], 50, 96)
         vel = components.Velocity([0, 0])
@@ -138,7 +144,7 @@ class GameWorld(object):
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
-        player = components.Player(0)
+        player = components.Player(0, hp_ID, )
         c = (direction, coll, vel, anim, player, components.State())
         self.player = self.create_entity(c)
         #Now create the players orb
@@ -213,6 +219,8 @@ class GameWorld(object):
                 self.attacks[entity_ID] = component
         elif isinstance(component, ai.AI):
             self.ai[entity_ID] = component
+        elif isinstance(component, components.Health):
+            self.hp[entity_ID] = component
         #Increase amount of components of the entity
         self.mask[entity_ID] += 1
 

@@ -23,38 +23,6 @@ def enum(*sequential, **named):
 Types = enum('position', 'appearance', 'collider', 'velocity')
 '''
 
-class Projectile(chaosparticle.Particle):
-    """All projectiles are here particles even melee attacks are short living particles.
-    
-    :Attributes:
-        - *character_ID* (int): this character fired the projectile
-        - *damage* (int): damage of the projectile
-    """
-    
-    def __init__(self, character_ID, damage, sprite_sheet, life, position, velocity,
-                 acceleration):
-        """
-        :param character_ID: this character fired the projectile
-        :type character_ID: int
-        :param damage: damage of the projectile
-        :type damage: int
-        :param sprite_sheet: graphical representation for the particle may be one image or a sprite sheet for animated particle
-        :type sprite_sheet: type may vary on Your implementation
-        :param life: life time of the projectile
-        :type life: int
-        :param position: vector for position of a projectile
-        :type position: 2d list
-        :param velocity: velocity vector
-        :type velocity: 2d list
-        :param acceleration: acceleration vector
-        :type acceleration: 2d list
-        """
-        chaosparticle.Particle.__init__(self, sprite_sheet, life,
-                                        position, velocity,
-                                        acceleration)
-        self.damage = damage
-        self.character_ID = character_ID
-
 
 class Attack(chaosparticle.Emitter):
     """All attacks are here particle emitters.
@@ -62,6 +30,7 @@ class Attack(chaosparticle.Emitter):
     :Attributes:
         - *particles* (list): array of projectiles
         - *position*: spawn position of projectiles
+        - *damage* (int): attack damage
     """
     
     def __init__(self, character_ID, damage, cooldown, position, amount,
@@ -93,15 +62,7 @@ class Attack(chaosparticle.Emitter):
                                        sprite_sheet, life, velocity,
                                        acceleration, spread_angle)
         #Convert all the particles to projectiles
-        temp = list()
-        for particle in self.particles:
-            projectile = Projectile(character_ID, damage,
-                                    particle.sprite_sheet,
-                                    particle.life, particle.position,
-                                    particle.velocity,
-                                    particle.acceleration)
-            temp.append(projectile)
-        self.particles = temp
+        self.damage = damage
 
 
 class Collider(pygame.Rect):
@@ -117,15 +78,32 @@ class Collider(pygame.Rect):
         pygame.Rect.__init__(self, x, y, width, height)
         self.tags = list_of_tags
 
+
 class Velocity(list):
     """Velocity of an entity is a simple list with two components."""
     pass
 
-'''
+
 class Health():
-    def __init__(self, hp):
-        self.hitpoints = hp
-'''
+    def __init__(self, hp, segments, hp_sprite_sheet=None):
+        self.max = hp
+        self.points = hp
+        self.hp_sprites = list()
+        width = 128
+        height = 128
+        #Store needed images
+        if hp_sprite_sheet:
+            for counter in range(segments):
+                #Create a new blank image for the sprite
+                image = pygame.Surface([width, height]).convert()
+                #Copy the sprite from the sprite sheet
+                image.blit(hp_sprite_sheet, (0, 0), (counter*width, 0,
+                                                     width, height))
+                self.hp_sprites.append(Appearance(image))
+                #Assuming black works as the transparent color
+                #image.set_colorkey((0,0,0))
+            self.current_image = self.hp_sprites[segments-1]
+
 
 class Appearance(pygame.sprite.Sprite):
     """Appearance class contains all images and animations of an entity, black is assumed to be transparent color.
@@ -233,12 +211,13 @@ class Player():
         - *orb_ID* (int): reference to the orb entity, that belongs this player
     """
 
-    def __init__(self, orb_ID):
+    def __init__(self, orb_ID, hp_ID):
         """
         :param orb_ID: reference to the orb entity, that belongs this player
         :type orb_ID: int
         """
         self.orb_ID = orb_ID
+        self.hp_ID = hp_ID
 
 class Direction(list):
     """Direction of an entity is a simple list with two components that shows its aim/view direction."""

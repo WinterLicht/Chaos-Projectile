@@ -53,15 +53,35 @@ class CombatSystem():
 
     def check_projectile_collision(self):
         """Checks for collision between projectiles and other objects."""
+        player_ID = self.world.player
         for attacks_ID in self.world.attacks:
             for attack in self.world.attacks[attacks_ID]:
                 for projectile in attack.particles:
                     for collider_ID in self.world.collider:
-                        if not collider_ID == attacks_ID:
-                            #Collision between walls
-                            hit_items = self.world.tree.hit(projectile.rect)
-                            if hit_items:
+                        #Check overlapping
+                        if self.world.collider[collider_ID].colliderect(projectile.rect):
+                            #Enemy hits player
+                            if collider_ID == player_ID and attacks_ID in self.world.ai:
+                                if self.world.hp[self.world.players[player_ID].hp_ID].points > 0:
+                                    players_health = self.world.hp[self.world.players[player_ID].hp_ID]
+                                    #Decrease HP 
+                                    players_health.points -= attack.damage
+                                    #Update players hp gui
+                                    hp_image_index = players_health.points // (players_health.max // len(players_health.hp_sprites))
+                                    players_health.current_image = players_health.hp_sprites[hp_image_index]
+                                    self.world.appearance[self.world.players[player_ID].hp_ID] = players_health.current_image
+                                else:
+                                    #No more Hp left
+                                    #print("player is dead")
+                                    pass
                                 projectile.life = -1
+                            #Player hits enemy
+                            elif collider_ID in self.world.ai and attacks_ID == player_ID:
+                                projectile.life = -1
+                    #Collision between walls
+                    hit_items = self.world.tree.hit(projectile.rect)
+                    if hit_items:
+                        projectile.life = -1
 
     def execute_attack(self, entity_ID, attack_Nr):
         """Entity executes one of its possible attacks if cooldown is ready.
