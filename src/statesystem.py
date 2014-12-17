@@ -33,14 +33,14 @@ class StateSystem():
         :param event: occured event
         :type event: events.Event
         """
+        #Update first enemy AI
+        for ai in self.world.ai.itervalues():
+            ai.current_action(event)
         if isinstance(event, events.TickEvent):
             self.update()
 
     def update(self):
         vel = 7
-        #Handle AI
-        for enemy_ID in self.world.ai:
-            self.world.ai[enemy_ID].current_action
         #Move entities
         for entity_ID in self.world.state:
             if self.world.velocity[entity_ID]:

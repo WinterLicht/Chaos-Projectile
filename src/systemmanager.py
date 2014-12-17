@@ -29,7 +29,8 @@ class SystemManager(object):
         self.systems.append(collisionsystem.CollisionSystem(event_manager, gameWorld))
         self.systems.append(animationsystem.AnimationSystem(event_manager, gameWorld))
         self.systems.append(inputsystem.InputSystem(event_manager, gameWorld))
-        self.systems.append(rendersystem.RenderSystem(event_manager, gameWorld))
-        self.systems.append(combatsystem.CombatSystem(event_manager, gameWorld))
         self.systems.append(statesystem.StateSystem(event_manager, gameWorld))
+        self.systems.append(rendersystem.RenderSystem(event_manager, gameWorld))
+        #Should be created at least
+        self.systems.append(combatsystem.CombatSystem(event_manager, gameWorld))
         

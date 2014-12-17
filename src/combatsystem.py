@@ -50,6 +50,7 @@ class CombatSystem():
                 attack.update()
         #Check for collision
         self.check_projectile_collision()
+        self.remove_dead_entities()
 
     def check_projectile_collision(self):
         """Checks for collision between projectiles and other objects."""
@@ -77,11 +78,25 @@ class CombatSystem():
                                 projectile.life = -1
                             #Player hits enemy
                             elif collider_ID in self.world.ai and attacks_ID == player_ID:
+                                if self.world.hp[collider_ID].points > 0:
+                                    enemys_health = self.world.hp[collider_ID]
+                                    #Decrease HP 
+                                    enemys_health.points -= attack.damage
+                                    print(enemys_health.points)
+                                else:
+                                    print("enemy is dead")
+                                    self.world.to_remove.append(collider_ID)
+                                    #self.world.destroy_entity(collider_ID)
                                 projectile.life = -1
                     #Collision between walls
                     hit_items = self.world.tree.hit(projectile.rect)
                     if hit_items:
                         projectile.life = -1
+
+    def remove_dead_entities(self):
+        for entity_ID in self.world.to_remove:
+            self.world.destroy_entity(entity_ID)
+        self.world.to_remove = list()
 
     def execute_attack(self, entity_ID, attack_Nr):
         """Entity executes one of its possible attacks if cooldown is ready.

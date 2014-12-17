@@ -68,15 +68,12 @@ class AI():
     """Generic class for AI.
 
     :Attributes:
-        - *event_manager* (:class:`events.EventManager`): event manager
         - *world* (:class:`gameWorld.GameWorld`): game world contains entities
         - *current_action* (function): current update function for AI
         - *entity_ID* (int): this AI belongs to this entity
         - *counter* (int): Helper
     """
-    def __init__(self, event_manager, world, entity_ID):
-        self.event_manager = event_manager
-        self.event_manager.register_listener(self)
+    def __init__(self, world, entity_ID):
         self.world = world
         self.entity_ID = entity_ID
         self.counter = 1
@@ -121,6 +118,8 @@ class AI():
 
     def stop_movement(self):
         """Simply stops walking."""
+        if self.entity_ID not in self.world.state:
+            print (self.entity_ID)
         self.world.state[self.entity_ID].walk_left = False
         self.world.state[self.entity_ID].walk_right = False
         self.world.velocity[self.entity_ID][0] = 0
@@ -153,25 +152,14 @@ class AI_1(AI):
         - *entity_ID* (int): this AI belongs to this entity
     """
 
-    def __init__(self, event_manager, world, entity_ID):
+    def __init__(self, world, entity_ID):
         """
-        :param event_manager: event manager
-        :type event_manager: events.EventManager
         :param world: game world contains entities
         :type world: gameWorld.GameWorld
         """
-        AI.__init__(self, event_manager, world, entity_ID)
+        AI.__init__(self, world, entity_ID)
         #Set idle function for the AI
         self.current_action = self.idle
-
-    def notify(self, event):
-        """Notify, when event occurs. 
-
-        :param event: occured event
-        :type event: events.Event
-        """
-        #if isinstance(event, events.TickEvent):
-        self.current_action(event)
 
     def cruise(self, event):
         """Function for simple enemy AI implements cruising logic.

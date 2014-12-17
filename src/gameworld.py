@@ -57,6 +57,8 @@ class GameWorld(object):
         self.tags = {}
         self.hp = {}
         
+        self.to_remove = list()
+        
         #Create all game entities
         
         #Create characters
@@ -183,10 +185,11 @@ class GameWorld(object):
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
-        c = (coll, direction, vel, anim, components.State())
+        hp = components.Health(100)
+        c = (coll, direction, vel, anim, components.State(), hp)
         enemy_ID = self.create_entity(c)
 
-        enemy_AI = ai.AI_1(self.event_manager, self, enemy_ID)
+        enemy_AI = ai.AI_1( self, enemy_ID)
         self.add_component_to_entity(enemy_ID, enemy_AI)
 
         projectile_image = pygame.image.load(os.path.join('data', 'orb.png'))
@@ -251,20 +254,27 @@ class GameWorld(object):
         self.mask.append(0)
         return entity
 
-'''
     def destroy_entity(self, entity_ID):
+        #Clear mask, this entity has no components more
         self.mask[entity_ID] = 0
         #Clear dictionaries
-        if entity_ID in self.appearance:
-            del self.appearance[entity_ID]
         if entity_ID in self.collider:
             del self.collider[entity_ID]
         if entity_ID in self.velocity:
             del self.velocity[entity_ID]
+        if entity_ID in self.appearance:
+            del self.appearance[entity_ID]
         if entity_ID in self.direction:
             del self.direction[entity_ID]
         if entity_ID in self.players:
             del self.players[entity_ID]
         if entity_ID in self.state:
             del self.state[entity_ID]
-'''
+        if entity_ID in self.attacks:
+            del self.attacks[entity_ID]
+        if entity_ID in self.ai:
+            self.event_manager.unregister_listener(self.ai[entity_ID])
+            del self.ai[entity_ID]
+        if entity_ID in self.hp:
+            del self.hp[entity_ID]
+        

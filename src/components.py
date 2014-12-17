@@ -85,13 +85,15 @@ class Velocity(list):
 
 
 class Health():
-    def __init__(self, hp, segments, hp_sprite_sheet=None):
+    def __init__(self, hp, segments=None, hp_sprite_sheet=None):
         self.max = hp
         self.points = hp
         self.hp_sprites = list()
         width = 128
         height = 128
         #Store needed images
+        if not segments:
+            segments = 1
         if hp_sprite_sheet:
             for counter in range(segments):
                 #Create a new blank image for the sprite
