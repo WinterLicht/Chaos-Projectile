@@ -28,14 +28,15 @@ class Attack(chaosparticle.Emitter):
     """All attacks are here particle emitters.
     
     :Attributes:
+        - *effect_ID* (int): ID of the effect of the attack
         - *particles* (list): array of projectiles
         - *position*: spawn position of projectiles
         - *damage* (int): attack damage
     """
     
-    def __init__(self, character_ID, damage, cooldown, position, amount,
+    def __init__(self, damage, cooldown, position, amount,
                  sprite_sheet, life, velocity, acceleration,
-                 spread_angle=0):
+                 spread_angle=0, effect_ID=None):
         """
         :param character_ID: this character fired the projectile
         :type character_ID: int
@@ -61,8 +62,8 @@ class Attack(chaosparticle.Emitter):
         chaosparticle.Emitter.__init__(self, cooldown, position, amount, 
                                        sprite_sheet, life, velocity,
                                        acceleration, spread_angle)
-        #Convert all the particles to projectiles
         self.damage = damage
+        self.effect_ID = effect_ID
 
 
 class Collider(pygame.Rect):
@@ -124,6 +125,7 @@ class Appearance(pygame.sprite.Sprite):
         - *image_frames* (dictionary animation : number): all frames of all animations
         - *original* (pygame.Surface): stores original image of current frame without rotation or flip applied
         - *rect* (pygame.Rect): reference of current image rectangle
+        - *visible* (boolean): True if the animation should be shown
     """
     
     def __init__(self, sprite_sheet, width=None, height=None,
@@ -141,7 +143,10 @@ class Appearance(pygame.sprite.Sprite):
         :type time: int list
         """
         pygame.sprite.Sprite.__init__(self)
-        
+
+        self.play_once = False
+        self.play_animation = True
+
         self.flip = False
         self.play_animation_till_end = False
         self.angle = 0
@@ -155,16 +160,16 @@ class Appearance(pygame.sprite.Sprite):
         self.delay_between_frames = list()
         self.frames = animations
         self.time = time
-        
+
         #Compute delay between frames for each animation
         for f in range(len(self.frames)):
             self.delay_between_frames.append(int(self.time[f] / self.frames[f]))
-        
+
         self.current_frame_x = 0
         self.current_animation = 0
         self.counter = 0
         self.image_frames = {}
-        
+
         #Initialize single sprites from the sprite sheet
         for animation_number in range(len(animations)):
             self.image_frames[animation_number] = list()

@@ -47,23 +47,27 @@ class AnimationSystem(object):
         for entity_ID in self.world.state:
             self.determine_animation(entity_ID)
         for animation in self.world.appearance.itervalues():
-            #For every animation
-            if animation.frames[animation.current_animation] > 1:
-                if animation.counter % animation.delay_between_frames[animation.current_animation] == 0:
-                    #Time equal delay between frames passed, so next frame
-                    if animation.current_frame_x < animation.frames[animation.current_animation]-1:
-                        animation.current_frame_x = animation.current_frame_x + 1
-                    else:
-                        if animation.play_animation_till_end:
-                            #Animation played already till end
-                            animation.play_animation_till_end = False
-                        #Loop Animation
-                        #Animation ended, begin from 0
-                        animation.current_frame_x = 0
-                animation.counter = animation.counter + 1
-                animation.set_image(animation.current_frame_x)
-            else:
-                animation.set_image(animation.current_frame_x)
+            if animation.play_animation:
+                #For every animation
+                if animation.frames[animation.current_animation] > 1:
+                    if animation.counter % animation.delay_between_frames[animation.current_animation] == 0:
+                        #Time equal delay between frames passed, so next frame
+                        if animation.current_frame_x < animation.frames[animation.current_animation]-1:
+                            animation.current_frame_x = animation.current_frame_x + 1
+                        else:
+                            if animation.play_animation_till_end:
+                                #Animation played already till end
+                                animation.play_animation_till_end = False
+                            if animation.play_once:
+                                #Animation played once
+                                animation.play_animation = False
+                            #Loop Animation
+                            #Animation ended, begin from 0
+                            animation.current_frame_x = 0
+                    animation.counter = animation.counter + 1
+                    animation.set_image(animation.current_frame_x)
+                else:
+                    animation.set_image(animation.current_frame_x)
 
     def determine_animation(self, entity_ID):
         """Determines which animation should be played depending on the state of an entity.
@@ -110,3 +114,14 @@ class AnimationSystem(object):
         """
         if entity_ID in self.world.appearance:
             self.world.appearance[entity_ID].rect.center = new_position
+        if entity_ID == self.world.player:
+            player = self.world.players[entity_ID]
+            player_state = self.world.state[entity_ID]
+            attack_Nr = player_state.attacks
+            effect_ID = self.world.attacks[entity_ID][attack_Nr].effect_ID
+            #Get the orb position of the player
+            orb_position = self.world.appearance[player.orb_ID].rect.center
+            #Update position and rotation of the attack effect
+            self.world.appearance[effect_ID].rect.center = orb_position
+            self.world.appearance[effect_ID].angle = self.world.appearance[player.orb_ID].angle 
+            

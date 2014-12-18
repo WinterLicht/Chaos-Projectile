@@ -82,9 +82,7 @@ class CombatSystem():
                                     enemys_health = self.world.hp[collider_ID]
                                     #Decrease HP 
                                     enemys_health.points -= attack.damage
-                                    print(enemys_health.points)
                                 else:
-                                    print("enemy is dead")
                                     self.world.to_remove.append(collider_ID)
                                     #self.world.destroy_entity(collider_ID)
                                 projectile.life = -1
@@ -119,6 +117,10 @@ class CombatSystem():
             #Post attack event
             ev = events.EntityAttacks(entity_ID)
             self.event_manager.post(ev)
+            #Show effect
+            effect_ID = self.world.attacks[entity_ID][attack_Nr].effect_ID
+            if effect_ID:
+                self.world.appearance[effect_ID].play_animation = True
         #Attack executed, so reset state
         self.world.state[entity_ID].attacks = -1
 

@@ -159,12 +159,20 @@ class GameWorld(object):
         #Set orb ID
         self.players[self.player].orb_ID = orb_ID
         #Create players attacks
-        #attack 1
+        #Attack 1:
         damage = 10
+        cooldown = 30
         position = coll.center
-        particle_emitter = components.Attack(self.player, damage, 30, position,
+        #Effect of this attack
+        temp_eff = pygame.image.load(os.path.join('data', 'attack_effect.png'))
+        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 62, 62, [6], [cooldown])
+        eff_sprite.play_once = True
+        eff_sprite.play_animation_till_end = True
+        c_eff = (eff_sprite,)
+        effect_ID = self.create_entity(c_eff)
+        particle_emitter = components.Attack(damage, cooldown, position,
                                              5, temp, 60,
-                                             self.direction[self.player], [0, 0], 15)
+                                             self.direction[self.player], [0, 0], 15, effect_ID)
         attack_list = list()
         attack_list.append(particle_emitter)
         self.add_component_to_entity(self.player, attack_list)
@@ -197,7 +205,7 @@ class GameWorld(object):
         #attack 1
         damage = 10
         position = coll.center
-        particle_emitter = components.Attack(enemy_ID, damage, 30, position,
+        particle_emitter = components.Attack(damage, 30, position,
                                              3, projectile_image, 60,
                                              self.direction[enemy_ID], [0, 0], 15)
         attack_list = list()

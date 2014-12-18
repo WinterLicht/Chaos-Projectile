@@ -65,8 +65,9 @@ class RenderSystem(object):
         """
         self.group.remove_sprites_of_layer(self.render_layer)
         #Add all game components
-        for image in self.world.appearance:
-            self.group.add(self.world.appearance[image])
+        for image in self.world.appearance.itervalues():
+            if image.play_animation:
+                self.group.add(image)
         #Add all particles
         for attacks in self.world.attacks.itervalues():
             for attack in attacks:
