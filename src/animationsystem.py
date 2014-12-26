@@ -36,6 +36,10 @@ class AnimationSystem(object):
         if isinstance(event, events.UpdateImagePosition):
             self.update_image_position(event.entity_ID,
                                        event.new_position)
+        #if isinstance(event, events.PlayerStoppedMovement):
+        #    self.handle_player_stopped_movement_event()
+        #if isinstance(event, events.PlayerMoved):
+        #    self.handle_player_moved_event()
 
     def run_animations(self, dt):
         """Computes which animation frame should be displayed.
@@ -124,4 +128,28 @@ class AnimationSystem(object):
             #Update position and rotation of the attack effect
             self.world.appearance[effect_ID].rect.center = orb_position
             self.world.appearance[effect_ID].angle = self.world.appearance[player.orb_ID].angle 
-            
+
+    def handle_player_moved_event(self):
+        player = self.world.player
+        current_animation = self.world.appearance[player].current_animation
+        state = self.world.state[player]
+        if state.grounded and not current_animation == 1:
+            #Walk animation is 1
+            #Reset to this when player moves, is grounded
+            self.world.appearance[player].current_animation = 1
+            self.world.appearance[player].current_frame_x = 0
+
+    def handle_player_stopped_movement_event(self):
+        """When player doesn't move or attack, then show his idle animation.
+        """
+
+        player = self.world.player
+        if not self.world.velocity[player][0] == 0:
+            #Flip sprite:
+            self.world.appearance[player].flip = self.world.velocity[player][0] < 0
+        current_animation = self.world.appearance[player].current_animation
+        if self.world.state[player].grounded and not current_animation == 0:
+                #Idle animation is 0
+                #Reset to idle, if it's not already played
+                self.world.appearance[player].current_animation = 0
+                self.world.appearance[player].current_frame_x = 0

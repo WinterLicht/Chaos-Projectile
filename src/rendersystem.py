@@ -38,8 +38,8 @@ class RenderSystem(object):
         #The sprite should to be on top of layer named "decoration behind"
         #Find layer number of the layer named "decoration behind"
         self.render_layer = 0
-        for layer_index in range(len(self.world.level.tmx_data.tilelayers)):
-            if self.world.level.tmx_data.tilelayers[layer_index].name == "decoration behind":
+        for layer_index in range(len(self.world.level.tmx_data.layers)):
+            if self.world.level.tmx_data.layers[layer_index].name == "decoration behind":
                 self.render_layer = layer_index
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer,
                                             default_layer=self.render_layer)

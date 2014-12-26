@@ -38,6 +38,18 @@ class StateSystem():
             ai.current_action(event)
         if isinstance(event, events.TickEvent):
             self.update()
+        if isinstance(event, events.PlayerMoved):
+            player_ID = self.world.player 
+            if self.world.velocity[player_ID][0] > 0:
+                self.world.state[player_ID].walk_left = False
+                self.world.state[player_ID].walk_right = True
+            elif self.world.velocity[player_ID][0] < 0:
+                self.world.state[player_ID].walk_left = True
+                self.world.state[player_ID].walk_right = False
+        if isinstance(event, events.PlayerStoppedMovement):
+            player_ID = self.world.player
+            self.world.state[player_ID].walk_left = False
+            self.world.state[player_ID].walk_right = False
 
     def update(self):
         vel = 7
@@ -55,4 +67,3 @@ class StateSystem():
                 if self.world.state[entity_ID].jumping and self.world.state[self.world.player].grounded:
                     self.world.velocity[self.world.player][1] = -vel*2
                     self.world.state[self.world.player].grounded = False
-

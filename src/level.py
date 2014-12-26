@@ -5,8 +5,8 @@
 """
 
 import os
-import pytmx
 import pyscroll
+import pytmx.util_pygame as pytmx
 
 class Level(object):
     """Loads and stores level data from a TMX file.

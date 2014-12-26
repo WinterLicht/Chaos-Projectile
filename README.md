@@ -16,3 +16,9 @@ is set in pixel art and the setting takes place in ancient Egypt. Visual
 elements ot the Art Nouveau era are present, as well as influences from
 the Cthulhu cult by Lovecraft.
 
+Used Libraries
+--------
+
+- Pygame:  http://www.pygame.org/news.html
+- PyTMX:  https://github.com/bitcraft/pytmx
+- pyscroll:  https://github.com/bitcraft/pyscroll

@@ -55,7 +55,6 @@ class CollisionSystem(object):
             old_position = self.world.collider[collider_ID].center
             self.calculate_collision_x(collider_ID)
             self.calculate_collision_y(collider_ID)
-            #self.calculate_collision(collider_ID)
             #Update image position of moved object
             ev = events.UpdateImagePosition(collider_ID, self.world.collider[collider_ID].center)
             self.event_manager.post(ev)
@@ -71,7 +70,8 @@ class CollisionSystem(object):
                 #Update hp gui
                 hp_ID = self.world.players[collider_ID].hp_ID
                 self.world.appearance[hp_ID].rect.center = self.world.appearance[orb_ID].rect.center
-                if not old_position == self.world.collider[collider_ID].center:
+                if not old_position[0] == self.world.collider[collider_ID].center[0] or \
+                not old_position[1] == self.world.collider[collider_ID].center[1]:
                     #If player moved, send event 
                     ev = events.PlayerMoved(map(int, self.world.collider[collider_ID].center))
                     self.event_manager.post(ev)
@@ -144,14 +144,14 @@ class CollisionSystem(object):
             #of the item we hit
             if self.world.velocity[collider_ID][0] > 0:
                 self.world.collider[collider_ID].right = element.left
-                if self.world.state[collider_ID]:
-                    self.world.state[collider_ID].walk_right = False
+                #if self.world.state[collider_ID]:
+                #    self.world.state[collider_ID].walk_right = False
 
             elif self.world.velocity[collider_ID][0] < 0:
             #Otherwise if we are moving left, do the opposite
                 self.world.collider[collider_ID].left = element.right
-                if self.world.state[collider_ID]:
-                    self.world.state[collider_ID].walk_left = False
+                #if self.world.state[collider_ID]:
+                #    self.world.state[collider_ID].walk_left = False
             #Post Event
             ev = events.CollisionOccured(collider_ID, element)
             self.event_manager.post(ev)

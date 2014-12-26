@@ -68,13 +68,13 @@ class GameWorld(object):
         fields = list()
         walls = list()
         #Get layer width and height in tiles
-        layer_width = len(self.level.tmx_data.tilelayers[0].data)
-        layer_height = len(self.level.tmx_data.tilelayers[0].data[0])
-        for layer_index in range(len(self.level.tmx_data.tilelayers)):
+        layer_width = len(self.level.tmx_data.layers[0].data)
+        layer_height = len(self.level.tmx_data.layers[0].data[0])
+        for layer_index in range(len(self.level.tmx_data.layers)):
             for x in range(layer_width):
                 for y in range(layer_height):
-                    if self.level.tmx_data.tilelayers[layer_index].name == "characters":
-                        tile = self.level.tmx_data.getTileProperties((x, y, layer_index))
+                    if self.level.tmx_data.layers[layer_index].name == "characters":
+                        tile = self.level.tmx_data.get_tile_properties(x, y, layer_index)
                         if tile:
                             if "type" in tile:
                                 if tile["type"] == "enemy":
@@ -85,8 +85,8 @@ class GameWorld(object):
                                     #Create player
                                     position = (x*64+32, y*64+32)
                                     self.create_player(position)
-                    if self.level.tmx_data.tilelayers[layer_index].name == "decoration front":
-                        tile = self.level.tmx_data.getTileProperties((x, y, layer_index))
+                    if self.level.tmx_data.layers[layer_index].name == "decoration front":
+                        tile = self.level.tmx_data.get_tile_properties(x, y, layer_index)
                         if tile:
                             if "type" in tile:
                                 if tile["type"] == "field":
@@ -95,9 +95,9 @@ class GameWorld(object):
                                     position = (x*64+32, y*64+32)
                                     fields.append(chaosparticle.Field(position, mass))
                     #Create walls
-                    if self.level.tmx_data.tilelayers[layer_index].name == "walls":
-                        tile = self.level.tmx_data.getTileImage(x, y, layer_index)
-                        tile_properties = self.level.tmx_data.getTileProperties((x, y, layer_index))
+                    if self.level.tmx_data.layers[layer_index].name == "walls":
+                        tile = self.level.tmx_data.get_tile_image(x, y, layer_index)
+                        tile_properties = self.level.tmx_data.get_tile_properties(x, y, layer_index)
                         if tile:
                             tags = list()
                             if tile_properties:
