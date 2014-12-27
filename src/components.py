@@ -202,13 +202,29 @@ class Appearance(pygame.sprite.Sprite):
         self.original = self.image_frames[y][x]
         #Transform if necessary
         if not self.angle == 0:
-            self.image = pygame.transform.rotate(self.original,
-                                                 self.angle)
+            #self.image = pygame.transform.rotate(self.original,
+            #                                     self.angle)
+            self.image = self.rot_center(self.original, self.angle)
             self.image = pygame.transform.flip(self.image, self.flip,
                                                False)
         else:
             self.image = pygame.transform.flip(self.original, self.flip,
                                                False)
+    def rot_center(self, image, angle):
+        """Rotate an image while keeping its center and size."""
+        '''
+        orig_x = image.get_rect().center[0]
+        orig_y = image.get_rect().center[1]
+        rot_image = pygame.transform.rotate(image, angle)
+        rot_image_rect = rot_image.get_rect()
+        rot_image_rect.center = (orig_x, orig_y)
+        '''
+        orig_rect = image.get_rect()
+        rot_image = pygame.transform.rotate(image, angle)
+        rot_rect = orig_rect.copy()
+        rot_rect.center = rot_image.get_rect().center
+        rot_image = rot_image.subsurface(rot_rect).copy()
+        return rot_image
 
 class Player():
     """Marks an entity as a player character.

@@ -53,6 +53,7 @@ class AnimationSystem(object):
         for animation in self.world.appearance.itervalues():
             if animation.play_animation:
                 #For every animation
+                animation.set_image(animation.current_frame_x)
                 if animation.frames[animation.current_animation] > 1:
                     if animation.counter % animation.delay_between_frames[animation.current_animation] == 0:
                         #Time equal delay between frames passed, so next frame
@@ -69,9 +70,9 @@ class AnimationSystem(object):
                             #Animation ended, begin from 0
                             animation.current_frame_x = 0
                     animation.counter = animation.counter + 1
-                    animation.set_image(animation.current_frame_x)
-                else:
-                    animation.set_image(animation.current_frame_x)
+                    #animation.set_image(animation.current_frame_x)
+                #else:
+                    #animation.set_image(animation.current_frame_x)
 
     def determine_animation(self, entity_ID):
         """Determines which animation should be played depending on the state of an entity.

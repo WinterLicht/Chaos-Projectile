@@ -38,6 +38,7 @@ class StateSystem():
             ai.current_action(event)
         if isinstance(event, events.TickEvent):
             self.update()
+        '''
         if isinstance(event, events.PlayerMoved):
             player_ID = self.world.player 
             if self.world.velocity[player_ID][0] > 0:
@@ -50,6 +51,7 @@ class StateSystem():
             player_ID = self.world.player
             self.world.state[player_ID].walk_left = False
             self.world.state[player_ID].walk_right = False
+        '''
 
     def update(self):
         vel = 7
