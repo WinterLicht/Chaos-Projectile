@@ -118,16 +118,6 @@ class AnimationSystem(object):
         """
         if entity_ID in self.world.appearance:
             self.world.appearance[entity_ID].rect.center = new_position
-        if entity_ID == self.world.player:
-            player = self.world.players[entity_ID]
-            player_state = self.world.state[entity_ID]
-            attack_Nr = player_state.attacks
-            effect_ID = self.world.attacks[entity_ID][attack_Nr].effect_ID
-            #Get the orb position of the player
-            orb_position = self.world.appearance[player.orb_ID].rect.center
-            #Update position and rotation of the attack effect
-            self.world.appearance[effect_ID].rect.center = orb_position
-            self.world.appearance[effect_ID].angle = self.world.appearance[player.orb_ID].angle 
 
     def handle_player_moved_event(self):
         player = self.world.player

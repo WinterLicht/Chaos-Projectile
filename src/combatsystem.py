@@ -120,6 +120,13 @@ class CombatSystem():
             #Show effect
             effect_ID = self.world.attacks[entity_ID][attack_Nr].effect_ID
             if effect_ID:
+                #Calculate position and angle of effect
+                player = self.world.players[entity_ID]
+                #Get the orb position of the player
+                orb_position = self.world.appearance[player.orb_ID].rect.center
+                #Update position and rotation of the attack effect
+                self.world.appearance[effect_ID].rect.center = orb_position
+                self.world.appearance[effect_ID].angle = self.world.appearance[player.orb_ID].angle
                 self.world.appearance[effect_ID].play_animation = True
         #Attack executed, so reset state
         self.world.state[entity_ID].attacks = -1
