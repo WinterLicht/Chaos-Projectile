@@ -45,10 +45,6 @@ class AnimationSystem(object):
                     self.world.appearance[event.entity_ID].current_frame_x = 0
                 if isinstance(event, events.EntityJump):
                     current_animation = self.world.appearance[event.entity_ID].current_animation
-                    #if not current_animation == 2:
-                    #    print("..")
-                        #Jump animation is 2
-                        #Reset to this when player isn't grounded
                     self.world.appearance[event.entity_ID].current_animation = 2
                     if not current_animation == 2:
                         self.world.appearance[event.entity_ID].current_frame_x = 0
@@ -87,11 +83,7 @@ class AnimationSystem(object):
                         #Reset to idle, if it's not already played
                         self.world.appearance[event.entity_ID].current_animation = 0
                         self.world.appearance[event.entity_ID].current_frame_x = 0
-        #if isinstance(event, events.PlayerStoppedMovement):
-        #    self.handle_player_stopped_movement_event()
-        #if isinstance(event, events.PlayerMoved):
-        #    self.handle_player_moved_event()
-
+                        
     def run_animations(self, dt):
         """Computes which animation frame should be displayed.
         Every CPU tick checks if new frame should be displayed. Therefore there is a counter for each animation that measures time. When time equal delay between frames passed, next frame will be displayed.
@@ -99,8 +91,6 @@ class AnimationSystem(object):
         :param dt: time passed
         :type dt: int
         """
-        #for entity_ID in self.world.state:
-        #    self.determine_animation(entity_ID)
         for animation in self.world.appearance.itervalues():
             if animation.play_animation:
                 #For every animation
@@ -125,43 +115,6 @@ class AnimationSystem(object):
                 #else:
                     #animation.set_image(animation.current_frame_x)
 
-    def determine_animation(self, entity_ID):
-        """Determines which animation should be played depending on the state of an entity.
-        
-        :param entity_ID: For this entity an animation will be determined 
-        :type entity_ID: int
-        """
-        current_animation = self.world.appearance[entity_ID].current_animation
-        state = self.world.state[entity_ID]
-        if self.world.velocity[entity_ID]:
-            if not self.world.velocity[entity_ID][0] == 0:
-                self.world.appearance[entity_ID].flip = self.world.velocity[entity_ID][0] < 0
-        if not self.world.appearance[entity_ID].play_animation_till_end:
-            if state.attacks > -1:
-                #Attack animation is 2
-                self.world.appearance[entity_ID].play_animation_till_end = True
-                self.world.appearance[entity_ID].current_animation = 2
-                self.world.appearance[entity_ID].current_frame_x = 0
-            #elif (state.walk_left or state.walk_right) and state.grounded and not current_animation == 1:
-                #Walk animation is 1
-                #Reset to this when player moves, is grounded
-                #self.world.appearance[entity_ID].current_animation = 1
-                #self.world.appearance[entity_ID].current_frame_x = 0
-            #elif (state.jumping or not state.grounded) and not current_animation == 2:
-                #Jump animation is 2
-                #Reset to this when player isn't grounded
-                #self.world.appearance[entity_ID].current_animation = 2
-                #self.world.appearance[entity_ID].current_frame_x = 0
-            '''
-            elif not state.walk_left and not state.walk_right and \
-            self.world.state[entity_ID].grounded and \
-            not current_animation == 0:
-                #Idle animation is 0
-                #Reset to idle, if it's not already played
-                self.world.appearance[entity_ID].current_animation = 0
-                self.world.appearance[entity_ID].current_frame_x = 0
-            '''
-
     def update_image_position(self, entity_ID, new_position):
         """Update image position, when corresponding entity moved.
         
@@ -172,28 +125,3 @@ class AnimationSystem(object):
         """
         if entity_ID in self.world.appearance:
             self.world.appearance[entity_ID].rect.center = new_position
-
-    def handle_player_moved_event(self):
-        player = self.world.player
-        current_animation = self.world.appearance[player].current_animation
-        state = self.world.state[player]
-        if state.grounded and not current_animation == 1:
-            #Walk animation is 1
-            #Reset to this when player moves, is grounded
-            self.world.appearance[player].current_animation = 1
-            self.world.appearance[player].current_frame_x = 0
-
-    def handle_player_stopped_movement_event(self):
-        """When player doesn't move or attack, then show his idle animation.
-        """
-
-        player = self.world.player
-        if not self.world.velocity[player][0] == 0:
-            #Flip sprite:
-            self.world.appearance[player].flip = self.world.velocity[player][0] < 0
-        current_animation = self.world.appearance[player].current_animation
-        if self.world.state[player].grounded and not current_animation == 0:
-                #Idle animation is 0
-                #Reset to idle, if it's not already played
-                self.world.appearance[player].current_animation = 0
-                self.world.appearance[player].current_frame_x = 0

@@ -288,32 +288,6 @@ class EntityAttackRequest(Event):
         self.attack_Nr = attack_Nr
 #-------------------------------------------------------------
 
-class PlayerMoved(Event):
-    """This event is sent every time when player moves.
-    Is used in enemy AI and animation system.
-    
-    :Attributes:
-        - *new_position* (2D list): new position of the player
-    """
-    
-    def __init__(self, new_position):
-        """
-        :param new_position: new position of the player
-        :type new_position: 2D list
-        """
-        self.name = "Player Moved Event"
-        self.new_position = new_position
-
-
-class PlayerStoppedMovement(Event):
-    """This event is sent when player stops movement.
-
-    Is used in enemy AI and animation system.
-    """
-
-    def __init__(self):
-        self.name = "Player Stopped Movement"
-
 class EventManager:
     """This class is responsible for coordinating most communication between the game systems.
     

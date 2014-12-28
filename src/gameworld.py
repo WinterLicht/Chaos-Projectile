@@ -26,7 +26,6 @@ class GameWorld(object):
             - *velocity* (dictionary ID : float tuple): velocity for movable entities
             - *direction* (dictionary ID : tuple): aim and attacks direction (das aendern, in den Player rein!!!)
             - *characters* (dictionary ID : ): enemies and player (das besser aufplitten ??!!)
-            - *state* (dictionary ID : components.State): states of entities
             - *attacks* (dictionary ID : components.Attack): attacks of the characters
             - *player* (int): ID of single player
             - *ai* (dictionary ID : ai): all AI for  enemies
@@ -50,7 +49,6 @@ class GameWorld(object):
         self.velocity = {}
         self.direction = {}
         self.players = {}
-        self.state = {}
         self.attacks = {}
         self.player = None
         self.ai = {}
@@ -147,7 +145,7 @@ class GameWorld(object):
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
         player = components.Player(0, hp_ID, )
-        c = (direction, coll, vel, anim, player, components.State())
+        c = (direction, coll, vel, anim, player)
         self.player = self.create_entity(c)
         #Now create the players orb
         #It is created afterward, so orb will be
@@ -194,10 +192,10 @@ class GameWorld(object):
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
         hp = components.Health(100)
-        c = (coll, direction, vel, anim, components.State(), hp)
+        c = (coll, direction, vel, anim, hp)
         enemy_ID = self.create_entity(c)
 
-        enemy_AI = ai.AI_1( self, enemy_ID)
+        enemy_AI = ai.AI_1(self, enemy_ID, self.event_manager)
         self.add_component_to_entity(enemy_ID, enemy_AI)
 
         projectile_image = pygame.image.load(os.path.join('data', 'orb.png'))
@@ -223,8 +221,6 @@ class GameWorld(object):
             self.direction[entity_ID] = component
         elif isinstance(component, components.Player):
             self.players[entity_ID] = component
-        elif isinstance(component, components.State):
-            self.state[entity_ID] = component
         elif isinstance(component, list):
             if isinstance(component[0], components.Attack):
                 self.attacks[entity_ID] = component
@@ -276,8 +272,6 @@ class GameWorld(object):
             del self.direction[entity_ID]
         if entity_ID in self.players:
             del self.players[entity_ID]
-        if entity_ID in self.state:
-            del self.state[entity_ID]
         if entity_ID in self.attacks:
             del self.attacks[entity_ID]
         if entity_ID in self.ai:

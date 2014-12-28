@@ -245,25 +245,3 @@ class Player():
 class Direction(list):
     """Direction of an entity is a simple list with two components that shows its aim/view direction."""
     pass
-
-class State():
-    """Various states of an entity.
-    Necessary for AI or for animation system to show appropriate animation.
-    
-    :Attributes:
-        - *attacks* (int): index of an attack that will be executed, -1 means there will be no attack executed
-        - *grounded* (boolean): true if entity stays on the ground
-        - *walking* (boolean): true if entity is moving horizontally
-        - *jumping* (boolean): true if entity is jumping or is on the air
-    """
-
-    def __init__(self):
-        self.grounded = False
-        self.walking = False
-        self.jumping = False
-        self.attacks = -1
-        #self.aim_direction = 0
-        
-        self.walk_left = False
-        self.walk_right = False
-        

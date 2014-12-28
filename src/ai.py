@@ -73,10 +73,11 @@ class AI():
         - *entity_ID* (int): this AI belongs to this entity
         - *counter* (int): Helper
     """
-    def __init__(self, world, entity_ID):
+    def __init__(self, world, entity_ID, event_manager):
         self.world = world
         self.entity_ID = entity_ID
         self.counter = 1
+        self.event_manager = event_manager
 
     def current_action(self, event):
         """This function is called every frame.
@@ -90,18 +91,20 @@ class AI():
 
     def walk_left(self):
         """Walk left."""
-        self.world.state[self.entity_ID].walk_left = True
-        self.world.state[self.entity_ID].walk_right = False
+        ev = events.EntityMovesLeftRequest(self.entity_ID)
+        self.event_manager.post(ev)
 
     def walk_right(self):
         """Walk right."""
-        self.world.state[self.entity_ID].walk_left = False
-        self.world.state[self.entity_ID].walk_right = True
+        ev = events.EntityMovesRightRequest(self.entity_ID)
+        self.event_manager.post(ev)
 
     def invert_walk_direction(self):
         """Simply inverts walk direction of the entity."""
-        self.world.state[self.entity_ID].walk_left = not self.world.state[self.entity_ID].walk_left
-        self.world.state[self.entity_ID].walk_right = not self.world.state[self.entity_ID].walk_right
+        if self.walking_left():
+            self.walk_right()
+        elif self.walking_right():
+            self.walk_left()
 
     def random_switch_movement(self, probability):
         """Switch movement direction randomly.
@@ -109,7 +112,6 @@ class AI():
         :param probability: Should be more than 2
         :type probability: int
         """
-
         random_number = random_(probability)
         if random_number == 0:
             self.walk_left()
@@ -118,15 +120,15 @@ class AI():
 
     def stop_movement(self):
         """Simply stops walking."""
-        if self.entity_ID not in self.world.state:
-            print (self.entity_ID)
-        self.world.state[self.entity_ID].walk_left = False
-        self.world.state[self.entity_ID].walk_right = False
-        self.world.velocity[self.entity_ID][0] = 0
+        ev = events.EntityStopMovingLeftRequest(self.entity_ID)
+        self.event_manager.post(ev)
+        ev = events.EntityStopMovingRightRequest(self.entity_ID)
+        self.event_manager.post(ev)
+        #self.world.velocity[self.entity_ID][0] = 0
 
-    def stop_attack(self):
-        """Stops attacks."""
-        self.world.state[self.entity_ID].attacks = -1
+    def attack(self, attack_Nr):
+        ev = events.EntityAttackRequest(self.entity_ID, attack_Nr)
+        self.event_manager.post(ev)
 
     def sees_player(self, player_position):
         """Checks if the player is in sight.
@@ -139,6 +141,12 @@ class AI():
         enemys_position = self.world.collider[self.entity_ID].center
         return (player_position[1] - offset) < enemys_position[1] and \
             enemys_position[1] < (player_position[1] + offset)
+    
+    def walking_left(self):
+        return self.world.velocity[self.entity_ID][0] < 0
+
+    def walking_right(self):
+        return self.world.velocity[self.entity_ID][0] > 0
 
 class AI_1(AI):
     """Handles simple AI.
@@ -152,12 +160,12 @@ class AI_1(AI):
         - *entity_ID* (int): this AI belongs to this entity
     """
 
-    def __init__(self, world, entity_ID):
+    def __init__(self, world, entity_ID, event_manager):
         """
         :param world: game world contains entities
         :type world: gameWorld.GameWorld
         """
-        AI.__init__(self, world, entity_ID)
+        AI.__init__(self, world, entity_ID, event_manager)
         #Set idle function for the AI
         self.current_action = self.idle
 
@@ -174,11 +182,9 @@ class AI_1(AI):
             self_collider = self.world.collider[self.entity_ID]
             if event.collidee.tags and event.collider_ID == self.entity_ID:
                 if "corner" in event.collidee.tags:
-                    if self.world.state[self.entity_ID].walk_left and \
-                    self_collider.left < event.collidee.right:
+                    if self.walking_left() and self_collider.left < event.collidee.right:
                         self.invert_walk_direction()
-                    elif self.world.state[self.entity_ID].walk_right and \
-                    self_collider.right > event.collidee.left:
+                    elif self.walking_right() and self_collider.right > event.collidee.left:
                         self.invert_walk_direction()
             random_number = random_(300)
             #Randomly go in idle state
@@ -200,7 +206,7 @@ class AI_1(AI):
         """
         if isinstance(event, events.TickEvent):
             #Do not attack
-            self.stop_attack()
+            #self.stop_attack()
             self.stop_movement()
             self.counter -= 1
             if self.counter == 0:
@@ -230,12 +236,9 @@ class AI_1(AI):
                 direction = (1, 0)
             self.world.direction[self.entity_ID] = direction
             #Do attack
-            self.world.state[self.entity_ID].attacks = 0
+            self.attack(0)
             #Check if state should be changed
             if not self.sees_player(self.world.collider[self.world.player].center):
-                #Stop attacking
-                self.stop_attack()
                 #Set duration of idle state
                 self.counter = 30
                 self.current_action = self.idle
-

@@ -37,8 +37,7 @@ class StateSystem():
         #Update first enemy AI
         for ai in self.world.ai.itervalues():
             ai.current_action(event)
-        if isinstance(event, events.TickEvent):
-            self.update()
+            
         if isinstance(event, events.EntityMovesLeftRequest):
             self.world.velocity[event.entity_ID][0] = -vel
         if isinstance(event, events.EntityMovesRightRequest):
@@ -52,25 +51,3 @@ class StateSystem():
         if isinstance(event, events.EntityJumpRequest):
             if self.world.velocity[event.entity_ID][1] == 0:
                 self.world.velocity[self.world.player][1] = -vel*2
-        #if isinstance(event, events.EntityGrounded):
-        #    self.world.velocity[self.world.player][1] = 0
-
-    def update(self):
-        vel = 7
-        #Move entities
-        for entity_ID in self.world.state:
-            if self.world.velocity[entity_ID]:
-                '''
-                if self.world.state[entity_ID].walk_left:
-                    self.world.velocity[entity_ID][0] = -vel
-                elif not self.world.state[entity_ID].walk_right:
-                    self.world.velocity[entity_ID][0] = 0
-                if self.world.state[entity_ID].walk_right:
-                    self.world.velocity[entity_ID][0] = vel
-                elif not self.world.state[entity_ID].walk_left:
-                    self.world.velocity[entity_ID][0] = 0
-                if self.world.state[entity_ID].jumping and self.world.state[self.world.player].grounded:
-                    self.world.velocity[self.world.player][1] = -vel*2
-                    self.world.state[self.world.player].grounded = False
-                '''
-                pass
