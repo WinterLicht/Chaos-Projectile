@@ -4,8 +4,8 @@
     :synopsis: AI
 """
 
+from math import sqrt
 import random
-
 import events
 
 def calculate_octant(vector):
@@ -78,6 +78,7 @@ class AI():
         self.entity_ID = entity_ID
         self.counter = 1
         self.event_manager = event_manager
+        self.aggresion_range = 200
 
     def current_action(self, event):
         """This function is called every frame.
@@ -130,6 +131,12 @@ class AI():
         ev = events.EntityAttackRequest(self.entity_ID, attack_Nr)
         self.event_manager.post(ev)
 
+    def walking_left(self):
+        return self.world.velocity[self.entity_ID][0] < 0
+
+    def walking_right(self):
+        return self.world.velocity[self.entity_ID][0] > 0
+
     def sees_player(self, player_position):
         """Checks if the player is in sight.
         
@@ -141,12 +148,23 @@ class AI():
         enemys_position = self.world.collider[self.entity_ID].center
         return (player_position[1] - offset) < enemys_position[1] and \
             enemys_position[1] < (player_position[1] + offset)
-    
-    def walking_left(self):
-        return self.world.velocity[self.entity_ID][0] < 0
 
-    def walking_right(self):
-        return self.world.velocity[self.entity_ID][0] > 0
+    def point_in_radius(self, radius, point):
+        """Checks if a given point is in radius to the enemy.
+        
+        :param radius: given radius
+        :type radius: int
+        :param point: given point
+        :type point: 2d list
+        :rtype: True if point is in given radius to the enemy
+        """
+        self_position = self.world.collider[self.entity_ID].center
+        vector = [point[0] - self_position[0], 
+                  point[1] - self_position[1]]
+        distance = sqrt(vector[0]*vector[0] + vector[1]*vector[1])
+        return distance < radius
+        
+        
 
 class AI_1(AI):
     """Handles simple AI.
@@ -194,8 +212,9 @@ class AI_1(AI):
                 self.current_action = self.idle
 
         elif isinstance(event, events.TickEvent):
-            #Check if enemy sees the player
-            if self.sees_player(self.world.collider[self.world.player].center):
+            #Check if enemy sees the player and if player is in range
+            players_position = self.world.collider[self.world.player].center
+            if self.sees_player(players_position) and self.point_in_radius(self.aggresion_range, players_position):
                 self.current_action = self.hunt
 
     def idle(self, event):
@@ -238,7 +257,8 @@ class AI_1(AI):
             #Do attack
             self.attack(0)
             #Check if state should be changed
-            if not self.sees_player(self.world.collider[self.world.player].center):
+            #Enemy doesn't sees player or player is not in range
+            if not self.sees_player(self.world.collider[self.world.player].center) or not self.point_in_radius(self.aggresion_range, players_position):
                 #Set duration of idle state
                 self.counter = 30
                 self.current_action = self.idle
