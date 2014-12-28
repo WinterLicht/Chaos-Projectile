@@ -43,7 +43,7 @@ class InputSystem(object):
             self.handle_hat_moved(event.x, event.y)
         if isinstance(event, events.AxisMoved):
             self.handle_joystick(event.x_axis, event.y_axis)
-        if isinstance(event, events.PlayerAttackRequest):
+        if isinstance(event, events.MouseButtonDown):
             self.handle_attack_request()
 
     def handle_hat_moved(self, x, y):
@@ -102,13 +102,21 @@ class InputSystem(object):
         """
         if key == pygame.K_a:
             #Walk left
-            self.world.state[self.world.player].walk_left = True
+            ev = events.EntityMovesLeftRequest(self.world.player)
+            self.event_manager.post(ev)
+            #self.world.state[self.world.player].walk_left = True
+            #self.world.state[self.world.player].walk_right = False
         if key == pygame.K_d:
             #Walk right
-            self.world.state[self.world.player].walk_right = True
+            ev = events.EntityMovesRightRequest(self.world.player)
+            self.event_manager.post(ev)
+            #self.world.state[self.world.player].walk_right = True
+            #self.world.state[self.world.player].walk_left = False
         if key == pygame.K_w:
             #Jump
-            self.world.state[self.world.player].jumping = True
+            ev = events.EntityJumpRequest(self.world.player)
+            self.event_manager.post(ev)
+            #self.world.state[self.world.player].jumping = True
 
     def handle_key_released(self, key):
         """Player stops movement, when key is released.
@@ -117,15 +125,23 @@ class InputSystem(object):
         :type key: pygame constant
         """
         if key == pygame.K_a:
-            self.world.state[self.world.player].walk_left = False
+            ev = events.EntityStopMovingLeftRequest(self.world.player)
+            self.event_manager.post(ev)
+            #self.world.state[self.world.player].walk_left = False
         if key == pygame.K_d:
-            self.world.state[self.world.player].walk_right = False
-        if key == pygame.K_w:
-            self.world.state[self.world.player].jumping = False
+            ev = events.EntityStopMovingRightRequest(self.world.player)
+            self.event_manager.post(ev)
+            #self.world.state[self.world.player].walk_right = False
+        #if key == pygame.K_w:
+            #ev = events.EntityStopJumpRequest(self.world.player)
+            #self.event_manager.post(ev)
+            #self.world.state[self.world.player].jumping = False
 
     def handle_attack_request(self):
         #Execute players attacks number 0
-        self.world.state[self.world.player].attacks = 0
+        #self.world.state[self.world.player].attacks = 0
+        ev = events.EntityAttackRequest(self.world.player, 0)
+        self.event_manager.post(ev)
 
     def handle_mouse_move(self, mouse_x, mouse_y):
         """Position of the mouse cursor controlls aim and attacks direction.

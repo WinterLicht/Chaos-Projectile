@@ -139,21 +139,33 @@ class CollisionSystem(object):
         self.world.collider[collider_ID] = self.world.collider[collider_ID].move(self.world.velocity[collider_ID][0], 0)
         #Filter overlapping hit boxes with collider
         hit_items = self.world.tree.hit(self.world.collider[collider_ID])
+        ev = None
         for element in hit_items:
             #If we are moving right, set our right side to the left side
             #of the item we hit
             if self.world.velocity[collider_ID][0] > 0:
                 self.world.collider[collider_ID].right = element.left
+                ev = events.EntityStopMovingRight(collider_ID)
                 #if self.world.state[collider_ID]:
                 #    self.world.state[collider_ID].walk_right = False
 
             elif self.world.velocity[collider_ID][0] < 0:
             #Otherwise if we are moving left, do the opposite
                 self.world.collider[collider_ID].left = element.right
+                ev = events.EntityStopMovingLeft(collider_ID)
                 #if self.world.state[collider_ID]:
                 #    self.world.state[collider_ID].walk_left = False
             #Post Event
-            ev = events.CollisionOccured(collider_ID, element)
+            #ev = events.CollisionOccured(collider_ID, element)
+            #self.event_manager.post(ev)
+        if not hit_items:
+            if self.world.velocity[collider_ID][0] > 0:
+                ev = events.EntityMovesRight(collider_ID)
+            elif self.world.velocity[collider_ID][0] < 0:
+                ev = events.EntityMovesLeft(collider_ID)
+            elif self.world.velocity[collider_ID][0] == 0:
+                ev = events.EntityStopMovingLeft(collider_ID)
+        if ev:
             self.event_manager.post(ev)
         #Set new position and cast to int before, because position is in
         #pixel coordinates
@@ -171,19 +183,26 @@ class CollisionSystem(object):
         #coordinates of the detected, if collider was moved 0.4 further
         temp = self.world.collider[collider_ID].move(0, 1)
         hit_items = self.world.tree.hit(temp)
+        ev = None
         for element in hit_items:
             #Reset our position based on the top/bottom of the object
             if self.world.velocity[collider_ID][1] > 0:
                 self.world.collider[collider_ID].bottom = element.top
                 if collider_ID in self.world.state:
-                    self.world.state[collider_ID].grounded = True
+                    ev = events.EntityGrounded(collider_ID)
+                    #self.world.state[collider_ID].grounded = True
             elif self.world.velocity[collider_ID][1] < 0:
                 self.world.collider[collider_ID].top = element.bottom
+                ev = events.EntityJump(collider_ID)
             #Reset velocity in y direction, so gravity will not be added
             #every new frame
             self.world.velocity[collider_ID][1] = 0
             #Post Event
-            ev = events.CollisionOccured(collider_ID, element)
+            #ev = events.CollisionOccured(collider_ID, element)
+            #self.event_manager.post(ev)
+        if not hit_items:
+            ev = events.EntityJump(collider_ID)
+        if ev: 
             self.event_manager.post(ev)
         #Set new position and cast to int before, because position is in
         #pixel coordinates

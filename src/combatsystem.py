@@ -35,16 +35,19 @@ class CombatSystem():
         """
         if isinstance(event, events.TickEvent):
             self.update()
+        if isinstance(event, events.EntityAttackRequest):
+            #Execute attacks
+            self.execute_attack(event.entity_ID, event.attack_Nr)
         #if isinstance(event, events.CollisionOccured):
         #    self.handle_collision(event.collider_ID, event.collidee_ID)
 
     def update(self):
         """Update all particle emitters, remove dead objects and execute attacks."""
         #Execute attacks
-        for entity_ID in self.world.state:
-            attack_Nr = self.world.state[entity_ID].attacks
-            if attack_Nr > -1:
-                self.execute_attack(entity_ID, attack_Nr)
+        #for entity_ID in self.world.state:
+        #    attack_Nr = self.world.state[entity_ID].attacks
+        #    if attack_Nr > -1:
+        #        self.execute_attack(entity_ID, attack_Nr)
         for attacks in self.world.attacks.itervalues():
             for attack in attacks:
                 attack.update()
@@ -115,7 +118,7 @@ class CombatSystem():
         spawned = self.world.attacks[entity_ID][attack_Nr].spawn_particles(velocity, position)
         if spawned:
             #Post attack event
-            ev = events.EntityAttacks(entity_ID)
+            ev = events.EntityAttacks(entity_ID, attack_Nr)
             self.event_manager.post(ev)
             #Show effect
             effect_ID = self.world.attacks[entity_ID][attack_Nr].effect_ID
@@ -128,8 +131,11 @@ class CombatSystem():
                 self.world.appearance[effect_ID].rect.center = orb_position
                 self.world.appearance[effect_ID].angle = self.world.appearance[player.orb_ID].angle
                 self.world.appearance[effect_ID].play_animation = True
+        #else:
+        #    ev = events.EntityStopAttack(entity_ID)
+        #    self.event_manager.post(ev) 
         #Attack executed, so reset state
-        self.world.state[entity_ID].attacks = -1
+        #self.world.state[entity_ID].attacks = -1
 
 #    def handle_collision(self, collider_ID, collidee_ID):
 #        pass

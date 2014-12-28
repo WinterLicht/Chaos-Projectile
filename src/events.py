@@ -115,13 +115,10 @@ class MouseMoved(Event):
         self.x = x
         self.y = y
 
-
-class PlayerAttackRequest(Event):
-    """Player attack request."""
-
+class MouseButtonDown(Event):
+    
     def __init__(self):
-        self.name = "Attack Request"
-
+        self.name = "Mouse Button Down Event"
 
 class AxisMoved(Event):
     """This event stores position of a game pad axis.
@@ -204,6 +201,92 @@ class CollisionOccured(Event):
         self.collider_ID = collider_ID
         self.collidee = collidee
 
+class EntityMovesRight(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Moved Right Event"
+        self.entity_ID = entity_ID
+
+class EntityMovesLeft(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Moved Left Event"
+        self.entity_ID = entity_ID
+
+class EntityStopMovingRight(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Stop Moved Right Event"
+        self.entity_ID = entity_ID
+
+class EntityStopMovingLeft(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Stop Moved Left Event"
+        self.entity_ID = entity_ID
+        
+class EntityJump(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Jump Event"
+        self.entity_ID = entity_ID
+        
+class EntityGrounded(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Jump Event"
+        self.entity_ID = entity_ID
+
+class EntityAttacks(Event):
+    
+    def __init__(self, entity_ID, attack_Nr):
+        self.name = "Entity Jump Event"
+        self.entity_ID = entity_ID
+        self.attack_Nr = attack_Nr
+        
+class EntityStopAttack(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Jump Event"
+        self.entity_ID = entity_ID
+#-------------------------------------------------------------
+class EntityMovesRightRequest(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Moved Right Event"
+        self.entity_ID = entity_ID
+
+class EntityMovesLeftRequest(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Moved Left Event"
+        self.entity_ID = entity_ID
+        
+class EntityStopMovingRightRequest(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Stop Moved Right Event"
+        self.entity_ID = entity_ID
+
+class EntityStopMovingLeftRequest(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Stop Moved Left Event"
+        self.entity_ID = entity_ID
+
+class EntityJumpRequest(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Jump Event"
+        self.entity_ID = entity_ID
+
+class EntityAttackRequest(Event):
+    
+    def __init__(self, entity_ID, attack_Nr):
+        self.name = "Entity Jump Event"
+        self.entity_ID = entity_ID
+        self.attack_Nr = attack_Nr
+#-------------------------------------------------------------
 
 class PlayerMoved(Event):
     """This event is sent every time when player moves.
@@ -230,19 +313,6 @@ class PlayerStoppedMovement(Event):
 
     def __init__(self):
         self.name = "Player Stopped Movement"
-
-
-class EntityAttacks(Event):
-    """Entity attacks.
-
-    :Attributes:
-        - *entity_ID* (int): ID of attacking entity 
-    """
-
-    def __init__(self, entity_ID):
-        self.name = "Attack"
-        self.entity_ID = entity_ID
-
 
 class EventManager:
     """This class is responsible for coordinating most communication between the game systems.

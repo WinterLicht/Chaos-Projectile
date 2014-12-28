@@ -36,6 +36,57 @@ class AnimationSystem(object):
         if isinstance(event, events.UpdateImagePosition):
             self.update_image_position(event.entity_ID,
                                        event.new_position)
+        if hasattr(event, 'entity_ID'):
+            if not self.world.appearance[event.entity_ID].play_animation_till_end:
+                if isinstance(event, events.EntityAttacks):
+                    #Attack animation is 2
+                    self.world.appearance[event.entity_ID].play_animation_till_end = True
+                    self.world.appearance[event.entity_ID].current_animation = 2
+                    self.world.appearance[event.entity_ID].current_frame_x = 0
+                if isinstance(event, events.EntityJump):
+                    current_animation = self.world.appearance[event.entity_ID].current_animation
+                    #if not current_animation == 2:
+                    #    print("..")
+                        #Jump animation is 2
+                        #Reset to this when player isn't grounded
+                    self.world.appearance[event.entity_ID].current_animation = 2
+                    if not current_animation == 2:
+                        self.world.appearance[event.entity_ID].current_frame_x = 0
+                if isinstance(event, events.EntityMovesLeft):
+                    current_animation = self.world.appearance[event.entity_ID].current_animation
+                    self.world.appearance[event.entity_ID].flip = True
+                    if not current_animation == 1 and not current_animation == 2:
+                        #Walk animation is 1
+                        self.world.appearance[event.entity_ID].current_animation = 1
+                        self.world.appearance[event.entity_ID].current_frame_x = 0
+                if isinstance(event, events.EntityMovesRight):
+                    current_animation = self.world.appearance[event.entity_ID].current_animation
+                    self.world.appearance[event.entity_ID].flip = False
+                    if not current_animation == 1 and not current_animation == 2:
+                        #Walk animation is 1
+                        self.world.appearance[event.entity_ID].current_animation = 1
+                        self.world.appearance[event.entity_ID].current_frame_x = 0
+                if isinstance(event, events.EntityStopMovingLeft):
+                    current_animation = self.world.appearance[event.entity_ID].current_animation
+                    if not current_animation == 0 and not current_animation == 2:
+                        #Idle animation is 0
+                        #Reset to idle, if it's not already played
+                        self.world.appearance[event.entity_ID].current_animation = 0
+                        self.world.appearance[event.entity_ID].current_frame_x = 0
+                if isinstance(event, events.EntityStopMovingRight):
+                    current_animation = self.world.appearance[event.entity_ID].current_animation
+                    if not current_animation == 0 and not current_animation == 2:
+                        #Idle animation is 0
+                        #Reset to idle, if it's not already played
+                        self.world.appearance[event.entity_ID].current_animation = 0
+                        self.world.appearance[event.entity_ID].current_frame_x = 0
+                if isinstance(event, events.EntityGrounded):
+                    current_animation = self.world.appearance[event.entity_ID].current_animation
+                    if current_animation == 2:
+                        #Idle animation is 0
+                        #Reset to idle, if it's not already played
+                        self.world.appearance[event.entity_ID].current_animation = 0
+                        self.world.appearance[event.entity_ID].current_frame_x = 0
         #if isinstance(event, events.PlayerStoppedMovement):
         #    self.handle_player_stopped_movement_event()
         #if isinstance(event, events.PlayerMoved):
@@ -48,8 +99,8 @@ class AnimationSystem(object):
         :param dt: time passed
         :type dt: int
         """
-        for entity_ID in self.world.state:
-            self.determine_animation(entity_ID)
+        #for entity_ID in self.world.state:
+        #    self.determine_animation(entity_ID)
         for animation in self.world.appearance.itervalues():
             if animation.play_animation:
                 #For every animation
@@ -91,16 +142,17 @@ class AnimationSystem(object):
                 self.world.appearance[entity_ID].play_animation_till_end = True
                 self.world.appearance[entity_ID].current_animation = 2
                 self.world.appearance[entity_ID].current_frame_x = 0
-            elif (state.walk_left or state.walk_right) and state.grounded and not current_animation == 1:
+            #elif (state.walk_left or state.walk_right) and state.grounded and not current_animation == 1:
                 #Walk animation is 1
                 #Reset to this when player moves, is grounded
-                self.world.appearance[entity_ID].current_animation = 1
-                self.world.appearance[entity_ID].current_frame_x = 0
-            elif (state.jumping or not state.grounded) and not current_animation == 2:
+                #self.world.appearance[entity_ID].current_animation = 1
+                #self.world.appearance[entity_ID].current_frame_x = 0
+            #elif (state.jumping or not state.grounded) and not current_animation == 2:
                 #Jump animation is 2
                 #Reset to this when player isn't grounded
-                self.world.appearance[entity_ID].current_animation = 2
-                self.world.appearance[entity_ID].current_frame_x = 0
+                #self.world.appearance[entity_ID].current_animation = 2
+                #self.world.appearance[entity_ID].current_frame_x = 0
+            '''
             elif not state.walk_left and not state.walk_right and \
             self.world.state[entity_ID].grounded and \
             not current_animation == 0:
@@ -108,6 +160,7 @@ class AnimationSystem(object):
                 #Reset to idle, if it's not already played
                 self.world.appearance[entity_ID].current_animation = 0
                 self.world.appearance[entity_ID].current_frame_x = 0
+            '''
 
     def update_image_position(self, entity_ID, new_position):
         """Update image position, when corresponding entity moved.
