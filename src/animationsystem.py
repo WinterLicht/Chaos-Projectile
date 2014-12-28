@@ -60,7 +60,9 @@ class AnimationSystem(object):
                 if isinstance(event, events.EntityGrounded):
                     if self.jump_animation_running(entity_ID):
                         self.play_idle_animation(event.entity_ID)
-                        
+                if isinstance(event, events.EntityDies):
+                    self.play_death_animation(entity_ID)
+                                                
     def run_animations(self, dt):
         """Computes which animation frame should be displayed.
         Every CPU tick checks if new frame should be displayed. Therefore there is a counter for each animation that measures time. When time equal delay between frames passed, next frame will be displayed.
@@ -68,7 +70,7 @@ class AnimationSystem(object):
         :param dt: time passed
         :type dt: int
         """
-        for animation in self.world.appearance.itervalues():
+        for entity_ID, animation in self.world.appearance.iteritems():
             if animation.play_animation:
                 #For every animation
                 animation.set_image(animation.current_frame_x)
@@ -84,6 +86,10 @@ class AnimationSystem(object):
                             if animation.play_once:
                                 #Animation played once
                                 animation.play_animation = False
+                                #Death animation ended
+                                if self.death_animation_running(entity_ID):
+                                    ev_remove_ent = events.RemoveEntityFromTheGame(entity_ID)
+                                    self.event_manager.post(ev_remove_ent)
                             #Loop Animation
                             #Animation ended, begin from 0
                             animation.current_frame_x = 0
@@ -136,3 +142,14 @@ class AnimationSystem(object):
         self.world.appearance[entity_ID].current_animation = 2
         self.world.appearance[entity_ID].current_frame_x = 0
         
+    def death_animation_running(self, entity_ID):
+        current_animation = self.world.appearance[entity_ID].current_animation
+        return current_animation == 3
+    
+    def play_death_animation(self, entity_ID):
+        #Death animation is 3
+        self.world.appearance[entity_ID].play_animation_till_end = True
+        self.world.appearance[entity_ID].play_once = True
+        self.world.appearance[entity_ID].current_animation = 3
+        self.world.appearance[entity_ID].current_frame_x = 0
+

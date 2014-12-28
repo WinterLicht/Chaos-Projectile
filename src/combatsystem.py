@@ -37,6 +37,8 @@ class CombatSystem():
             self.update()
         if isinstance(event, events.EntityAttackRequest):
             self.execute_attack(event.entity_ID, event.attack_Nr)
+        if isinstance(event, events.RemoveEntityFromTheGame):
+            self.world.to_remove.append(event.entity_ID)
 
     def update(self):
         """Update all particle emitters, remove dead objects and execute attacks."""
@@ -78,8 +80,8 @@ class CombatSystem():
                                     #Decrease HP 
                                     enemys_health.points -= attack.damage
                                 else:
-                                    self.world.to_remove.append(collider_ID)
-                                    #self.world.destroy_entity(collider_ID)
+                                    ev_die = events.EntityDies(collider_ID)
+                                    self.event_manager.post(ev_die)
                                 projectile.life = -1
                     #Collision between walls
                     hit_items = self.world.tree.hit(projectile.rect)

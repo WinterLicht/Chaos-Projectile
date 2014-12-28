@@ -244,11 +244,18 @@ class EntityAttacks(Event):
         self.entity_ID = entity_ID
         self.attack_Nr = attack_Nr
         
-class EntityStopAttack(Event):
+class EntityDies(Event):
     
     def __init__(self, entity_ID):
         self.name = "Entity Jump Event"
         self.entity_ID = entity_ID
+
+class RemoveEntityFromTheGame(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Entity Jump Event"
+        self.entity_ID = entity_ID
+
 #-------------------------------------------------------------
 class EntityMovesRightRequest(Event):
     
