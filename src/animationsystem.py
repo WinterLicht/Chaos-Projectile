@@ -41,7 +41,8 @@ class AnimationSystem(object):
                 if isinstance(event, events.EntityAttacks):
                     self.play_attack_animation(entity_ID)
                 if isinstance(event, events.EntityJump):
-                    self.play_jump_animation(entity_ID)
+                    if not self.jump_animation_running(entity_ID):
+                        self.play_jump_animation(entity_ID)
                 if isinstance(event, events.EntityMovesLeft):
                     self.world.appearance[entity_ID].flip = True
                     if not self.walk_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
@@ -127,8 +128,7 @@ class AnimationSystem(object):
     def play_jump_animation(self, entity_ID):
         #Jump animation is 2
         self.world.appearance[entity_ID].current_animation = 2
-        if not self.jump_animation_running(entity_ID):
-            self.world.appearance[entity_ID].current_frame_x = 0
+        self.world.appearance[entity_ID].current_frame_x = 0
     
     def play_attack_animation(self, entity_ID):
         #Attack animation is 2

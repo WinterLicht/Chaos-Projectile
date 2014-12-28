@@ -55,6 +55,7 @@ class GameWorld(object):
         self.tags = {}
         self.hp = {}
         
+        self.inactive_entities = list()
         self.to_remove = list()
         
         #Create all game entities
@@ -139,8 +140,8 @@ class GameWorld(object):
         vel = components.Velocity([0, 0])
         #Create players animations
         temp = pygame.image.load(os.path.join('data', 'char.png')).convert_alpha()
-        anim_list = [4, 10, 3]
-        anim_time_list = [240, 60, 44]
+        anim_list = [4, 10, 3, 4]
+        anim_time_list = [240, 60, 44, 60]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
@@ -186,8 +187,8 @@ class GameWorld(object):
         vel = components.Velocity([0, 0])
         #Create enemy's animations
         temp = pygame.image.load(os.path.join('data', 'char.png')).convert_alpha()
-        anim_list = [4, 10, 3]
-        anim_time_list = [240, 60, 44]
+        anim_list = [4, 10, 3, 4]
+        anim_time_list = [240, 60, 44, 60]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
