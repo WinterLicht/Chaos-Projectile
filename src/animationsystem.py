@@ -33,56 +33,32 @@ class AnimationSystem(object):
         """
         if isinstance(event, events.TickEvent):
             self.run_animations(event.dt)
-        if isinstance(event, events.UpdateImagePosition):
-            self.update_image_position(event.entity_ID,
-                                       event.new_position)
         if hasattr(event, 'entity_ID'):
-            if not self.world.appearance[event.entity_ID].play_animation_till_end:
+            entity_ID = event.entity_ID
+            if isinstance(event, events.UpdateImagePosition):
+                self.update_image_position(entity_ID, event.new_position)
+            if not self.world.appearance[entity_ID].play_animation_till_end:
                 if isinstance(event, events.EntityAttacks):
-                    #Attack animation is 2
-                    self.world.appearance[event.entity_ID].play_animation_till_end = True
-                    self.world.appearance[event.entity_ID].current_animation = 2
-                    self.world.appearance[event.entity_ID].current_frame_x = 0
+                    self.play_attack_animation(entity_ID)
                 if isinstance(event, events.EntityJump):
-                    current_animation = self.world.appearance[event.entity_ID].current_animation
-                    self.world.appearance[event.entity_ID].current_animation = 2
-                    if not current_animation == 2:
-                        self.world.appearance[event.entity_ID].current_frame_x = 0
+                    self.play_jump_animation(entity_ID)
                 if isinstance(event, events.EntityMovesLeft):
-                    current_animation = self.world.appearance[event.entity_ID].current_animation
-                    self.world.appearance[event.entity_ID].flip = True
-                    if not current_animation == 1 and not current_animation == 2:
-                        #Walk animation is 1
-                        self.world.appearance[event.entity_ID].current_animation = 1
-                        self.world.appearance[event.entity_ID].current_frame_x = 0
+                    self.world.appearance[entity_ID].flip = True
+                    if not self.walk_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
+                        self.play_walk_animation(entity_ID)
                 if isinstance(event, events.EntityMovesRight):
-                    current_animation = self.world.appearance[event.entity_ID].current_animation
-                    self.world.appearance[event.entity_ID].flip = False
-                    if not current_animation == 1 and not current_animation == 2:
-                        #Walk animation is 1
-                        self.world.appearance[event.entity_ID].current_animation = 1
-                        self.world.appearance[event.entity_ID].current_frame_x = 0
+                    self.world.appearance[entity_ID].flip = False
+                    if not self.walk_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
+                        self.play_walk_animation(entity_ID)
                 if isinstance(event, events.EntityStopMovingLeft):
-                    current_animation = self.world.appearance[event.entity_ID].current_animation
-                    if not current_animation == 0 and not current_animation == 2:
-                        #Idle animation is 0
-                        #Reset to idle, if it's not already played
-                        self.world.appearance[event.entity_ID].current_animation = 0
-                        self.world.appearance[event.entity_ID].current_frame_x = 0
+                    if not self.idle_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
+                        self.play_idle_animation(entity_ID)
                 if isinstance(event, events.EntityStopMovingRight):
-                    current_animation = self.world.appearance[event.entity_ID].current_animation
-                    if not current_animation == 0 and not current_animation == 2:
-                        #Idle animation is 0
-                        #Reset to idle, if it's not already played
-                        self.world.appearance[event.entity_ID].current_animation = 0
-                        self.world.appearance[event.entity_ID].current_frame_x = 0
+                    if not self.idle_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
+                        self.play_idle_animation(entity_ID)
                 if isinstance(event, events.EntityGrounded):
-                    current_animation = self.world.appearance[event.entity_ID].current_animation
-                    if current_animation == 2:
-                        #Idle animation is 0
-                        #Reset to idle, if it's not already played
-                        self.world.appearance[event.entity_ID].current_animation = 0
-                        self.world.appearance[event.entity_ID].current_frame_x = 0
+                    if self.jump_animation_running(entity_ID):
+                        self.play_idle_animation(event.entity_ID)
                         
     def run_animations(self, dt):
         """Computes which animation frame should be displayed.
@@ -125,3 +101,38 @@ class AnimationSystem(object):
         """
         if entity_ID in self.world.appearance:
             self.world.appearance[entity_ID].rect.center = new_position
+
+    def idle_animation_running(self, entity_ID):
+        current_animation = self.world.appearance[entity_ID].current_animation
+        return current_animation == 0
+
+    def play_idle_animation(self, entity_ID):
+        #Idle animation is 0
+        self.world.appearance[entity_ID].current_animation = 0
+        self.world.appearance[entity_ID].current_frame_x = 0
+        
+    def walk_animation_running(self, entity_ID):
+        current_animation = self.world.appearance[entity_ID].current_animation
+        return current_animation == 1
+    
+    def play_walk_animation(self, entity_ID):
+        #Walk animation is 1
+        self.world.appearance[entity_ID].current_animation = 1
+        self.world.appearance[entity_ID].current_frame_x = 0
+    
+    def jump_animation_running(self, entity_ID):
+        current_animation = self.world.appearance[entity_ID].current_animation
+        return current_animation == 2
+    
+    def play_jump_animation(self, entity_ID):
+        #Jump animation is 2
+        self.world.appearance[entity_ID].current_animation = 2
+        if not self.jump_animation_running(entity_ID):
+            self.world.appearance[entity_ID].current_frame_x = 0
+    
+    def play_attack_animation(self, entity_ID):
+        #Attack animation is 2
+        self.world.appearance[entity_ID].play_animation_till_end = True
+        self.world.appearance[entity_ID].current_animation = 2
+        self.world.appearance[entity_ID].current_frame_x = 0
+        
