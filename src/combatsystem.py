@@ -36,7 +36,8 @@ class CombatSystem():
         if isinstance(event, events.TickEvent):
             self.update()
         if isinstance(event, events.EntityAttackRequest):
-            self.execute_attack(event.entity_ID, event.attack_Nr)
+            if self.world.active_entity(event.entity_ID):
+                self.execute_attack(event.entity_ID, event.attack_Nr)
         if isinstance(event, events.RemoveEntityFromTheGame):
             self.world.to_remove.append(event.entity_ID)
 
@@ -44,7 +45,10 @@ class CombatSystem():
         """Update all particle emitters, remove dead objects and execute attacks."""
         for attacks in self.world.attacks.itervalues():
             for attack in attacks:
-                attack.update()
+                dead_particles = attack.update()
+                for projectile in dead_particles:
+                    ev_die = events.EntityDies(projectile.entity_ID)
+                    self.event_manager.post(ev_die)
         #Check for collision
         self.check_projectile_collision()
         self.remove_dead_entities()
@@ -55,9 +59,12 @@ class CombatSystem():
         for attacks_ID in self.world.attacks:
             for attack in self.world.attacks[attacks_ID]:
                 for projectile in attack.particles:
+                    #First update projectiles grafic position
+                    self.world.appearance[projectile.entity_ID].rect.center = projectile.position
+                    projectile_rect = self.world.appearance[projectile.entity_ID].rect
                     for collider_ID in self.world.collider:
                         #Check overlapping
-                        if self.world.collider[collider_ID].colliderect(projectile.rect):
+                        if self.world.collider[collider_ID].colliderect(projectile_rect):
                             #Enemy hits player
                             if collider_ID == player_ID and attacks_ID in self.world.ai:
                                 if self.world.hp[self.world.players[player_ID].hp_ID].points > 0:
@@ -73,6 +80,8 @@ class CombatSystem():
                                     #print("player is dead")
                                     pass
                                 projectile.life = -1
+                                ev_die = events.EntityDies(projectile.entity_ID)
+                                self.event_manager.post(ev_die)
                             #Player hits enemy
                             elif collider_ID in self.world.ai and attacks_ID == player_ID:
                                 if self.world.hp[collider_ID].points > 0:
@@ -83,10 +92,14 @@ class CombatSystem():
                                     ev_die = events.EntityDies(collider_ID)
                                     self.event_manager.post(ev_die)
                                 projectile.life = -1
+                                ev_die = events.EntityDies(projectile.entity_ID)
+                                self.event_manager.post(ev_die)
                     #Collision between walls
-                    hit_items = self.world.tree.hit(projectile.rect)
+                    hit_items = self.world.tree.hit(projectile_rect)
                     if hit_items:
                         projectile.life = -1
+                        ev_die = events.EntityDies(projectile.entity_ID)
+                        self.event_manager.post(ev_die)
 
     def remove_dead_entities(self):
         for entity_ID in self.world.to_remove:

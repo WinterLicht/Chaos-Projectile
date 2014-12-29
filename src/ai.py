@@ -78,8 +78,17 @@ class AI():
         self.entity_ID = entity_ID
         self.counter = 1
         self.event_manager = event_manager
+        #Throws
+        #RuntimeError: dictionary changed size during iteration
+        #self.event_manager.register_listener(self)
         self.aggresion_range = 200
 
+    '''
+    def notify(self, event):
+        if self.world.active_entity(self.entity_ID):
+            self.current_action(event)
+    '''
+    
     def current_action(self, event):
         """This function is called every frame.
         

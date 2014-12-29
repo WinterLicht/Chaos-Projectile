@@ -35,19 +35,25 @@ class StateSystem():
         """
         vel = 7
         #Update first enemy AI
-        for ai in self.world.ai.itervalues():
-            ai.current_action(event)
-            
-        if isinstance(event, events.EntityMovesLeftRequest):
-            self.world.velocity[event.entity_ID][0] = -vel
-        if isinstance(event, events.EntityMovesRightRequest):
-            self.world.velocity[event.entity_ID][0] = vel
-        if isinstance(event, events.EntityStopMovingLeftRequest):
-            if self.world.velocity[event.entity_ID][0] < 0:
-                self.world.velocity[event.entity_ID][0] = 0
-        if isinstance(event, events.EntityStopMovingRightRequest):
-            if self.world.velocity[event.entity_ID][0] > 0:
-                self.world.velocity[event.entity_ID][0] = 0
-        if isinstance(event, events.EntityJumpRequest):
-            if self.world.velocity[event.entity_ID][1] == 0:
-                self.world.velocity[self.world.player][1] = -vel*2
+        for entity_ID, ai in self.world.ai.iteritems():
+            if self.world.active_entity(entity_ID): 
+                ai.current_action(event)
+                
+        if hasattr(event, 'entity_ID'):
+            entity_ID = event.entity_ID
+            if self.world.active_entity(entity_ID):
+                if isinstance(event, events.EntityMovesLeftRequest):
+                    self.world.velocity[entity_ID][0] = -vel
+                if isinstance(event, events.EntityMovesRightRequest):
+                    self.world.velocity[entity_ID][0] = vel
+                if isinstance(event, events.EntityStopMovingLeftRequest):
+                    if self.world.velocity[entity_ID][0] < 0:
+                        self.world.velocity[entity_ID][0] = 0
+                if isinstance(event, events.EntityStopMovingRightRequest):
+                    if self.world.velocity[entity_ID][0] > 0:
+                        self.world.velocity[entity_ID][0] = 0
+                if isinstance(event, events.EntityJumpRequest):
+                    if self.world.velocity[entity_ID][1] == 0:
+                        self.world.velocity[self.world.player][1] = -vel*2
+            if isinstance(event, events.EntityDies):
+                self.world.inactive_entities.append(entity_ID)

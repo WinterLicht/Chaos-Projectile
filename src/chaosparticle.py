@@ -49,20 +49,20 @@ def get_rotated_vector(vector, angle):
     return result
 
 
-class Particle(pygame.sprite.Sprite):
+class Particle():
     """One Particle.
 
     :Attributes:
-        - *sprite_sheet* (pygame.Surface): graphical representation for the particle may be one image or a sprite sheet for animated particle
+        - *sprite* ( ): graphical representation for the particle
         - *life* (int):
         - *position* (list): 2d vector for position of a particle
         - *velocity* (list): velocity vector
         - *acceleration* (list): acceleration vector can be used as gravity as well
     """
-    def __init__(self, sprite_sheet, life, position, velocity, acceleration):
+    def __init__(self, sprite, life, position, velocity, acceleration, ID=None):
         """
-        :param sprite_sheet: graphical representation for the particle may be one image or a sprite sheet for animated particle
-        :type sprite_sheet: pygame.Surface
+        :param sprite: graphical representation for the particle
+        :type sprite: ---
         :param life: life time of the particle in frames
         :type life: int
         :param position: vector for position of a particle
@@ -72,15 +72,12 @@ class Particle(pygame.sprite.Sprite):
         :param acceleration: acceleration vector
         :type acceleration: 2d list
         """
-        pygame.sprite.Sprite.__init__(self)
-        self.image = sprite_sheet
-        self.rect = self.image.get_rect()
         self.life = life
-        self.sprite_sheet = sprite_sheet
+        self.sprite = sprite
         self.position = position
         self.velocity = velocity
         self.acceleration = acceleration
-
+        self.ID = ID
 
 class Emitter():
     """Particle emitter.
@@ -96,8 +93,8 @@ class Emitter():
         - *fields* (list): list of fields
     """
 
-    def __init__(self, cooldown, position, amount, sprite_sheet, life,
-                 velocity, acceleration, spread_angle=0, fields=None):
+    def __init__(self, cooldown, position, amount, sprite, life,
+                 velocity, acceleration, spread_angle=0, fields=None, ID=None):
         """
         :param cooldown: time till new particles can be spawned in frames
         :type cooldown: int
@@ -122,7 +119,8 @@ class Emitter():
         self.counter = 0
         self.particles = list()
         self.position = position
-        self.particle_data = Particle(sprite_sheet, life, position,
+        self.ID = ID
+        self.particle_data = Particle(sprite, life, position,
                                       velocity, acceleration)
         self.amount = amount
         self.spread_angle = spread_angle
@@ -143,11 +141,12 @@ class Emitter():
             #Update life time
             particle.life = particle.life - 1
             #Update position of the image of the particle
-            particle.rect.center = particle.position
-        self.remove_dead_particles()
+            #
+        dead_particles = self.remove_dead_particles()
         #Update counter so the cooldown expires
         if self.counter < (self.cooldown+1):
             self.counter = self.counter + 1
+        return dead_particles
 
     def spawn_particles(self, velocity=None, position=None):
         """Emitter spawns particles if its cooldown expired.
@@ -159,6 +158,7 @@ class Emitter():
         :rtype: True if particles were spawned successfully
         """
         #Spawn particles, if cooldown expired
+        new_particles = list()
         if self.counter > self.cooldown:
             if not position:
                 position = self.position
@@ -170,23 +170,28 @@ class Emitter():
                 angle = angle - ((self.spread_angle*(self.amount-1)) / 2)
                 #Direction of each particle is a bit rotated
                 vel = get_rotated_vector(velocity, angle)
-                self.particles.append(Particle(self.particle_data.sprite_sheet,
+                new_part = Particle(self.particle_data.sprite,
                                                self.particle_data.life,
                                                position,
                                                vel,
-                                               self.particle_data.acceleration))
+                                               self.particle_data.acceleration, self.ID)
+                self.particles.append(new_part)
+                new_particles.append(new_part)
             #Reset counter, emitter is on the cooldown now
             self.counter = 0
-            return True
+            return new_particles
         else:
             #Cooldown not expired, no particles spawned
-            return False
+            return new_particles
 
     def remove_dead_particles(self):
         """Removes all particles, whose life is expired."""
+        dead_particles = list()
         for particle in self.particles:
                 if particle.life < 0:
+                    dead_particles.append(particle)
                     self.particles.remove(particle)
+        return dead_particles
 
     def submit_to_fields(self, particle):
         """Update acceleration and velocity of the particle based on fields.

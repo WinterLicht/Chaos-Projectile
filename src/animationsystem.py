@@ -144,12 +144,12 @@ class AnimationSystem(object):
         
     def death_animation_running(self, entity_ID):
         current_animation = self.world.appearance[entity_ID].current_animation
-        return current_animation == 3
+        return current_animation == 1
     
     def play_death_animation(self, entity_ID):
         #Death animation is 3
         self.world.appearance[entity_ID].play_animation_till_end = True
         self.world.appearance[entity_ID].play_once = True
-        self.world.appearance[entity_ID].current_animation = 3
+        self.world.appearance[entity_ID].current_animation = 1
         self.world.appearance[entity_ID].current_frame_x = 0
 

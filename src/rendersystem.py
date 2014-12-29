@@ -69,10 +69,12 @@ class RenderSystem(object):
             if image.play_animation:
                 self.group.add(image)
         #Add all particles
+        '''
         for attacks in self.world.attacks.itervalues():
             for attack in attacks:
                 for projectile in attack.particles:
                     self.group.add(projectile)
+        '''
 
     def draw(self, dt):
         """Draw everything on the screen.

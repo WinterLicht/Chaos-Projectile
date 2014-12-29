@@ -162,15 +162,15 @@ class GameWorld(object):
         damage = 10
         cooldown = 30
         position = coll.center
-        #Effect of this attack
+        
         temp_eff = pygame.image.load(os.path.join('data', 'attack_effect.png'))
         eff_sprite = components.Appearance(temp_eff.convert_alpha(), 62, 62, [6], [cooldown])
         eff_sprite.play_once = True
         eff_sprite.play_animation_till_end = True
         c_eff = (eff_sprite,)
         effect_ID = self.create_entity(c_eff)
-        particle_emitter = components.Attack(damage, cooldown, position,
-                                             5, temp, 60,
+        particle_emitter = components.Attack(self, damage, cooldown, position,
+                                             5, 'proj.png', 60,
                                              self.direction[self.player], [0, 0], 15, effect_ID)
         attack_list = list()
         attack_list.append(particle_emitter)
@@ -199,13 +199,12 @@ class GameWorld(object):
         enemy_AI = ai.AI_1(self, enemy_ID, self.event_manager)
         self.add_component_to_entity(enemy_ID, enemy_AI)
 
-        projectile_image = pygame.image.load(os.path.join('data', 'orb.png'))
         #Create enemies attacks
         #attack 1
         damage = 10
         position = coll.center
-        particle_emitter = components.Attack(damage, 30, position,
-                                             3, projectile_image, 60,
+        particle_emitter = components.Attack(self, damage, 30, position,
+                                             3, 'proj.png', 60,
                                              self.direction[enemy_ID], [0, 0], 15)
         attack_list = list()
         attack_list.append(particle_emitter)
@@ -259,6 +258,10 @@ class GameWorld(object):
         self.mask.append(0)
         return entity
 
+    def active_entity(self, entity_ID):
+        
+        return not entity_ID in self.inactive_entities
+
     def destroy_entity(self, entity_ID):
         #Clear mask, this entity has no components more
         self.mask[entity_ID] = 0
@@ -276,7 +279,7 @@ class GameWorld(object):
         if entity_ID in self.attacks:
             del self.attacks[entity_ID]
         if entity_ID in self.ai:
-            self.event_manager.unregister_listener(self.ai[entity_ID])
+            #self.event_manager.unregister_listener(self.ai[entity_ID])
             del self.ai[entity_ID]
         if entity_ID in self.hp:
             del self.hp[entity_ID]

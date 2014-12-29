@@ -23,6 +23,21 @@ def enum(*sequential, **named):
 Types = enum('position', 'appearance', 'collider', 'velocity')
 '''
 
+import os
+
+class Projectile(chaosparticle.Particle):
+    def __init__(self, sprite, life, position, velocity, acceleration):
+        chaosparticle.Particle.__init__(self, sprite, life, position, velocity, acceleration)
+        self.entity_ID = None 
+        
+    def load_grafic(self, gameworld):
+        proj_temp = pygame.image.load(os.path.join('data', self.sprite))
+        proj_anim_list = [2, 2]
+        proj_anim_time_list = [50, 13]
+        proj_anim = Appearance(proj_temp, 16, 16, proj_anim_list, proj_anim_time_list)
+        proj_anim.rect.center = self.position
+        proj_c = (proj_anim,)
+        self.entity_ID = gameworld.create_entity(proj_c)
 
 class Attack(chaosparticle.Emitter):
     """All attacks are here particle emitters.
@@ -34,7 +49,7 @@ class Attack(chaosparticle.Emitter):
         - *damage* (int): attack damage
     """
     
-    def __init__(self, damage, cooldown, position, amount,
+    def __init__(self, world, damage, cooldown, position, amount,
                  sprite_sheet, life, velocity, acceleration,
                  spread_angle=0, effect_ID=None):
         """
@@ -59,12 +74,27 @@ class Attack(chaosparticle.Emitter):
         :param spread_angle: angle between velocities of the particles in grad
         :type spread_angle: int
         """
-        chaosparticle.Emitter.__init__(self, cooldown, position, amount, 
+        chaosparticle.Emitter.__init__(self, cooldown, position, amount,
                                        sprite_sheet, life, velocity,
                                        acceleration, spread_angle)
         self.damage = damage
         self.effect_ID = effect_ID
-
+        self.world = world
+        
+    def spawn_particles(self, velocity=None, position=None):
+        old_particles = self.particles[:]
+        spawned = chaosparticle.Emitter.spawn_particles(self, velocity, position)
+        if spawned:
+            #Convert particles to projectiles
+            #copy_particles = self.particles[:]
+            self.particles = list()
+            for projectile in old_particles:
+                self.particles.append(projectile)
+            for particle in spawned:#copy_particles:
+                projectile = Projectile(particle.sprite, particle.life, particle.position, particle.velocity, particle.acceleration)
+                projectile.load_grafic(self.world)
+                self.particles.append(projectile)
+        return spawned
 
 class Collider(pygame.Rect):
     """Collider class is equal a hitbox of an entity, also stores position of entity.
