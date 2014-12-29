@@ -7,6 +7,7 @@
 from math import sqrt
 import random
 import events
+import chaosparticle
 
 def calculate_octant(vector):
     """Calculates in which octant vector lies and returns the normalized vector for this octant.
@@ -136,8 +137,8 @@ class AI():
         self.event_manager.post(ev)
         #self.world.velocity[self.entity_ID][0] = 0
 
-    def attack(self, attack_Nr):
-        ev = events.EntityAttackRequest(self.entity_ID, attack_Nr)
+    def attack(self, attack_Nr, spawn_attack_pos=None, attack_dir=None):
+        ev = events.EntityAttackRequest(self.entity_ID, attack_Nr, spawn_attack_pos, attack_dir)
         self.event_manager.post(ev)
 
     def walking_left(self):
@@ -271,3 +272,64 @@ class AI_1(AI):
                 #Set duration of idle state
                 self.counter = 30
                 self.current_action = self.idle
+
+class Level1_curse(AI):
+    """Handles Level curse's AI.
+    
+    Spawns in random position projectiles in direction to player.
+
+    :Attributes:
+        - *event_manager* (:class:`events.EventManager`): event manager
+        - *world* (:class:`gameWorld.GameWorld`): game world contains entities
+        - *current_action* (function): current update function for AI
+        - *entity_ID* (int): this AI belongs to this entity
+    """
+
+    def __init__(self, world, entity_ID, event_manager):
+        """
+        :param world: game world contains entities
+        :type world: gameWorld.GameWorld
+        """
+        AI.__init__(self, world, entity_ID, event_manager)
+        #Set idle function for the AI
+        self.current_action = self.idle
+    
+    def idle(self, event):
+        """Idle, lasts ... frames long.
+        
+        No action happen here.
+
+        :param event: occured event
+        :type event: events.Event
+        """
+        if isinstance(event, events.TickEvent):
+            self.counter -= 1
+            if self.counter == 0:
+                self.counter = 60
+                self.current_action = self.cast_curse
+
+    def cast_curse(self, event):
+        if isinstance(event, events.CollisionOccured):
+            if event.collider_ID == self.world.player:
+                player_position = self.world.collider[self.world.player].center
+                spawn_attack_position = self.calculate_random_position_in_radius(player_position, 200, 300)
+                direction = [player_position[0] - spawn_attack_position[0],
+                             player_position[1] - spawn_attack_position[1]]
+                direction = calculate_octant(direction)
+                if direction[0] == 0 and direction[1] == 0:
+                    #Direction (0,0) is not valid
+                    direction = (1, 0)
+                self.attack(0, spawn_attack_position, direction)
+                self.current_action = self.idle
+
+    def calculate_random_position_in_radius(self, point, min_distance, max_distance):
+        radius = random_(min_distance, max_distance)
+        vector = [1, 0]
+        angle = random_(0, 360)
+        vector = chaosparticle.get_rotated_vector(vector, angle)
+        #Vector is rotated and normalized now
+        #Scale and translate vector
+        vector = [vector[0]*radius + point[0], vector[1]*radius + point[1]]
+        vector = map(int, vector)
+        return vector
+

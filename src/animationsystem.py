@@ -37,31 +37,32 @@ class AnimationSystem(object):
             entity_ID = event.entity_ID
             if isinstance(event, events.UpdateImagePosition):
                 self.update_image_position(entity_ID, event.new_position)
-            if not self.world.appearance[entity_ID].play_animation_till_end:
-                if isinstance(event, events.EntityAttacks):
-                    self.play_attack_animation(entity_ID)
-                if isinstance(event, events.EntityJump):
-                    if not self.jump_animation_running(entity_ID):
-                        self.play_jump_animation(entity_ID)
-                if isinstance(event, events.EntityMovesLeft):
-                    self.world.appearance[entity_ID].flip = True
-                    if not self.walk_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
-                        self.play_walk_animation(entity_ID)
-                if isinstance(event, events.EntityMovesRight):
-                    self.world.appearance[entity_ID].flip = False
-                    if not self.walk_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
-                        self.play_walk_animation(entity_ID)
-                if isinstance(event, events.EntityStopMovingLeft):
-                    if not self.idle_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
-                        self.play_idle_animation(entity_ID)
-                if isinstance(event, events.EntityStopMovingRight):
-                    if not self.idle_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
-                        self.play_idle_animation(entity_ID)
-                if isinstance(event, events.EntityGrounded):
-                    if self.jump_animation_running(entity_ID):
-                        self.play_idle_animation(event.entity_ID)
-                if isinstance(event, events.EntityDies):
-                    self.play_death_animation(entity_ID)
+            if entity_ID in self.world.appearance:
+                if not self.world.appearance[entity_ID].play_animation_till_end:
+                    if isinstance(event, events.EntityAttacks):
+                        self.play_attack_animation(entity_ID)
+                    if isinstance(event, events.EntityJump):
+                        if not self.jump_animation_running(entity_ID):
+                            self.play_jump_animation(entity_ID)
+                    if isinstance(event, events.EntityMovesLeft):
+                        self.world.appearance[entity_ID].flip = True
+                        if not self.walk_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
+                            self.play_walk_animation(entity_ID)
+                    if isinstance(event, events.EntityMovesRight):
+                        self.world.appearance[entity_ID].flip = False
+                        if not self.walk_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
+                            self.play_walk_animation(entity_ID)
+                    if isinstance(event, events.EntityStopMovingLeft):
+                        if not self.idle_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
+                            self.play_idle_animation(entity_ID)
+                    if isinstance(event, events.EntityStopMovingRight):
+                        if not self.idle_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
+                            self.play_idle_animation(entity_ID)
+                    if isinstance(event, events.EntityGrounded):
+                        if self.jump_animation_running(entity_ID):
+                            self.play_idle_animation(event.entity_ID)
+                    if isinstance(event, events.EntityDies):
+                        self.play_death_animation(entity_ID)
                                                 
     def run_animations(self, dt):
         """Computes which animation frame should be displayed.
@@ -120,11 +121,11 @@ class AnimationSystem(object):
         
     def walk_animation_running(self, entity_ID):
         current_animation = self.world.appearance[entity_ID].current_animation
-        return current_animation == 1
+        return current_animation == 3
     
     def play_walk_animation(self, entity_ID):
-        #Walk animation is 1
-        self.world.appearance[entity_ID].current_animation = 1
+        #Walk animation is 3
+        self.world.appearance[entity_ID].current_animation = 3
         self.world.appearance[entity_ID].current_frame_x = 0
     
     def jump_animation_running(self, entity_ID):
@@ -147,7 +148,7 @@ class AnimationSystem(object):
         return current_animation == 1
     
     def play_death_animation(self, entity_ID):
-        #Death animation is 3
+        #Death animation is 1
         self.world.appearance[entity_ID].play_animation_till_end = True
         self.world.appearance[entity_ID].play_once = True
         self.world.appearance[entity_ID].current_animation = 1

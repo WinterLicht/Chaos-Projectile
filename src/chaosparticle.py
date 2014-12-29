@@ -59,7 +59,7 @@ class Particle():
         - *velocity* (list): velocity vector
         - *acceleration* (list): acceleration vector can be used as gravity as well
     """
-    def __init__(self, sprite, life, position, velocity, acceleration, ID=None):
+    def __init__(self, sprite, life, position, velocity, acceleration):
         """
         :param sprite: graphical representation for the particle
         :type sprite: ---
@@ -77,7 +77,6 @@ class Particle():
         self.position = position
         self.velocity = velocity
         self.acceleration = acceleration
-        self.ID = ID
 
 class Emitter():
     """Particle emitter.
@@ -94,7 +93,7 @@ class Emitter():
     """
 
     def __init__(self, cooldown, position, amount, sprite, life,
-                 velocity, acceleration, spread_angle=0, fields=None, ID=None):
+                 velocity, acceleration, spread_angle=0, fields=None):
         """
         :param cooldown: time till new particles can be spawned in frames
         :type cooldown: int
@@ -119,7 +118,6 @@ class Emitter():
         self.counter = 0
         self.particles = list()
         self.position = position
-        self.ID = ID
         self.particle_data = Particle(sprite, life, position,
                                       velocity, acceleration)
         self.amount = amount
@@ -174,7 +172,7 @@ class Emitter():
                                                self.particle_data.life,
                                                position,
                                                vel,
-                                               self.particle_data.acceleration, self.ID)
+                                               self.particle_data.acceleration)
                 self.particles.append(new_part)
                 new_particles.append(new_part)
             #Reset counter, emitter is on the cooldown now

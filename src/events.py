@@ -243,7 +243,7 @@ class EntityAttacks(Event):
         self.name = "Entity Jump Event"
         self.entity_ID = entity_ID
         self.attack_Nr = attack_Nr
-        
+
 class EntityDies(Event):
     
     def __init__(self, entity_ID):
@@ -289,10 +289,13 @@ class EntityJumpRequest(Event):
 
 class EntityAttackRequest(Event):
     
-    def __init__(self, entity_ID, attack_Nr):
+    def __init__(self, entity_ID, attack_Nr, spawn_attack_pos=None, attack_dir=None):
         self.name = "Entity Jump Event"
         self.entity_ID = entity_ID
         self.attack_Nr = attack_Nr
+        self.spawn_attack_pos = spawn_attack_pos
+        self.attack_dir = attack_dir
+
 #-------------------------------------------------------------
 
 class EventManager:

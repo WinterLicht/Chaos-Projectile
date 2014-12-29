@@ -37,7 +37,7 @@ class CombatSystem():
             self.update()
         if isinstance(event, events.EntityAttackRequest):
             if self.world.active_entity(event.entity_ID):
-                self.execute_attack(event.entity_ID, event.attack_Nr)
+                self.execute_attack(event.entity_ID, event.attack_Nr, event.spawn_attack_pos, event.attack_dir)
         if isinstance(event, events.RemoveEntityFromTheGame):
             self.world.to_remove.append(event.entity_ID)
 
@@ -106,7 +106,7 @@ class CombatSystem():
             self.world.destroy_entity(entity_ID)
         self.world.to_remove = list()
 
-    def execute_attack(self, entity_ID, attack_Nr):
+    def execute_attack(self, entity_ID, attack_Nr, spawn_attack_pos=None, attack_dir=None):
         """Entity executes one of its possible attacks if cooldown is ready.
 
         :param entity_ID: entity
@@ -114,12 +114,18 @@ class CombatSystem():
         :param attack_Nr: number of the attacks that is executed
         :type attack_Nr: int
         """
-        position = (self.world.collider[entity_ID].center[0],
-                    self.world.collider[entity_ID].center[1])
-        if entity_ID in self.world.players:
-            orb_ID = self.world.players[entity_ID].orb_ID
-            position = self.world.appearance[orb_ID].rect.center
-        direction = self.world.direction[entity_ID]
+        if spawn_attack_pos:
+            position = spawn_attack_pos
+        else:
+            position = (self.world.collider[entity_ID].center[0],
+                        self.world.collider[entity_ID].center[1])
+            if entity_ID in self.world.players:
+                orb_ID = self.world.players[entity_ID].orb_ID
+                position = self.world.appearance[orb_ID].rect.center
+        if attack_dir:
+            direction = attack_dir
+        else:
+            direction = self.world.direction[entity_ID]
         velocity = [direction[0] * 3,
                     direction[1] * 3]
         spawned = self.world.attacks[entity_ID][attack_Nr].spawn_particles(velocity, position)
@@ -130,13 +136,18 @@ class CombatSystem():
             #Show effect
             effect_ID = self.world.attacks[entity_ID][attack_Nr].effect_ID
             if effect_ID:
-                #Calculate position and angle of effect
-                player = self.world.players[entity_ID]
-                #Get the orb position of the player
-                orb_position = self.world.appearance[player.orb_ID].rect.center
+                if entity_ID == self.world.player:
+                    #Calculate position and angle of effect
+                    player = self.world.players[entity_ID]
+                    #Get the orb position of the player
+                    eff_position = self.world.appearance[player.orb_ID].rect.center
+                    rot_angle = self.world.appearance[player.orb_ID].angle
+                else:
+                    eff_position = position
+                    rot_angle = 0
                 #Update position and rotation of the attack effect
-                self.world.appearance[effect_ID].rect.center = orb_position
-                self.world.appearance[effect_ID].angle = self.world.appearance[player.orb_ID].angle
+                self.world.appearance[effect_ID].rect.center = eff_position
+                self.world.appearance[effect_ID].angle = rot_angle
                 self.world.appearance[effect_ID].play_animation = True
 
 #    def handle_collision(self, collider_ID, collidee_ID):

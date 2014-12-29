@@ -109,6 +109,27 @@ class GameWorld(object):
         #Characters and their attacks are created, so fields can be added
         for field in fields:
             self.create_field(field.position, field.mass)
+        #Create Level curse:
+        #---
+        damage = 10
+        cooldown = 30
+        position = [0,0]
+        
+        temp_eff = pygame.image.load(os.path.join('data', 'attack_effect.png'))
+        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 62, 62, [6], [cooldown])
+        eff_sprite.play_animation_till_end = True
+        eff_sprite.play_once = True
+        effect_ID = self.create_entity((eff_sprite, ))
+        curse_AI = ai.Level1_curse(self, 0, self.event_manager)
+        curse_ID = self.create_entity((curse_AI, ))
+        curse_AI.entity_ID = curse_ID 
+        particle_emitter = components.Attack(self, damage, cooldown, position,
+                                             1, 'proj.png', 60,
+                                             [1, 0], [0, 0], 15, effect_ID)
+        attack_list = list()
+        attack_list.append(particle_emitter)
+        self.add_component_to_entity(curse_ID, attack_list)
+        #---
         #Quad Tree
         self.tree = quadTree.QuadTree(walls)
 
@@ -140,8 +161,8 @@ class GameWorld(object):
         vel = components.Velocity([0, 0])
         #Create players animations
         temp = pygame.image.load(os.path.join('data', 'char.png')).convert_alpha()
-        anim_list = [4, 10, 3, 4]
-        anim_time_list = [240, 60, 44, 60]
+        anim_list = [4, 4, 3, 10]
+        anim_time_list = [240, 180, 44, 60]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
@@ -187,7 +208,7 @@ class GameWorld(object):
         vel = components.Velocity([0, 0])
         #Create enemy's animations
         temp = pygame.image.load(os.path.join('data', 'char.png')).convert_alpha()
-        anim_list = [4, 10, 3, 4]
+        anim_list = [4, 4, 3, 10]
         anim_time_list = [240, 60, 44, 60]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center

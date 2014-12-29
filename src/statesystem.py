@@ -55,5 +55,10 @@ class StateSystem():
                 if isinstance(event, events.EntityJumpRequest):
                     if self.world.velocity[entity_ID][1] == 0:
                         self.world.velocity[self.world.player][1] = -vel*2
+            else:
+                if entity_ID in self.world.velocity:
+                    #Inactive entities stop movement
+                    self.world.velocity[entity_ID][0] = 0
+                    self.world.velocity[entity_ID][1] = 0
             if isinstance(event, events.EntityDies):
                 self.world.inactive_entities.append(entity_ID)
