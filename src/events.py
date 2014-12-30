@@ -181,6 +181,10 @@ class UpdateImagePosition(Event):
         self.entity_ID = entity_ID
         self.new_position = new_position
 
+class UpdatePlayersHpUI(Event):
+    def __init__(self, player_ID):
+        self.name = "Update HP UI"
+        self.player_ID = player_ID
 
 class CollisionOccured(Event):
     """This event is sent when two objects collide.
@@ -194,8 +198,6 @@ class CollisionOccured(Event):
         """
         :param collider_ID: Collider ID
         :type collider_ID: int
-        :type tags: Tags of Collidee
-        :type tags: list
         """
         self.name = "Collision occured"
         self.collider_ID = collider_ID

@@ -208,12 +208,14 @@ class AI_1(AI):
         #Check if walk direction should be inverted
         if isinstance(event, events.CollisionOccured):
             self_collider = self.world.collider[self.entity_ID]
-            if event.collidee.tags and event.collider_ID == self.entity_ID:
-                if "corner" in event.collidee.tags:
-                    if self.walking_left() and self_collider.left < event.collidee.right:
-                        self.invert_walk_direction()
-                    elif self.walking_right() and self_collider.right > event.collidee.left:
-                        self.invert_walk_direction()
+            if hasattr(event.collidee, 'tags'):
+                tags = event.collidee.tags
+                if tags and event.collider_ID == self.entity_ID:
+                    if "corner" in tags:
+                        if self.walking_left() and self_collider.left < event.collidee.right:
+                            self.invert_walk_direction()
+                        elif self.walking_right() and self_collider.right > event.collidee.left:
+                            self.invert_walk_direction()
             random_number = random_(300)
             #Randomly go in idle state
             if random_number == 0:

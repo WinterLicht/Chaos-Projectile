@@ -50,6 +50,15 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="23" name="heal_pot" tilewidth="64" tileheight="64">
+  <image source="heal_pot.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="recovery" value="50"/>
+    <property name="type" value="heal_potion"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="bg" width="50" height="50">
   <data encoding="base64" compression="zlib">
    eJztw8EJAAAMA6F7ZP+ZO0dBwVVTVVVVVVVVVVXV5w+SZScR
@@ -72,7 +81,7 @@
  </layer>
  <layer name="characters" width="50" height="50" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt0jsKwCAQBFBPkA8muf9Rs6WliwgK78F0U0wxpQCwuhp5Ev0jck7aMuKNfIn+FbknbaFP+73sD1fSfi/7QwAAAAAAAAD28QMtqgE1
+   eJzt0jkOgDAMBEBewCGO/P+npIwQBRFEhDAjbefCtrbrAKjdHLNkzPcxQ6Fd7lhjtoz5MWYqtAvXpN3L7WFN0u7l9hCeEt5e4EeOv/Z7AAAAAABoRzjJF7VyR4125pICYA==
   </data>
  </layer>
 </map>

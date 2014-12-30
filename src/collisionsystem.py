@@ -43,13 +43,9 @@ class CollisionSystem(object):
 
     def compute(self):
         """Moves object, checks collision, sends events for collision handling and updates image position of moved objects."""
-        #List of moving objects
-        collider_IDs = list()
-        #Filter collider, they have velocity vector
-        #collider have a hit box.
-        for entity_ID in range(len(self.world.mask)):
-            if entity_ID in self.world.velocity:#in self.world.collider and entity_ID in self.world.velocity:
-                collider_IDs.append(entity_ID)
+        #List of moving objects, they have velocity vector
+        #Assumption: this objects has also collider component
+        collider_IDs = self.world.velocity.keys()
         #Check collision
         for collider_ID in collider_IDs:
             self.calculate_collision_x(collider_ID)
@@ -75,6 +71,15 @@ class CollisionSystem(object):
         self.world.collider[collider_ID] = self.world.collider[collider_ID].move(self.world.velocity[collider_ID][0], 0)
         #Filter overlapping hit boxes with collider
         hit_items = self.world.tree.hit(self.world.collider[collider_ID])
+        #-----
+        #Pruefe die 'nicht' Waende...
+        for entity_ID in self.world.collider.keys():
+            if self.world.collider[collider_ID].colliderect(self.world.collider[entity_ID]):
+                if not entity_ID == collider_ID:
+                    if entity_ID in self.world.collectibles:
+                        ev_collision = events.CollisionOccured(collider_ID, self.world.collectibles[entity_ID])
+                        self.event_manager.post(ev_collision)
+        #-----
         ev = None
         for element in hit_items:
             #If we are moving right, set our right side to the left side

@@ -33,6 +33,8 @@ class AnimationSystem(object):
         """
         if isinstance(event, events.TickEvent):
             self.run_animations(event.dt)
+        if isinstance(event, events.UpdatePlayersHpUI):
+            self.update_players_hp_ui(event.player_ID)
         if hasattr(event, 'entity_ID'):
             entity_ID = event.entity_ID
             if isinstance(event, events.UpdateImagePosition):
@@ -109,6 +111,14 @@ class AnimationSystem(object):
         """
         if entity_ID in self.world.appearance:
             self.world.appearance[entity_ID].rect.center = new_position
+
+    def update_players_hp_ui(self, player_ID):
+        players_health = self.world.hp[self.world.players[player_ID].hp_ID]
+        hp_image_index = players_health.points // (players_health.max // (len(players_health.hp_sprites) - 1))
+        #print("image_index")
+        #print(hp_image_index)
+        players_health.current_image = players_health.hp_sprites[hp_image_index]
+        self.world.appearance[self.world.players[player_ID].hp_ID] = players_health.current_image
 
     def idle_animation_running(self, entity_ID):
         current_animation = self.world.appearance[entity_ID].current_animation

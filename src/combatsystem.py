@@ -71,10 +71,8 @@ class CombatSystem():
                                     players_health = self.world.hp[self.world.players[player_ID].hp_ID]
                                     #Decrease HP 
                                     players_health.points -= attack.damage
-                                    #Update players hp gui
-                                    hp_image_index = players_health.points // (players_health.max // len(players_health.hp_sprites))
-                                    players_health.current_image = players_health.hp_sprites[hp_image_index]
-                                    self.world.appearance[self.world.players[player_ID].hp_ID] = players_health.current_image
+                                    update_ui_ev = events.UpdatePlayersHpUI(player_ID)
+                                    self.event_manager.post(update_ui_ev)
                                 else:
                                     #No more Hp left
                                     #print("player is dead")

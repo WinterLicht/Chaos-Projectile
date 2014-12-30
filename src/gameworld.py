@@ -10,6 +10,7 @@ import level
 import components
 import chaosparticle
 import ai
+import collectible
 
 import quadTree
 
@@ -54,6 +55,7 @@ class GameWorld(object):
         self.ai = {}
         self.tags = {}
         self.hp = {}
+        self.collectibles = {}
         
         self.inactive_entities = list()
         self.to_remove = list()
@@ -93,6 +95,22 @@ class GameWorld(object):
                                     mass = int(tile["mass"])
                                     position = (x*64+32, y*64+32)
                                     fields.append(chaosparticle.Field(position, mass))
+                    if self.level.tmx_data.layers[layer_index].name == "characters":
+                        tile = self.level.tmx_data.get_tile_properties(x, y, layer_index)
+                        if tile:
+                            if "type" in tile:
+                                if tile["type"] == "heal_potion":
+                                    #Add fields
+                                    recovery = int(tile["recovery"])
+                                    tags = list()
+                                    tags.append("heal_potion")
+                                    collider = components.Collider(x*64, y*64, 64, 64, tags)
+                                    temp = pygame.image.load(os.path.join('data', 'heal_pot.png'))
+                                    heal_sprite = components.Appearance(temp.convert_alpha())
+                                    heal_sprite.rect.center = collider.center
+                                    heal_pot = collectible.HealPotion(self, self.event_manager, recovery)
+                                    colle_ID = self.create_entity((heal_sprite, heal_pot, collider))
+                                    heal_pot.entity_ID = colle_ID
                     #Create walls
                     if self.level.tmx_data.layers[layer_index].name == "walls":
                         tile = self.level.tmx_data.get_tile_image(x, y, layer_index)
@@ -249,6 +267,8 @@ class GameWorld(object):
             self.ai[entity_ID] = component
         elif isinstance(component, components.Health):
             self.hp[entity_ID] = component
+        elif isinstance(component, collectible.Collectible):
+            self.collectibles[entity_ID] = component
         #Increase amount of components of the entity
         self.mask[entity_ID] += 1
 
@@ -304,4 +324,6 @@ class GameWorld(object):
             del self.ai[entity_ID]
         if entity_ID in self.hp:
             del self.hp[entity_ID]
+        if entity_ID in self.collectibles:
+            del self.collectibles[entity_ID]
         
