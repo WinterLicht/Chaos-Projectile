@@ -59,6 +59,14 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="24" name="skill_pot" tilewidth="64" tileheight="64">
+  <image source="skill_pot.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="skill_up"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="bg" width="50" height="50">
   <data encoding="base64" compression="zlib">
    eJztw8EJAAAMA6F7ZP+ZO0dBwVVTVVVVVVVVVVXV5w+SZScR
@@ -81,7 +89,7 @@
  </layer>
  <layer name="characters" width="50" height="50" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt0jkOgDAMBEBewCGO/P+npIwQBRFEhDAjbefCtrbrAKjdHLNkzPcxQ6Fd7lhjtoz5MWYqtAvXpN3L7WFN0u7l9hCeEt5e4EeOv/Z7AAAAAABoRzjJF7VyR4125pICYA==
+   eJzt0ksKgCAUBdBW0Ie++19pDiUKkpKszoGLCA6ej1tVAJSuDxkS3tchTaZZrhhDpoT3bUiXaRbOibuX2sOSxN1L7SHcZX56gB/Z7truAQAAAADg2HJw356lmHfyRl/5R4lW72ECwA==
   </data>
  </layer>
 </map>

@@ -34,5 +34,15 @@ class HealPotion(Collectible):
             #Destroy collectible
             self.remove_item()
             
-        
+class SkillUp(Collectible):
+    
+    def __init__(self, world, event_manager):
+        Collectible.__init__(self, world, event_manager)
+    
+    def handle_collision_event(self, collider_ID):
+        if collider_ID == self.world.player:
+            attack = self.world.attacks[collider_ID][0]
+            attack.amount += 1
+            #Destroy collectible
+            self.remove_item()
 

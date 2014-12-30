@@ -111,6 +111,15 @@ class GameWorld(object):
                                     heal_pot = collectible.HealPotion(self, self.event_manager, recovery)
                                     colle_ID = self.create_entity((heal_sprite, heal_pot, collider))
                                     heal_pot.entity_ID = colle_ID
+                                if tile["type"] == "skill_up":
+                                    #Add fields
+                                    collider = components.Collider(x*64, y*64, 64, 64)
+                                    temp = pygame.image.load(os.path.join('data', 'skill_pot.png'))
+                                    skillup_sprite = components.Appearance(temp.convert_alpha())
+                                    skillup_sprite.rect.center = collider.center
+                                    skillup_pot = collectible.SkillUp(self, self.event_manager)
+                                    colle_ID = self.create_entity((skillup_sprite, skillup_pot, collider))
+                                    skillup_pot.entity_ID = colle_ID
                     #Create walls
                     if self.level.tmx_data.layers[layer_index].name == "walls":
                         tile = self.level.tmx_data.get_tile_image(x, y, layer_index)
@@ -209,7 +218,7 @@ class GameWorld(object):
         c_eff = (eff_sprite,)
         effect_ID = self.create_entity(c_eff)
         particle_emitter = components.Attack(self, damage, cooldown, position,
-                                             5, 'proj.png', 60,
+                                             1, 'proj.png', 60,
                                              self.direction[self.player], [0, 0], 15, effect_ID)
         attack_list = list()
         attack_list.append(particle_emitter)
