@@ -120,6 +120,18 @@ class GameWorld(object):
                                     skillup_pot = collectible.SkillUp(self, self.event_manager)
                                     colle_ID = self.create_entity((skillup_sprite, skillup_pot, collider))
                                     skillup_pot.entity_ID = colle_ID
+                                if tile["type"] == "portal":
+                                    #Add fields
+                                    x_pos = int(tile["x"])
+                                    y_pos = int(tile["y"])
+                                    x_pos, y_pos = x_pos*64+32, y_pos*64+32
+                                    collider = components.Collider(x*64, y*64, 64, 64)
+                                    temp = pygame.image.load(os.path.join('data', 'portal.png'))
+                                    portal_sprite = components.Appearance(temp.convert_alpha())
+                                    portal_sprite.rect.center = collider.center
+                                    portal = collectible.Portal(self, self.event_manager, x_pos, y_pos)
+                                    colle_ID = self.create_entity((portal_sprite, portal, collider))
+                                    portal.entity_ID = colle_ID
                     #Create walls
                     if self.level.tmx_data.layers[layer_index].name == "walls":
                         tile = self.level.tmx_data.get_tile_image(x, y, layer_index)
