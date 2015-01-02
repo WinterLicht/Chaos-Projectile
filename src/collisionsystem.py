@@ -50,6 +50,7 @@ class CollisionSystem(object):
         for collider_ID in collider_IDs:
             self.calculate_collision_x(collider_ID)
             self.calculate_collision_y(collider_ID)
+            self.check_collision_with_non_static_elements(collider_ID)
             #Update image position of moved object
             ev = events.UpdateImagePosition(collider_ID, self.world.collider[collider_ID].center)
             self.event_manager.post(ev)
@@ -59,7 +60,6 @@ class CollisionSystem(object):
         self.world.collider[collider_ID] = self.world.collider[collider_ID].move(self.world.velocity[collider_ID][0], 0)
         #Filter overlapping hit boxes with collider
         hit_items = self.world.tree.hit(self.world.collider[collider_ID])
-        self.check_collision_with_non_static_elements(collider_ID)
         ev = None
         for element in hit_items:
             #If we are moving right, set our right side to the left side
@@ -98,7 +98,6 @@ class CollisionSystem(object):
         #coordinates of the detected, if collider was moved 0.4 further
         temp = self.world.collider[collider_ID].move(0, 1)
         hit_items = self.world.tree.hit(temp)
-        self.check_collision_with_non_static_elements(collider_ID)
         ev = None
         for element in hit_items:
             #Reset our position based on the top/bottom of the object
