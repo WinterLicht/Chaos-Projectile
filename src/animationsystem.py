@@ -40,7 +40,7 @@ class AnimationSystem(object):
             if isinstance(event, events.UpdateImagePosition):
                 self.update_image_position(entity_ID, event.new_position)
             if entity_ID in self.world.appearance:
-                if not self.world.appearance[entity_ID].play_animation_till_end:
+                if not self.world.appearance[entity_ID].play_animation_till_end and not self.stun_animation_running(entity_ID):
                     if isinstance(event, events.EntityAttacks):
                         self.play_attack_animation(entity_ID)
                     if isinstance(event, events.EntityJump):
@@ -62,9 +62,13 @@ class AnimationSystem(object):
                             self.play_idle_animation(entity_ID)
                     if isinstance(event, events.EntityGrounded):
                         if self.jump_animation_running(entity_ID):
-                            self.play_idle_animation(event.entity_ID)
-                    if isinstance(event, events.EntityDies):
-                        self.play_death_animation(entity_ID)
+                            self.play_idle_animation(entity_ID)
+                if isinstance(event, events.ActivateEntity):
+                    self.play_idle_animation(entity_ID)
+                if isinstance(event, events.EntityStunned):
+                    self.play_stun_animation(entity_ID, event.duration)
+                if isinstance(event, events.EntityDies):
+                    self.play_death_animation(entity_ID)
                                                 
     def run_animations(self, dt):
         """Computes which animation frame should be displayed.
@@ -93,6 +97,10 @@ class AnimationSystem(object):
                                 if self.death_animation_running(entity_ID):
                                     ev_remove_ent = events.RemoveEntityFromTheGame(entity_ID)
                                     self.event_manager.post(ev_remove_ent)
+                                #Stun animation ended
+                                if self.stun_animation_running(entity_ID):
+                                    ev_activate = events.ActivateEntity(entity_ID)
+                                    self.event_manager.post(ev_activate)
                             #Loop Animation
                             #Animation ended, begin from 0
                             animation.current_frame_x = 0
@@ -111,6 +119,18 @@ class AnimationSystem(object):
         """
         if entity_ID in self.world.appearance:
             self.world.appearance[entity_ID].rect.center = new_position
+        #When moving object was a player
+        if self.world.player == entity_ID:
+            #Update orb direction correspondent aim direction and
+            #player position
+            orb_ID = self.world.players[entity_ID].orb_ID
+            directionX = self.world.direction[entity_ID][0]
+            directionY = self.world.direction[entity_ID][1]
+            self.world.appearance[orb_ID].rect.center = (directionX*64 + self.world.collider[self.world.player].center[0],
+                                                         directionY*64 + self.world.collider[self.world.player].center[1])
+            #Update hp gui
+            hp_ID = self.world.players[entity_ID].hp_ID
+            self.world.appearance[hp_ID].rect.center = self.world.appearance[orb_ID].rect.center
 
     def update_players_hp_ui(self, player_ID):
         players_health = self.world.hp[self.world.players[player_ID].hp_ID]
@@ -128,6 +148,9 @@ class AnimationSystem(object):
         #Idle animation is 0
         self.world.appearance[entity_ID].current_animation = 0
         self.world.appearance[entity_ID].current_frame_x = 0
+        self.world.appearance[entity_ID].play_animation_till_end = False
+        self.world.appearance[entity_ID].play_once = False
+        self.world.appearance[entity_ID].play_animation = True
         
     def walk_animation_running(self, entity_ID):
         current_animation = self.world.appearance[entity_ID].current_animation
@@ -137,6 +160,9 @@ class AnimationSystem(object):
         #Walk animation is 3
         self.world.appearance[entity_ID].current_animation = 3
         self.world.appearance[entity_ID].current_frame_x = 0
+        self.world.appearance[entity_ID].play_animation_till_end = False
+        self.world.appearance[entity_ID].play_once = False
+        self.world.appearance[entity_ID].play_animation = True
     
     def jump_animation_running(self, entity_ID):
         current_animation = self.world.appearance[entity_ID].current_animation
@@ -146,9 +172,14 @@ class AnimationSystem(object):
         #Jump animation is 2
         self.world.appearance[entity_ID].current_animation = 2
         self.world.appearance[entity_ID].current_frame_x = 0
+        self.world.appearance[entity_ID].play_animation_till_end = False
+        self.world.appearance[entity_ID].play_once = False
+        self.world.appearance[entity_ID].play_animation = True
     
     def play_attack_animation(self, entity_ID):
         #Attack animation is 2
+        self.world.appearance[entity_ID].play_animation = True
+        self.world.appearance[entity_ID].play_animation_till_end = False
         self.world.appearance[entity_ID].play_animation_till_end = True
         self.world.appearance[entity_ID].current_animation = 2
         self.world.appearance[entity_ID].current_frame_x = 0
@@ -163,4 +194,17 @@ class AnimationSystem(object):
         self.world.appearance[entity_ID].play_once = True
         self.world.appearance[entity_ID].current_animation = 1
         self.world.appearance[entity_ID].current_frame_x = 0
+        self.world.appearance[entity_ID].play_animation = True
 
+    def stun_animation_running(self, entity_ID):
+        current_animation = self.world.appearance[entity_ID].current_animation
+        return current_animation == 4
+    
+    def play_stun_animation(self, entity_ID, duration):
+        #Stun animation is 4
+        self.world.appearance[entity_ID].current_animation = 4
+        self.world.appearance[entity_ID].set_animation_duration(4, duration)
+        self.world.appearance[entity_ID].current_frame_x = 0
+        self.world.appearance[entity_ID].play_once = True
+        self.world.appearance[entity_ID].play_animation_till_end = True
+        self.world.appearance[entity_ID].play_animation = True

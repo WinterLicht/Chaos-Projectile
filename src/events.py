@@ -203,6 +203,12 @@ class CollisionOccured(Event):
         self.collider_ID = collider_ID
         self.collidee = collidee
 
+class ActivateEntity(Event):
+    
+    def __init__(self, entity_ID):
+        self.name = "Activate."
+        self.entity_ID = entity_ID
+
 class EntityMovesRight(Event):
     
     def __init__(self, entity_ID):
@@ -245,6 +251,13 @@ class EntityAttacks(Event):
         self.name = "Entity Jump Event"
         self.entity_ID = entity_ID
         self.attack_Nr = attack_Nr
+
+class EntityStunned(Event):
+    
+    def __init__(self, entity_ID, duration):
+        self.name = "stunned"
+        self.entity_ID = entity_ID
+        self.duration = duration
 
 class EntityDies(Event):
     

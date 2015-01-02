@@ -73,6 +73,9 @@ class CombatSystem():
                                     players_health.points -= attack.damage
                                     update_ui_ev = events.UpdatePlayersHpUI(player_ID)
                                     self.event_manager.post(update_ui_ev)
+                                    #Send stun event
+                                    stun_ev = events.EntityStunned(player_ID, attack.stun)
+                                    self.event_manager.post(stun_ev)
                                 else:
                                     #No more Hp left
                                     #print("player is dead")
@@ -86,6 +89,9 @@ class CombatSystem():
                                     enemys_health = self.world.hp[collider_ID]
                                     #Decrease HP 
                                     enemys_health.points -= attack.damage
+                                    #Send stun event
+                                    stun_ev = events.EntityStunned(collider_ID, attack.stun)
+                                    self.event_manager.post(stun_ev)
                                 else:
                                     ev_die = events.EntityDies(collider_ID)
                                     self.event_manager.post(ev_die)

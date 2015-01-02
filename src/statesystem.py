@@ -70,4 +70,8 @@ class StateSystem():
                     self.world.velocity[entity_ID][0] = 0
                     self.world.velocity[entity_ID][1] = 0
             if isinstance(event, events.EntityDies):
-                self.world.inactive_entities.append(entity_ID)
+                self.world.deactivate_entity(entity_ID)
+            if isinstance(event, events.EntityStunned):
+                self.world.deactivate_entity(entity_ID)
+            if isinstance(event, events.ActivateEntity):
+                self.world.inactive_entities.remove(entity_ID)

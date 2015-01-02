@@ -58,16 +58,4 @@ class Portal(Collectible):
             #Update image position of moved object
             ev = events.UpdateImagePosition(collider_ID, self.world.collider[collider_ID].center)
             self.event_manager.post(ev)
-            #When moving object was a player
-            if self.world.player == collider_ID:
-                #Update orb direction correspondent aim direction and
-                #player position
-                orb_ID = self.world.players[collider_ID].orb_ID
-                directionX = self.world.direction[collider_ID][0]
-                directionY = self.world.direction[collider_ID][1]
-                self.world.appearance[orb_ID].rect.center = (directionX*64 + self.world.collider[self.world.player].center[0] ,
-                                                        directionY*64 + self.world.collider[self.world.player].center[1])
-                #Update hp gui
-                hp_ID = self.world.players[collider_ID].hp_ID
-                self.world.appearance[hp_ID].rect.center = self.world.appearance[orb_ID].rect.center
 

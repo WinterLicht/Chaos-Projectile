@@ -53,33 +53,13 @@ class CollisionSystem(object):
             #Update image position of moved object
             ev = events.UpdateImagePosition(collider_ID, self.world.collider[collider_ID].center)
             self.event_manager.post(ev)
-            #When moving object was a player
-            if self.world.player == collider_ID:
-                #Update orb direction correspondent aim direction and
-                #player position
-                orb_ID = self.world.players[collider_ID].orb_ID
-                directionX = self.world.direction[collider_ID][0]
-                directionY = self.world.direction[collider_ID][1]
-                self.world.appearance[orb_ID].rect.center = (directionX*64 + self.world.collider[self.world.player].center[0] ,
-                                                        directionY*64 + self.world.collider[self.world.player].center[1])
-                #Update hp gui
-                hp_ID = self.world.players[collider_ID].hp_ID
-                self.world.appearance[hp_ID].rect.center = self.world.appearance[orb_ID].rect.center
 
     def calculate_collision_x(self, collider_ID):
         #Move collider in x direction.
         self.world.collider[collider_ID] = self.world.collider[collider_ID].move(self.world.velocity[collider_ID][0], 0)
         #Filter overlapping hit boxes with collider
         hit_items = self.world.tree.hit(self.world.collider[collider_ID])
-        #-----
-        #Pruefe die 'nicht' Waende...
-        for entity_ID in self.world.collider.keys():
-            if self.world.collider[collider_ID].colliderect(self.world.collider[entity_ID]):
-                if not entity_ID == collider_ID:
-                    if entity_ID in self.world.collectibles:
-                        ev_collision = events.CollisionOccured(collider_ID, self.world.collectibles[entity_ID])
-                        self.event_manager.post(ev_collision)
-        #-----
+        self.check_collision_with_non_static_elements(collider_ID)
         ev = None
         for element in hit_items:
             #If we are moving right, set our right side to the left side
@@ -118,6 +98,7 @@ class CollisionSystem(object):
         #coordinates of the detected, if collider was moved 0.4 further
         temp = self.world.collider[collider_ID].move(0, 1)
         hit_items = self.world.tree.hit(temp)
+        self.check_collision_with_non_static_elements(collider_ID)
         ev = None
         for element in hit_items:
             #Reset our position based on the top/bottom of the object
@@ -140,3 +121,14 @@ class CollisionSystem(object):
         #Set new position and cast to int before, because position is in
         #pixel coordinates
         self.world.collider[collider_ID].center = map(int, self.world.collider[collider_ID].center)
+
+    def check_collision_with_non_static_elements(self, collider_ID):
+        """Collision with non-static elements in level should be checked separately, besause this elements aren't in quad tree.
+        """
+        for entity_ID in self.world.collider.keys():
+            if self.world.collider[collider_ID].colliderect(self.world.collider[entity_ID]):
+                if not entity_ID == collider_ID:
+                    if entity_ID in self.world.collectibles:
+                        ev_collision = events.CollisionOccured(collider_ID, self.world.collectibles[entity_ID])
+                        self.event_manager.post(ev_collision)
+

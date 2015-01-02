@@ -49,7 +49,7 @@ class Attack(chaosparticle.Emitter):
         - *damage* (int): attack damage
     """
     
-    def __init__(self, world, damage, cooldown, position, amount,
+    def __init__(self, world, damage, stun, cooldown, position, amount,
                  sprite_sheet, life, velocity, acceleration,
                  spread_angle=0, effect_ID=None):
         """
@@ -78,6 +78,7 @@ class Attack(chaosparticle.Emitter):
                                        sprite_sheet, life, velocity,
                                        acceleration, spread_angle)
         self.damage = damage
+        self.stun = stun
         self.effect_ID = effect_ID
         self.world = world
         
@@ -240,6 +241,12 @@ class Appearance(pygame.sprite.Sprite):
         else:
             self.image = pygame.transform.flip(self.original, self.flip,
                                                False)
+            
+    def set_animation_duration(self, animation_index, duration):
+        #Compute delay between frames
+        self.time[animation_index] = duration
+        self.delay_between_frames[animation_index] = (int(duration / self.frames[animation_index]))
+            
     def rot_center(self, image, angle):
         """Rotate an image while keeping its center and size."""
         '''

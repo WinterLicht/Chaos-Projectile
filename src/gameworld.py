@@ -151,6 +151,7 @@ class GameWorld(object):
         #Create Level curse:
         #---
         damage = 10
+        stun = 10
         cooldown = 30
         position = [0,0]
         
@@ -162,7 +163,7 @@ class GameWorld(object):
         curse_AI = ai.Level1_curse(self, 0, self.event_manager)
         curse_ID = self.create_entity((curse_AI, ))
         curse_AI.entity_ID = curse_ID 
-        particle_emitter = components.Attack(self, damage, cooldown, position,
+        particle_emitter = components.Attack(self, damage, stun, cooldown, position,
                                              1, 'proj.png', 60,
                                              [1, 0], [0, 0], 15, effect_ID)
         attack_list = list()
@@ -200,8 +201,8 @@ class GameWorld(object):
         vel = components.Velocity([0, 0])
         #Create players animations
         temp = pygame.image.load(os.path.join('data', 'char.png')).convert_alpha()
-        anim_list = [4, 4, 3, 10]
-        anim_time_list = [240, 180, 44, 60]
+        anim_list = [4, 4, 3, 10, 4]
+        anim_time_list = [240, 180, 44, 60, 30]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
@@ -220,6 +221,7 @@ class GameWorld(object):
         #Create players attacks
         #Attack 1:
         damage = 10
+        stun = 30
         cooldown = 30
         position = coll.center
         
@@ -229,7 +231,7 @@ class GameWorld(object):
         eff_sprite.play_animation_till_end = True
         c_eff = (eff_sprite,)
         effect_ID = self.create_entity(c_eff)
-        particle_emitter = components.Attack(self, damage, cooldown, position,
+        particle_emitter = components.Attack(self, damage, stun, cooldown, position,
                                              1, 'proj.png', 60,
                                              self.direction[self.player], [0, 0], 15, effect_ID)
         attack_list = list()
@@ -247,8 +249,8 @@ class GameWorld(object):
         vel = components.Velocity([0, 0])
         #Create enemy's animations
         temp = pygame.image.load(os.path.join('data', 'char.png')).convert_alpha()
-        anim_list = [4, 4, 3, 10]
-        anim_time_list = [240, 60, 44, 60]
+        anim_list = [4, 4, 3, 10, 4]
+        anim_time_list = [240, 60, 44, 60, 10]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
@@ -262,8 +264,9 @@ class GameWorld(object):
         #Create enemies attacks
         #attack 1
         damage = 10
+        stun = 20
         position = coll.center
-        particle_emitter = components.Attack(self, damage, 30, position,
+        particle_emitter = components.Attack(self, damage, stun, 30, position,
                                              3, 'proj.png', 60,
                                              self.direction[enemy_ID], [0, 0], 15)
         attack_list = list()
@@ -323,6 +326,10 @@ class GameWorld(object):
     def active_entity(self, entity_ID):
         
         return not entity_ID in self.inactive_entities
+
+    def deactivate_entity(self, entity_ID):
+        if not entity_ID in self.inactive_entities:
+            self.inactive_entities.append(entity_ID)
 
     def destroy_entity(self, entity_ID):
         #Clear mask, this entity has no components more
