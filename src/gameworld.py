@@ -132,6 +132,19 @@ class GameWorld(object):
                                     portal = collectible.Portal(self, self.event_manager, x_pos, y_pos)
                                     colle_ID = self.create_entity((portal_sprite, portal, collider))
                                     portal.entity_ID = colle_ID
+                                if tile["type"] == "moving_platform":
+                                    #Add fields
+                                    x_vel = int(tile["x_vel"])
+                                    y_vel = int(tile["y_vel"])
+                                    tags = list()
+                                    tags.append("moving_platform")
+                                    coll = components.Collider(x*64, y*64, 64, 64, tags)
+                                    vel = components.Velocity([x_vel, y_vel])
+                                    #Create players animations
+                                    temp = pygame.image.load(os.path.join('data', 'field.png')).convert_alpha()
+                                    anim = components.Appearance(temp)
+                                    anim.rect.center = coll.center
+                                    self.create_entity((coll, vel, anim))                                 
                     #Create walls
                     if self.level.tmx_data.layers[layer_index].name == "walls":
                         tile = self.level.tmx_data.get_tile_image(x, y, layer_index)

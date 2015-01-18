@@ -5,7 +5,8 @@
 """
 
 import events
-
+import components
+import pygame
 
 class CollisionSystem(object):
     """Moves object, checks collision, sends events for collision handling and updates image position of moved objects.
@@ -46,6 +47,7 @@ class CollisionSystem(object):
         #List of moving objects, they have velocity vector
         #Assumption: this objects has also collider component
         collider_IDs = self.world.velocity.keys()
+        print( isinstance(self.world.collider[0], components.Collider))
         #Check collision
         for collider_ID in collider_IDs:
             self.calculate_collision_x(collider_ID)
@@ -57,7 +59,7 @@ class CollisionSystem(object):
 
     def calculate_collision_x(self, collider_ID):
         #Move collider in x direction.
-        self.world.collider[collider_ID] = self.world.collider[collider_ID].move(self.world.velocity[collider_ID][0], 0)
+        self.world.collider[collider_ID].x += self.world.velocity[collider_ID][0]
         #Filter overlapping hit boxes with collider
         hit_items = self.world.tree.hit(self.world.collider[collider_ID])
         ev = None
@@ -89,9 +91,10 @@ class CollisionSystem(object):
 
     def calculate_collision_y(self, collider_ID):
         #Consider gravity
-        self.world.velocity[collider_ID][1] += self.gravity[1]
+        if not "moving_platform" in self.world.collider[collider_ID].tags:
+            self.world.velocity[collider_ID][1] += self.gravity[1]
         #Move collider in y direction.
-        self.world.collider[collider_ID] = self.world.collider[collider_ID].move(0, self.world.velocity[collider_ID][1])
+        self.world.collider[collider_ID].y += self.world.velocity[collider_ID][1]
         #Filter overlapping hit boxes with collider
         #Overlapping is checked with a temp, which was moved 1 pixel
         #further than collider. This is necessary because of pixel

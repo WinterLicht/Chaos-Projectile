@@ -77,6 +77,16 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="26" name="moving_platform" tilewidth="64" tileheight="64">
+  <image source="moving_platform.png" width="128" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="moving_platform"/>
+    <property name="x_vel" value="4"/>
+    <property name="y_vel" value="0"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="bg" width="50" height="50">
   <data encoding="base64" compression="zlib">
    eJztw8EJAAAMA6F7ZP+ZO0dBwVVTVVVVVVVVVVXV5w+SZScR
@@ -99,7 +109,7 @@
  </layer>
  <layer name="characters" width="50" height="50" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt0lsKhDAMBVBXoCM6Pva/UfspMgXDKFY9By6lEEoaUlUAlK5L6QP1dUpzUi//+KYMgfpPSntSL+yz3r3oHubMB7wRtd696B7CUcarG3iR7azNHgAAAAAA8qbMfXuWYvyRO3rKP0q0AOwCAtk=
+   eJzt0t0KgCAMhmGvoB/KrO7/QtuhSDsYObR6H/gQYcgcCwEA0LtFshrqB8no1MsTUbIZ6ifJ7NSLh7N1Aw7y3bPuoeao8IZVvnvWPQRqSa0b+JFy1sweAAAAAAAAAADdrtzLsxfpJm/0lX/06AIlVgLz
   </data>
  </layer>
 </map>

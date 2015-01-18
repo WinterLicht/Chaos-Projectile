@@ -30,12 +30,14 @@ class Projectile(chaosparticle.Particle):
         chaosparticle.Particle.__init__(self, sprite, life, position, velocity, acceleration)
         self.entity_ID = None 
         
-    def load_grafic(self, gameworld):
+    def load_grafic(self, gameworld, angle):
         proj_temp = pygame.image.load(os.path.join('data', self.sprite))
         proj_anim_list = [2, 2]
         proj_anim_time_list = [50, 13]
-        proj_anim = Appearance(proj_temp, 16, 16, proj_anim_list, proj_anim_time_list)
+        #Die groesse des Bildes muss mit uebergeben werden!
+        proj_anim = Appearance(proj_temp, 25, 25, proj_anim_list, proj_anim_time_list)
         proj_anim.rect.center = self.position
+        proj_anim.angle = angle
         proj_c = (proj_anim,)
         self.entity_ID = gameworld.create_entity(proj_c)
 
@@ -82,7 +84,7 @@ class Attack(chaosparticle.Emitter):
         self.effect_ID = effect_ID
         self.world = world
         
-    def spawn_particles(self, velocity=None, position=None):
+    def spawn_particles(self, direction=None, velocity=None, position=None):
         old_particles = self.particles[:]
         spawned = chaosparticle.Emitter.spawn_particles(self, velocity, position)
         if spawned:
@@ -91,9 +93,16 @@ class Attack(chaosparticle.Emitter):
             self.particles = list()
             for projectile in old_particles:
                 self.particles.append(projectile)
+            #first proj isn't rotated
+            if direction:
+                angle = chaosparticle.get_angle_between_vectors(direction, [1,0])
+                if direction[1] > 0:
+                    angle = 360-angle
+            else:
+                angle = 0
             for particle in spawned:#copy_particles:
                 projectile = Projectile(particle.sprite, particle.life, particle.position, particle.velocity, particle.acceleration)
-                projectile.load_grafic(self.world)
+                projectile.load_grafic(self.world, -(particle.angle-angle))
                 self.particles.append(projectile)
         return spawned
 
@@ -108,6 +117,8 @@ class Collider(pygame.Rect):
     def __init__(self, x, y, width, height, list_of_tags=None):
         #pygame.Rect.__init__(self, x-width/2, y-height/2, width, height)
         pygame.Rect.__init__(self, x, y, width, height)
+        if not list_of_tags:
+            list_of_tags = "None"
         self.tags = list_of_tags
 
 
@@ -246,16 +257,25 @@ class Appearance(pygame.sprite.Sprite):
         #Compute delay between frames
         self.time[animation_index] = duration
         self.delay_between_frames[animation_index] = (int(duration / self.frames[animation_index]))
-            
+    '''   
     def rot_center(self, image, angle):
-        """Rotate an image while keeping its center and size."""
-        '''
-        orig_x = image.get_rect().center[0]
-        orig_y = image.get_rect().center[1]
-        rot_image = pygame.transform.rotate(image, angle)
-        rot_image_rect = rot_image.get_rect()
-        rot_image_rect.center = (orig_x, orig_y)
-        '''
+        """rotate a Surface, maintaining position."""
+    
+        loc = image.get_rect().center
+        rot_sprite = pygame.transform.rotate(image, angle)
+        rot_sprite.get_rect().center = loc
+        return rot_sprite
+    '''
+    def rot_center(self, image, angle):
+        """Rotate an image while keeping its center and size.
+        
+        Works only if the image is rectangular.
+        """
+        #orig_x = image.get_rect().center[0]
+        #orig_y = image.get_rect().center[1]
+        #rot_image = pygame.transform.rotate(image, angle)
+        #rot_image_rect = rot_image.get_rect()
+        #rot_image_rect.center = (orig_x, orig_y)
         orig_rect = image.get_rect()
         rot_image = pygame.transform.rotate(image, angle)
         rot_rect = orig_rect.copy()

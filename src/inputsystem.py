@@ -216,3 +216,8 @@ class InputSystem(object):
                                                         y*64 + self.world.collider[self.world.player].center[1])
             #Save rotation for orbs sprite
             self.world.appearance[orb_ID].angle = angle
+            #Rotate hp-ui
+            hp_ID = self.world.players[self.world.player].hp_ID
+            self.world.appearance[hp_ID].rect.center = self.world.appearance[orb_ID].rect.center
+            #self.world.appearance[hp_ID].angle = angle
+            

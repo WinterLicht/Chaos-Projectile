@@ -135,8 +135,6 @@ class AnimationSystem(object):
     def update_players_hp_ui(self, player_ID):
         players_health = self.world.hp[self.world.players[player_ID].hp_ID]
         hp_image_index = players_health.points // (players_health.max // (len(players_health.hp_sprites) - 1))
-        #print("image_index")
-        #print(hp_image_index)
         players_health.current_image = players_health.hp_sprites[hp_image_index]
         self.world.appearance[self.world.players[player_ID].hp_ID] = players_health.current_image
 
@@ -158,11 +156,12 @@ class AnimationSystem(object):
     
     def play_walk_animation(self, entity_ID):
         #Walk animation is 3
-        self.world.appearance[entity_ID].current_animation = 3
-        self.world.appearance[entity_ID].current_frame_x = 0
-        self.world.appearance[entity_ID].play_animation_till_end = False
-        self.world.appearance[entity_ID].play_once = False
-        self.world.appearance[entity_ID].play_animation = True
+        if len(self.world.appearance[entity_ID].frames) > 3:
+            self.world.appearance[entity_ID].current_animation = 3
+            self.world.appearance[entity_ID].current_frame_x = 0
+            self.world.appearance[entity_ID].play_animation_till_end = False
+            self.world.appearance[entity_ID].play_once = False
+            self.world.appearance[entity_ID].play_animation = True
     
     def jump_animation_running(self, entity_ID):
         current_animation = self.world.appearance[entity_ID].current_animation
@@ -170,19 +169,21 @@ class AnimationSystem(object):
     
     def play_jump_animation(self, entity_ID):
         #Jump animation is 2
-        self.world.appearance[entity_ID].current_animation = 2
-        self.world.appearance[entity_ID].current_frame_x = 0
-        self.world.appearance[entity_ID].play_animation_till_end = False
-        self.world.appearance[entity_ID].play_once = False
-        self.world.appearance[entity_ID].play_animation = True
+        if len(self.world.appearance[entity_ID].frames) > 2:
+            self.world.appearance[entity_ID].current_animation = 2
+            self.world.appearance[entity_ID].current_frame_x = 0
+            self.world.appearance[entity_ID].play_animation_till_end = False
+            self.world.appearance[entity_ID].play_once = False
+            self.world.appearance[entity_ID].play_animation = True
     
     def play_attack_animation(self, entity_ID):
         #Attack animation is 2
-        self.world.appearance[entity_ID].play_animation = True
-        self.world.appearance[entity_ID].play_animation_till_end = False
-        self.world.appearance[entity_ID].play_animation_till_end = True
-        self.world.appearance[entity_ID].current_animation = 2
-        self.world.appearance[entity_ID].current_frame_x = 0
+        if len(self.world.appearance[entity_ID].frames) > 2:
+            self.world.appearance[entity_ID].play_animation = True
+            self.world.appearance[entity_ID].play_animation_till_end = False
+            self.world.appearance[entity_ID].play_animation_till_end = True
+            self.world.appearance[entity_ID].current_animation = 2
+            self.world.appearance[entity_ID].current_frame_x = 0
         
     def death_animation_running(self, entity_ID):
         current_animation = self.world.appearance[entity_ID].current_animation
@@ -190,11 +191,12 @@ class AnimationSystem(object):
     
     def play_death_animation(self, entity_ID):
         #Death animation is 1
-        self.world.appearance[entity_ID].play_animation_till_end = True
-        self.world.appearance[entity_ID].play_once = True
-        self.world.appearance[entity_ID].current_animation = 1
-        self.world.appearance[entity_ID].current_frame_x = 0
-        self.world.appearance[entity_ID].play_animation = True
+        if len(self.world.appearance[entity_ID].frames) > 1:
+            self.world.appearance[entity_ID].play_animation_till_end = True
+            self.world.appearance[entity_ID].play_once = True
+            self.world.appearance[entity_ID].current_animation = 1
+            self.world.appearance[entity_ID].current_frame_x = 0
+            self.world.appearance[entity_ID].play_animation = True
 
     def stun_animation_running(self, entity_ID):
         current_animation = self.world.appearance[entity_ID].current_animation
@@ -202,9 +204,10 @@ class AnimationSystem(object):
     
     def play_stun_animation(self, entity_ID, duration):
         #Stun animation is 4
-        self.world.appearance[entity_ID].current_animation = 4
-        self.world.appearance[entity_ID].set_animation_duration(4, duration)
-        self.world.appearance[entity_ID].current_frame_x = 0
-        self.world.appearance[entity_ID].play_once = True
-        self.world.appearance[entity_ID].play_animation_till_end = True
-        self.world.appearance[entity_ID].play_animation = True
+        if len(self.world.appearance[entity_ID].frames) > 4:
+            self.world.appearance[entity_ID].current_animation = 4
+            self.world.appearance[entity_ID].set_animation_duration(4, duration)
+            self.world.appearance[entity_ID].current_frame_x = 0
+            self.world.appearance[entity_ID].play_once = True
+            self.world.appearance[entity_ID].play_animation_till_end = True
+            self.world.appearance[entity_ID].play_animation = True

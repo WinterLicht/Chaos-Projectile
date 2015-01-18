@@ -132,7 +132,7 @@ class CombatSystem():
             direction = self.world.direction[entity_ID]
         velocity = [direction[0] * 3,
                     direction[1] * 3]
-        spawned = self.world.attacks[entity_ID][attack_Nr].spawn_particles(velocity, position)
+        spawned = self.world.attacks[entity_ID][attack_Nr].spawn_particles(direction, velocity, position)
         if spawned:
             #Post attack event
             ev = events.EntityAttacks(entity_ID, attack_Nr)

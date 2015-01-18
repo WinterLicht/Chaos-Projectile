@@ -11,6 +11,14 @@ import numpy as np
 
 import pygame
 
+def get_angle_between_vectors(vector_a, vector_b):
+    temp = vector_a[0]*vector_b[0] + vector_a[1]*vector_b[1]
+    length_a = math.sqrt(vector_a[0]*vector_a[0] + vector_a[1]*vector_a[1])
+    length_b = math.sqrt(vector_b[0]*vector_b[0] + vector_b[1]*vector_b[1])
+    angle = math.acos( temp/(length_a*length_b) )
+    angle = (angle * 180) / math.pi
+    return ( angle )
+
 def get_normalized(vector):
     """Returns normalized vector or None, if vector is (0, 0).
     
@@ -77,6 +85,7 @@ class Particle():
         self.position = position
         self.velocity = velocity
         self.acceleration = acceleration
+        self.angle = 0
 
 class Emitter():
     """Particle emitter.
@@ -173,6 +182,7 @@ class Emitter():
                                                position,
                                                vel,
                                                self.particle_data.acceleration)
+                new_part.angle = angle
                 self.particles.append(new_part)
                 new_particles.append(new_part)
             #Reset counter, emitter is on the cooldown now
