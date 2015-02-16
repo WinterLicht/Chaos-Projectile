@@ -47,7 +47,6 @@ class CollisionSystem(object):
         #List of moving objects, they have velocity vector
         #Assumption: this objects has also collider component
         collider_IDs = self.world.velocity.keys()
-        print( isinstance(self.world.collider[0], components.Collider))
         #Check collision
         for collider_ID in collider_IDs:
             self.calculate_collision_x(collider_ID)
