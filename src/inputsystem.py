@@ -119,6 +119,28 @@ class InputSystem(object):
             ev = events.EntityJumpRequest(self.world.player)
             self.event_manager.post(ev)
 
+        """Keys UP, DOWN, LEFT, RIGHT controll aim and attacks direction. This is for custom controller with makey makey board.
+        :param key: key pressed
+        :type key: pygame constant
+        """
+        #only 4 directions so far. also the character should attack simultaniously if one of the arrow keys is pressed.
+        x_axis = 0
+        y_axis = 0
+        if key == pygame.K_UP:
+            #aim up
+            y_axis = -1
+        elif key == pygame.K_DOWN:
+            #aim down
+            y_axis = 1
+        if key == pygame.K_LEFT:
+            #aim left
+            x_axis = -1
+        elif key == pygame.K_RIGHT:
+            #aim right
+            x_axis = 1
+        #Determine rotation for the orb according which keys are pressed   
+        self.move_orb(x_axis, y_axis)
+
     def handle_key_released(self, key):
         """Player stops movement, when key is released.
 
