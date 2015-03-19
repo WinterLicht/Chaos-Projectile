@@ -132,8 +132,8 @@ class Health():
         self.max = hp
         self.points = hp
         self.hp_sprites = list()
-        width = 128
-        height = 128
+        width = 72
+        height = 72
         #Store needed images
         if not segments:
             segments = 1

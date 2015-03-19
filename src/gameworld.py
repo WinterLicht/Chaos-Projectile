@@ -206,7 +206,7 @@ class GameWorld(object):
         """
         #Create players hp gui
         temp = pygame.image.load(os.path.join('data', 'hp.png')).convert_alpha()
-        hp = components.Health(150, 3, temp)
+        hp = components.Health(150, 8, temp)
         c_hp = (hp, hp.current_image)
         hp_ID = self.create_entity(c_hp)
         #Players hitbox, it is 50 pixel width and 96 pixel height
