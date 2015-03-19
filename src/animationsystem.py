@@ -204,7 +204,7 @@ class AnimationSystem(object):
     
     def play_stun_animation(self, entity_ID, duration):
         #Stun animation is 4
-        if len(self.world.appearance[entity_ID].frames) > 1:
+        if len(self.world.appearance[entity_ID].frames) > 0:
             self.world.appearance[entity_ID].current_animation = 4
             self.world.appearance[entity_ID].set_animation_duration(4, duration)
             self.world.appearance[entity_ID].current_frame_x = 0

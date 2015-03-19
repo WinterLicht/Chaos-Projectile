@@ -262,7 +262,7 @@ class GameWorld(object):
         vel = components.Velocity([0, 0])
         #Create enemy's animations
         temp = pygame.image.load(os.path.join('data', 'enemy1.png')).convert_alpha()
-        anim_list = [2, 4, 4, 8, 4, 1]
+        anim_list = [2, 4, 4, 8, 2, 1]
         anim_time_list = [240, 60, 44, 120, 10, 10]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
@@ -279,7 +279,7 @@ class GameWorld(object):
         damage = 10
         stun = 20
         position = coll.center
-        particle_emitter = components.Attack(self, damage, stun, 30, position,
+        particle_emitter = components.Attack(self, damage, stun, 60, position,
                                              3, 'proj.png', 60,
                                              self.direction[enemy_ID], [0, 0], 15)
         attack_list = list()
