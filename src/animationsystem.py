@@ -165,12 +165,12 @@ class AnimationSystem(object):
     
     def jump_animation_running(self, entity_ID):
         current_animation = self.world.appearance[entity_ID].current_animation
-        return current_animation == 2
+        return current_animation == 5
     
     def play_jump_animation(self, entity_ID):
-        #Jump animation is 2
+        #Jump animation is 5
         if len(self.world.appearance[entity_ID].frames) > 2:
-            self.world.appearance[entity_ID].current_animation = 2
+            self.world.appearance[entity_ID].current_animation = 5
             self.world.appearance[entity_ID].current_frame_x = 0
             self.world.appearance[entity_ID].play_animation_till_end = False
             self.world.appearance[entity_ID].play_once = False
@@ -204,7 +204,7 @@ class AnimationSystem(object):
     
     def play_stun_animation(self, entity_ID, duration):
         #Stun animation is 4
-        if len(self.world.appearance[entity_ID].frames) > 4:
+        if len(self.world.appearance[entity_ID].frames) > 1:
             self.world.appearance[entity_ID].current_animation = 4
             self.world.appearance[entity_ID].set_animation_duration(4, duration)
             self.world.appearance[entity_ID].current_frame_x = 0

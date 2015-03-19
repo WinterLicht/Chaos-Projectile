@@ -214,8 +214,8 @@ class GameWorld(object):
         vel = components.Velocity([0, 0])
         #Create players animations
         temp = pygame.image.load(os.path.join('data', 'char.png')).convert_alpha()
-        anim_list = [4, 4, 3, 10, 4]
-        anim_time_list = [240, 180, 44, 60, 30]
+        anim_list = [4, 4, 8, 8, 2, 2]
+        anim_time_list = [240, 180, 44, 60, 30, 44]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
@@ -261,9 +261,9 @@ class GameWorld(object):
         coll = components.Collider(position[0], position[1], 50, 96)
         vel = components.Velocity([0, 0])
         #Create enemy's animations
-        temp = pygame.image.load(os.path.join('data', 'char.png')).convert_alpha()
-        anim_list = [4, 4, 3, 10, 4]
-        anim_time_list = [240, 60, 44, 60, 10]
+        temp = pygame.image.load(os.path.join('data', 'enemy1.png')).convert_alpha()
+        anim_list = [2, 4, 4, 8, 4, 1]
+        anim_time_list = [240, 60, 44, 120, 10, 10]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
