@@ -25,6 +25,8 @@ Types = enum('position', 'appearance', 'collider', 'velocity')
 
 import os
 
+import pygame
+
 class Projectile(chaosparticle.Particle):
     def __init__(self, sprite, life, position, velocity, acceleration):
         chaosparticle.Particle.__init__(self, sprite, life, position, velocity, acceleration)
@@ -140,10 +142,11 @@ class Health():
         if hp_sprite_sheet:
             for counter in range(segments):
                 #Create a new blank image for the sprite
-                image = pygame.Surface([width, height]).convert()
+                image = pygame.Surface([width, height], pygame.SRCALPHA)
                 #Copy the sprite from the sprite sheet
                 image.blit(hp_sprite_sheet, (0, 0), (counter*width, 0,
                                                      width, height))
+                image.convert_alpha()
                 self.hp_sprites.append(Appearance(image))
                 #Assuming black works as the transparent color
                 #image.set_colorkey((0,0,0))
@@ -217,14 +220,15 @@ class Appearance(pygame.sprite.Sprite):
             self.image_frames[animation_number] = list()
             for frame in range(animations[animation_number]):
                 #Create a new blank image for the sprite
-                image = pygame.Surface([width, height]).convert()
+                image = pygame.Surface([width, height], pygame.SRCALPHA)
                 #Copy the sprite from the sprite sheet
                 image.blit(sprite_sheet, (0, 0), (frame*width,
                                                   animation_number*height,
                                                   width, height))
+                image.convert_alpha()
                 self.image_frames[animation_number].append(image)
-                #Assuming black works as the transparent color
-                image.set_colorkey((0,0,0))
+                #Assuming black works as the transparent colflags=or
+                #image.set_colorkey((0,0,0))
         #Set the image the entity starts with, here idle
         self.original = self.image_frames[0][0]
         self.image = self.image_frames[0][0]

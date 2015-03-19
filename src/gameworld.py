@@ -165,11 +165,11 @@ class GameWorld(object):
         #---
         damage = 10
         stun = 10
-        cooldown = 30
+        cooldown = 50
         position = [0,0]
         
-        temp_eff = pygame.image.load(os.path.join('data', 'attack_effect.png'))
-        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 62, 62, [6], [cooldown])
+        temp_eff = pygame.image.load(os.path.join('data', 'curse_green_effect.png'))
+        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 170, 170, [5], [40])
         eff_sprite.play_animation_till_end = True
         eff_sprite.play_once = True
         effect_ID = self.create_entity((eff_sprite, ))
@@ -238,8 +238,8 @@ class GameWorld(object):
         cooldown = 30
         position = coll.center
         
-        temp_eff = pygame.image.load(os.path.join('data', 'attack_effect.png'))
-        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 62, 62, [6], [cooldown])
+        temp_eff = pygame.image.load(os.path.join('data', 'char_attack1_effect.png'))
+        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 250, 250, [8], [cooldown])
         eff_sprite.play_once = True
         eff_sprite.play_animation_till_end = True
         c_eff = (eff_sprite,)
