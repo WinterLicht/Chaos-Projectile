@@ -81,7 +81,6 @@ class InputController:
                     if event.type == pygame.JOYBUTTONDOWN:
                         #Check if R1 (on Sony controller) button pressed
                         if self.joystick.get_button(7):
-                            #attack_request_ev = events.PlayerAttackRequest()
-                            #self.event_manager.post(attack_request_ev)
-                            pass
+                            attack_request_ev = events.MouseButtonDown()
+                            self.event_manager.post(attack_request_ev)
                         

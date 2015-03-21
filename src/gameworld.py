@@ -239,7 +239,7 @@ class GameWorld(object):
         position = coll.center
         
         temp_eff = pygame.image.load(os.path.join('data', 'char_attack1_effect.png'))
-        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 250, 250, [8], [cooldown])
+        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 250, 250, [30], [cooldown])
         eff_sprite.play_once = True
         eff_sprite.play_animation_till_end = True
         c_eff = (eff_sprite,)
