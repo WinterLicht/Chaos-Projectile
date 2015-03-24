@@ -66,14 +66,16 @@ class GameWorld(object):
         #layer = self.level.tmx_data.getTileLayerByName("players")
         '''LayerWeite und Breite auslesen!! Sowie die Nummer'''
         #Temp list
-        fields = list()
+        #fields = list()
         walls = list()
         #Get layer width and height in tiles
         layer_width = len(self.level.tmx_data.layers[0].data)
         layer_height = len(self.level.tmx_data.layers[0].data[0])
         for layer_index in range(len(self.level.tmx_data.layers)):
-            for x in range(layer_width):
-                for y in range(layer_height):
+            #BUG? pyTMX reads from top to down, then fom left to right
+            #So: y in range(layer_width) ans x in range (layer_heigt)
+            for y in range(layer_width):
+                for x in range(layer_height):
                     if self.level.tmx_data.layers[layer_index].name == "characters":
                         tile = self.level.tmx_data.get_tile_properties(x, y, layer_index)
                         if tile:
@@ -86,6 +88,7 @@ class GameWorld(object):
                                     #Create player
                                     position = (x*64+32, y*64+32)
                                     self.create_player(position)
+                    '''
                     if self.level.tmx_data.layers[layer_index].name == "decoration front":
                         tile = self.level.tmx_data.get_tile_properties(x, y, layer_index)
                         if tile:
@@ -95,6 +98,7 @@ class GameWorld(object):
                                     mass = int(tile["mass"])
                                     position = (x*64+32, y*64+32)
                                     fields.append(chaosparticle.Field(position, mass))
+                    '''
                     if self.level.tmx_data.layers[layer_index].name == "characters":
                         tile = self.level.tmx_data.get_tile_properties(x, y, layer_index)
                         if tile:
@@ -112,7 +116,6 @@ class GameWorld(object):
                                     colle_ID = self.create_entity((heal_sprite, heal_pot, collider))
                                     heal_pot.entity_ID = colle_ID
                                 if tile["type"] == "skill_up":
-                                    #Add fields
                                     collider = components.Collider(x*64, y*64, 64, 64)
                                     temp = pygame.image.load(os.path.join('data', 'skill_pot.png'))
                                     skillup_sprite = components.Appearance(temp.convert_alpha())
@@ -121,7 +124,6 @@ class GameWorld(object):
                                     colle_ID = self.create_entity((skillup_sprite, skillup_pot, collider))
                                     skillup_pot.entity_ID = colle_ID
                                 if tile["type"] == "portal":
-                                    #Add fields
                                     x_pos = int(tile["x"])
                                     y_pos = int(tile["y"])
                                     x_pos, y_pos = x_pos*64+32, y_pos*64+32
@@ -132,8 +134,8 @@ class GameWorld(object):
                                     portal = collectible.Portal(self, self.event_manager, x_pos, y_pos)
                                     colle_ID = self.create_entity((portal_sprite, portal, collider))
                                     portal.entity_ID = colle_ID
+                                '''
                                 if tile["type"] == "moving_platform":
-                                    #Add fields
                                     x_vel = int(tile["x_vel"])
                                     y_vel = int(tile["y_vel"])
                                     tags = list()
@@ -144,7 +146,8 @@ class GameWorld(object):
                                     temp = pygame.image.load(os.path.join('data', 'field.png')).convert_alpha()
                                     anim = components.Appearance(temp)
                                     anim.rect.center = coll.center
-                                    self.create_entity((coll, vel, anim))                                 
+                                    self.create_entity((coll, vel, anim))
+                                '''                                 
                     #Create walls
                     if self.level.tmx_data.layers[layer_index].name == "walls":
                         tile = self.level.tmx_data.get_tile_image(x, y, layer_index)
@@ -159,8 +162,8 @@ class GameWorld(object):
                             coll = components.Collider(x*64, y*64, 64, 64, tags)
                             walls.append(coll)
         #Characters and their attacks are created, so fields can be added
-        for field in fields:
-            self.create_field(field.position, field.mass)
+        #for field in fields:
+            #self.create_field(field.position, field.mass)
         #Create Level curse:
         #---
         damage = 10
@@ -185,7 +188,7 @@ class GameWorld(object):
         #---
         #Quad Tree
         self.tree = quadTree.QuadTree(walls)
-
+    '''
     def create_field(self, position, mass):
         """Adds field to all attacks.
         
@@ -197,7 +200,7 @@ class GameWorld(object):
         for attacks in self.attacks.itervalues():
             for attack in attacks:
                 attack.add_field(chaosparticle.Field(position, mass))
-
+    '''
     def create_player(self, position):
         """Create player.
         
@@ -261,7 +264,7 @@ class GameWorld(object):
         coll = components.Collider(position[0], position[1], 50, 96)
         vel = components.Velocity([0, 0])
         #Create enemy's animations
-        temp = pygame.image.load(os.path.join('data', 'enemy1.png')).convert_alpha()
+        temp = pygame.image.load(os.path.join('data', 'enemy_green_1.png')).convert_alpha()
         anim_list = [2, 4, 4, 8, 2, 1]
         anim_time_list = [240, 60, 44, 120, 10, 10]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
@@ -336,8 +339,7 @@ class GameWorld(object):
         self.mask.append(0)
         return entity
 
-    def active_entity(self, entity_ID):
-        
+    def active_entity(self, entity_ID):        
         return not entity_ID in self.inactive_entities
 
     def deactivate_entity(self, entity_ID):
@@ -361,10 +363,92 @@ class GameWorld(object):
         if entity_ID in self.attacks:
             del self.attacks[entity_ID]
         if entity_ID in self.ai:
-            #self.event_manager.unregister_listener(self.ai[entity_ID])
+            self.event_manager.unregister_listener(self.ai[entity_ID])
             del self.ai[entity_ID]
         if entity_ID in self.hp:
             del self.hp[entity_ID]
         if entity_ID in self.collectibles:
             del self.collectibles[entity_ID]
+
+    def reset_the_world(self):
+        for entity_ID in range(len(self.mask)):
+            #No point to reset indestructible walls.
+            #Walls are in qudtree
+            self.destroy_entity(entity_ID)
+        #Reload Objects
+        layer_width = len(self.level.tmx_data.layers[0].data)
+        layer_height = len(self.level.tmx_data.layers[0].data[0])
+        layer_index = len(self.level.tmx_data.layers)-1
+        self.inactive_entities = list()
+        #BUG? pyTMX reads from top to down, then fom left to right
+        #So: y in range(layer_width) ans x in range (layer_heigt)
+        for y in range(layer_width):
+            for x in range(layer_height):
+                if self.level.tmx_data.layers[layer_index].name == "characters":
+                    tile = self.level.tmx_data.get_tile_properties(x, y, layer_index)
+                    if tile:
+                        if "type" in tile:
+                            if tile["type"] == "enemy":
+                                #Create enemies
+                                position = (x*64+32, y*64+32)
+                                self.create_enemy(position)
+                            elif tile["type"] == "player":
+                                #Create player
+                                position = (x*64+32, y*64+32)
+                                self.create_player(position)
+                    tile = self.level.tmx_data.get_tile_properties(x, y, layer_index)
+                    if tile:
+                        if "type" in tile:
+                            if tile["type"] == "heal_potion":
+                                #Add fields
+                                recovery = int(tile["recovery"])
+                                tags = list()
+                                tags.append("heal_potion")
+                                collider = components.Collider(x*64, y*64, 64, 64, tags)
+                                temp = pygame.image.load(os.path.join('data', 'heal_pot.png'))
+                                heal_sprite = components.Appearance(temp.convert_alpha())
+                                heal_sprite.rect.center = collider.center
+                                heal_pot = collectible.HealPotion(self, self.event_manager, recovery)
+                                colle_ID = self.create_entity((heal_sprite, heal_pot, collider))
+                                heal_pot.entity_ID = colle_ID
+                            if tile["type"] == "skill_up":
+                                collider = components.Collider(x*64, y*64, 64, 64)
+                                temp = pygame.image.load(os.path.join('data', 'skill_pot.png'))
+                                skillup_sprite = components.Appearance(temp.convert_alpha())
+                                skillup_sprite.rect.center = collider.center
+                                skillup_pot = collectible.SkillUp(self, self.event_manager)
+                                colle_ID = self.create_entity((skillup_sprite, skillup_pot, collider))
+                                skillup_pot.entity_ID = colle_ID
+                            if tile["type"] == "portal":
+                                x_pos = int(tile["x"])
+                                y_pos = int(tile["y"])
+                                x_pos, y_pos = x_pos*64+32, y_pos*64+32
+                                collider = components.Collider(x*64, y*64, 64, 64)
+                                temp = pygame.image.load(os.path.join('data', 'portal.png'))
+                                portal_sprite = components.Appearance(temp.convert_alpha())
+                                portal_sprite.rect.center = collider.center
+                                portal = collectible.Portal(self, self.event_manager, x_pos, y_pos)
+                                colle_ID = self.create_entity((portal_sprite, portal, collider))
+                                portal.entity_ID = colle_ID
+        #Create Level curse:
+        #---
+        damage = 10
+        stun = 10
+        cooldown = 50
+        position = [0,0]
+        
+        temp_eff = pygame.image.load(os.path.join('data', 'curse_green_effect.png'))
+        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 170, 170, [5], [40])
+        eff_sprite.play_animation_till_end = True
+        eff_sprite.play_once = True
+        effect_ID = self.create_entity((eff_sprite, ))
+        curse_AI = ai.Level1_curse(self, 0, self.event_manager)
+        curse_ID = self.create_entity((curse_AI, ))
+        curse_AI.entity_ID = curse_ID 
+        particle_emitter = components.Attack(self, damage, stun, cooldown, position,
+                                             1, 'proj.png', 60,
+                                             [1, 0], [0, 0], 15, effect_ID)
+        attack_list = list()
+        attack_list.append(particle_emitter)
+        self.add_component_to_entity(curse_ID, attack_list)
         

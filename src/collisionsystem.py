@@ -90,8 +90,7 @@ class CollisionSystem(object):
 
     def calculate_collision_y(self, collider_ID):
         #Consider gravity
-        if not "moving_platform" in self.world.collider[collider_ID].tags:
-            self.world.velocity[collider_ID][1] += self.gravity[1]
+        self.world.velocity[collider_ID][1] += self.gravity[1]
         #Move collider in y direction.
         self.world.collider[collider_ID].y += self.world.velocity[collider_ID][1]
         #Filter overlapping hit boxes with collider

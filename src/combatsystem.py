@@ -26,6 +26,8 @@ class CombatSystem():
         self.event_manager.register_listener(self)
 
         self.world = world
+        
+        self.reset_the_world = False
 
     def notify(self, event):
         """Notify, when event occurs. 
@@ -52,6 +54,11 @@ class CombatSystem():
         #Check for collision
         self.check_projectile_collision()
         self.remove_dead_entities()
+        if self.reset_the_world:
+            self.event_manager.paused = True
+            self.world.reset_the_world()
+            self.reset_the_world = False
+            self.event_manager.paused = False
 
     def check_projectile_collision(self):
         """Checks for collision between projectiles and other objects."""
@@ -78,8 +85,7 @@ class CombatSystem():
                                     self.event_manager.post(stun_ev)
                                 else:
                                     #No more Hp left
-                                    #print("player is dead")
-                                    pass
+                                    self.reset_the_world = True
                                 projectile.life = -1
                                 ev_die = events.EntityDies(projectile.entity_ID)
                                 self.event_manager.post(ev_die)
