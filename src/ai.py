@@ -135,17 +135,17 @@ class AI():
         self.event_manager.post(ev)
         ev = events.EntityStopMovingRightRequest(self.entity_ID)
         self.event_manager.post(ev)
-        #self.world.velocity[self.entity_ID][0] = 0
+        #self.world.velocity[self.entity_ID].x = 0
 
     def attack(self, attack_Nr, spawn_attack_pos=None, attack_dir=None):
         ev = events.EntityAttackRequest(self.entity_ID, attack_Nr, spawn_attack_pos, attack_dir)
         self.event_manager.post(ev)
 
     def walking_left(self):
-        return self.world.velocity[self.entity_ID][0] < 0
+        return self.world.velocity[self.entity_ID].x < 0
 
     def walking_right(self):
-        return self.world.velocity[self.entity_ID][0] > 0
+        return self.world.velocity[self.entity_ID].x > 0
 
     def sees_player(self, player_position):
         """Checks if the player is in sight.

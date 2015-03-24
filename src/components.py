@@ -8,21 +8,6 @@
 import pygame
 import chaosparticle
 
-'''
-# Enumarations: http://legacy.python.org/dev/peps/pep-0435/
-class Types(Enum):
-    position = 1
-    appearance = 2
-    collider = 3
-'''
-'''
-def enum(*sequential, **named):
-    enums = dict(zip(sequential, range(len(sequential))), **named)
-    return type('Enum', (), enums)
-
-Types = enum('position', 'appearance', 'collider', 'velocity')
-'''
-
 import os
 
 import pygame
@@ -36,7 +21,7 @@ class Projectile(chaosparticle.Particle):
         proj_temp = pygame.image.load(os.path.join('data', self.sprite))
         proj_anim_list = [2, 2]
         proj_anim_time_list = [50, 13]
-        #Die groesse des Bildes muss mit uebergeben werden!
+        #Die groesse des Bildes muss mit uebergeben werden?!
         proj_anim = Appearance(proj_temp, 25, 25, proj_anim_list, proj_anim_time_list)
         proj_anim.rect.center = self.position
         proj_anim.angle = angle
@@ -124,10 +109,18 @@ class Collider(pygame.Rect):
         self.tags = list_of_tags
 
 
-class Velocity(list):
-    """Velocity of an entity is a simple list with two components."""
-    pass
+class Velocity():
+    """Velocity of an entity.
+    
+    Current Velocity is stored in x and y attributes. Maximum x and y are used when entity
+    bedins movig.
+    """
 
+    def __init__(self, x, y, max_x, max_y):
+        self.x = x
+        self.y = y
+        self.max_x = max_x
+        self.max_y = max_y
 
 class Health():
     def __init__(self, hp, segments=None, hp_sprite_sheet=None):

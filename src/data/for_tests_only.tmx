@@ -7,12 +7,30 @@
   <image source="characters.png" width="384" height="384"/>
   <tile id="0">
    <properties>
-    <property name="name" value="Isis"/>
+    <property name="att_1_cooldown" value="30"/>
+    <property name="att_1_damage" value="10"/>
+    <property name="att_1_projectile_amount" value="1"/>
+    <property name="att_1_projectile_lifetime" value="60"/>
+    <property name="att_1_spread_angle" value="15"/>
+    <property name="att_1_stun" value="30"/>
+    <property name="max_hp" value="150"/>
+    <property name="max_x_vel" value="7"/>
+    <property name="max_y_vel" value="14"/>
     <property name="type" value="player"/>
    </properties>
   </tile>
   <tile id="2">
    <properties>
+    <property name="ai" value="green_1"/>
+    <property name="att_1_cooldown" value="60"/>
+    <property name="att_1_damage" value="10"/>
+    <property name="att_1_projectile_amount" value="3"/>
+    <property name="att_1_projectile_lifetime" value="60"/>
+    <property name="att_1_spread_angle" value="15"/>
+    <property name="att_1_stun" value="20"/>
+    <property name="max_hp" value="100"/>
+    <property name="max_x_vel" value="4"/>
+    <property name="max_y_vel" value="0"/>
     <property name="type" value="enemy"/>
    </properties>
   </tile>
@@ -24,7 +42,7 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdRnYwjtoxqOwYLnHOTAc7+EhQj66WGL3DyQ4JBtqWueJADACWYQWg
+   eJzjZmBgEKMx5magLeAdRnYwArEoA/ZwpKYdtATDyQ56xTmt7WCmgx18JKhHV0uM3uFkhwQDbctccSAGAMIvBiM=
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
@@ -39,7 +57,7 @@
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUDGaQCsRpNLYjG4hzaGwHOkgH4gw8fGqAXCDOw8MfzgAAFYkE9w==
+   eJxjYBh+IBWI02hsRzYQ59DYjlEwCoYDSAfiDBrbkQvEeTS2Y6gBAP77A00=
   </data>
  </layer>
 </map>

@@ -145,7 +145,7 @@ class CombatSystem():
             self.event_manager.post(ev)
             #Show effect
             effect_ID = self.world.attacks[entity_ID][attack_Nr].effect_ID
-            if effect_ID:
+            if not effect_ID == None:
                 if entity_ID == self.world.player:
                     #Calculate position and angle of effect
                     player = self.world.players[entity_ID]
