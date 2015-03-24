@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="15" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" name="tileset_neutral_01" tilewidth="64" tileheight="64">
+  <image source="tileset_neutral_01.png" width="640" height="640"/>
+ </tileset>
+ <tileset firstgid="101" name="characters" tilewidth="64" tileheight="64">
+  <image source="characters.png" width="384" height="384"/>
+  <tile id="0">
+   <properties>
+    <property name="name" value="Isis"/>
+    <property name="type" value="player"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="enemy"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="bg" width="25" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxTZGBgUBzFo3gUj+JRPKwwAA2+MFg=
+  </data>
+ </layer>
+ <layer name="walls" width="25" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzjZmBgEKMx5magLeAdRnYwjtoxqOwYLnHOTAc7+EhQj66WGL3DyQ4JBtqWueJADACWYQWg
+  </data>
+ </layer>
+ <layer name="decoration behind" width="25" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMNwAAAXcAAE=
+  </data>
+ </layer>
+ <layer name="decoration front" width="25" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMNwAAAXcAAE=
+  </data>
+ </layer>
+ <layer name="characters" width="25" height="15" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDGaQCsRpNLYjG4hzaGwHOkgH4gw8fGqAXCDOw8MfzgAAFYkE9w==
+  </data>
+ </layer>
+</map>
