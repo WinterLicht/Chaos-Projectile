@@ -284,8 +284,8 @@ class GameWorld(object):
         vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
         #Create players animations
         temp = pygame.image.load(os.path.join('data', 'char.png')).convert_alpha()
-        anim_list = [4, 4, 8, 8, 2, 2]
-        anim_time_list = [240, 180, 44, 60, 30, 44]
+        anim_list = [4, 10, 8, 8, 2, 2]
+        anim_time_list = [240, 50, 44, 60, 30, 44]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])

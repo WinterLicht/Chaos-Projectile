@@ -68,7 +68,8 @@ class AnimationSystem(object):
                 if isinstance(event, events.EntityStunned):
                     self.play_stun_animation(entity_ID, event.duration)
                 if isinstance(event, events.EntityDies):
-                    self.play_death_animation(entity_ID)
+                    if not self.death_animation_running(entity_ID):
+                        self.play_death_animation(entity_ID)
                                                 
     def run_animations(self, dt):
         """Computes which animation frame should be displayed.
