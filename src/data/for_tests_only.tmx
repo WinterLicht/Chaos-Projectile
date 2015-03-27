@@ -37,22 +37,22 @@
  </tileset>
  <layer name="bg" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxTZGBgUBzFo3gUj+JRPKwwAA2+MFg=
+   eJxTZGBgUBzFo5hOWBOItYBYm4Z2GAOxCRCb0tD9ClBsTyP3yxMwX5PGYQjCtjTy3yimDwYAfKwxUg==
   </data>
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdRnYwArEoA/ZwpKYdtATDyQ56xTmt7WCmgx18JKhHV0uM3uFkhwQDbctccSAGAMIvBiM=
+   eJzjZmBgEKMx5magLeAdRnYwArEoA/ZwZKaiHTxQmhtKI7MptQdmBy0BveygV5zTww4mBsJ5ldy4B9nBR4EbWehgBzF6SbUD3d3E2iHBQHz5ia6WGL3iQAwAhoUG1g==
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMNwAAAXcAAE=
+   eJxjYBgFo2AUDHbgMdAOGAU4gTsQRw+0I7AAAANPAOs=
   </data>
  </layer>
  <layer name="decoration front" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMNwAAAXcAAE=
+   eJxjYBgFIxUEMTAcAOEYKB0IZVPbjhgoDqahHdFI5gZC+dS0IxhqHsxcdyqbTyszRwF1QTQd7ACmZwYPKpgDAFRFF7A=
   </data>
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
