@@ -7,6 +7,8 @@ Synopsis
 Chaos Projectile is an open source 2-dimensional action arcade game with
 role-playing elements, currently in development.
 
+![screenshot](doc/source/screenshot.png)
+
 The game is set in the run’n’gun genre but there will also be character
 development system with which the character can gain additional attri-
 butes or actions permanently over the course of the game. Every level
