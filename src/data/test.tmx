@@ -8,6 +8,7 @@
     <property name="att_1_damage" value="10"/>
     <property name="att_1_projectile_amount" value="1"/>
     <property name="att_1_projectile_lifetime" value="60"/>
+    <property name="att_1_projectile_speed" value="7"/>
     <property name="att_1_spread_angle" value="15"/>
     <property name="att_1_stun" value="30"/>
     <property name="max_hp" value="150"/>
@@ -19,12 +20,13 @@
   <tile id="2">
    <properties>
     <property name="ai" value="green_1"/>
-    <property name="att_01_cooldown" value="60"/>
-    <property name="att_01_damage" value="10"/>
-    <property name="att_01_projectile_amount" value="3"/>
-    <property name="att_01_projectile_lifetime" value="60"/>
-    <property name="att_01_spread_angle" value="15"/>
-    <property name="att_01_stun" value="20"/>
+    <property name="att_1_cooldown" value="60"/>
+    <property name="att_1_damage" value="10"/>
+    <property name="att_1_projectile_amount" value="3"/>
+    <property name="att_1_projectile_lifetime" value="60"/>
+    <property name="att_1_projectile_speed" value="5"/>
+    <property name="att_1_spread_angle" value="15"/>
+    <property name="att_1_stun" value="20"/>
     <property name="max_hp" value="100"/>
     <property name="max_x_vel" value="4"/>
     <property name="max_y_vel" value="0"/>

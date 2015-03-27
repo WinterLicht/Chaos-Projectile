@@ -267,7 +267,7 @@ class AI_1(AI):
                 direction = (1, 0)
             self.world.direction[self.entity_ID] = direction
             #Do attack
-            self.attack(0)
+            self.attack(0, None, direction)
             #Check if state should be changed
             #Enemy doesn't sees player or player is not in range
             if not self.sees_player(self.world.collider[self.world.player].center) or not self.point_in_radius(self.aggresion_range, players_position):

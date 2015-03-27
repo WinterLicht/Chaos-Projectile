@@ -34,6 +34,7 @@
     <property name="att_1_damage" value="10"/>
     <property name="att_1_projectile_amount" value="1"/>
     <property name="att_1_projectile_lifetime" value="60"/>
+    <property name="att_1_projectile_speed" value="7"/>
     <property name="att_1_spread_angle" value="15"/>
     <property name="att_1_stun" value="30"/>
     <property name="max_hp" value="150"/>
@@ -49,6 +50,7 @@
     <property name="att_1_damage" value="10"/>
     <property name="att_1_projectile_amount" value="3"/>
     <property name="att_1_projectile_lifetime" value="60"/>
+    <property name="att_1_projectile_speed" value="4"/>
     <property name="att_1_spread_angle" value="15"/>
     <property name="att_1_stun" value="20"/>
     <property name="max_hp" value="100"/>
@@ -65,7 +67,7 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdRnYwArEoA/ZwZKaiHTxQmhtKI7MptQdmBy0BveygV5zTww4mBsJ5ldy4ZwViPgrcyEKEGl4K7SBGL6l2oLubWDskGIgvP9HVIvNZkTCyGnEgBgB1HQab
+   eJzjZmBgEKMx5magLeAdRnYwArEoA/ZwZKaiHTxQmhtKI7MptQdmB7mACckNojjcQ6kdIADyLysD7nilRpwDzT8Aw7jsoNQfhADMDlC4Esqr5MY90H8JfBS4kYUINSB/UGIHMXpJtQPd3SC92MIROU+LA7EEA/HlJ7paEB+WV1mRMC8Dan4GAIrKCYc=
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
@@ -75,7 +77,7 @@
  </layer>
  <layer name="decoration front" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFIxUEMTAcAOEYKB0IZVPbjhgoDqahHdFI5gZC+dS0IxhqHsxcdyqbTyszRwF1QTQd7ACmZwYPKpgDAFRFF7A=
+   eJxjYBgFIxUEMTAcAOEYKB0IZVPbjhgoDqahHdFI5gZC+dS0IxhqHsxcdyqbTyszRwF1QTQd7ACmZwYPCvSzQmkAVG0XtQ==
   </data>
  </layer>
  <layer name="characters" width="25" height="15" visible="0">

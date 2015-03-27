@@ -39,7 +39,7 @@ class Attack(chaosparticle.Emitter):
     """
     
     def __init__(self, world, damage, stun, cooldown, position, amount,
-                 sprite_sheet, life, velocity, acceleration,
+                 sprite_sheet, life, projectile_speed, acceleration,
                  spread_angle=0, effect_ID=None):
         """
         :param character_ID: this character fired the projectile
@@ -56,16 +56,17 @@ class Attack(chaosparticle.Emitter):
         :type sprite_sheet: type may vary on Your implementation
         :param life: life time of all particles
         :type life: int
-        :param velocity: velocity vector shows middle direction of all particles
-        :type velocity: 2d list
+        :param projectile_speed: speed of a projectile per frame in pixel
+        :type projectile_speed: int
         :param acceleration: acceleration vector
         :type acceleration: 2d list
         :param spread_angle: angle between velocities of the particles in grad
         :type spread_angle: int
         """
         chaosparticle.Emitter.__init__(self, cooldown, position, amount,
-                                       sprite_sheet, life, velocity,
+                                       sprite_sheet, life, [1,0],
                                        acceleration, spread_angle)
+        self.projectile_speed = projectile_speed
         self.damage = damage
         self.stun = stun
         self.effect_ID = effect_ID
