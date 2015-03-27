@@ -187,6 +187,9 @@ class GameWorld(object):
                                     if tile_properties["type"] == "corner":
                                         #Tile is a corner
                                         tags.append("corner")
+                                    if tile_properties["type"] == "deadly":
+                                        #Deadly tile, instant death on player collision
+                                        tags.append("deadly")
                             coll = components.Collider(x*64, y*64, 64, 64, tags)
                             walls.append(coll)
         #Create Level curse:

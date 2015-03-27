@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="25" height="15" tilewidth="64" tileheight="64">
  <tileset firstgid="1" name="tileset_neutral_01" tilewidth="64" tileheight="64">
+  <properties>
+   <property name="type" value="deadly"/>
+  </properties>
   <image source="tileset_neutral_01.png" width="640" height="640"/>
+  <tile id="1">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="type" value="deadly"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="101" name="characters" tilewidth="64" tileheight="64">
   <image source="characters.png" width="384" height="384"/>
@@ -42,7 +65,7 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdRnYwArEoA/ZwZKaiHTxQmhtKI7MptQdmBy0BveygV5zTww4mBsJ5ldy4B9nBR4EbWehgBzF6SbUD3d3E2iHBQHz5ia6WGL3iQAwAhoUG1g==
+   eJzjZmBgEKMx5magLeAdRnYwArEoA/ZwZKaiHTxQmhtKI7MptQdmBy0BveygV5zTww4mBsJ5ldy4ZwViPgrcyEKEGl4K7SBGL6l2oLubWDskGIgvP9HVIvNZkTCyGnEgBgB1HQab
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">

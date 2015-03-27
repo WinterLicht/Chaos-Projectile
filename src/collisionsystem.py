@@ -122,9 +122,14 @@ class CollisionSystem(object):
         self.world.collider[collider_ID].center = map(int, self.world.collider[collider_ID].center)
 
     def check_collision_with_non_static_elements(self, collider_ID):
-        """Collision with non-static elements in level should be checked separately, besause this elements aren't in quad tree.
+        """Collision with non-static elements in level should be checked separately,
+        because this elements aren't in quad tree.
+        
+        TODO: collectibles sind eigentlich unbeweglich?!
+        Die funktion wurde gebraucht, damit man healpots nicht doppelt aufsammeln konnte?
         """
         for entity_ID in self.world.collider.keys():
+            # Check collision
             if self.world.collider[collider_ID].colliderect(self.world.collider[entity_ID]):
                 if not entity_ID == collider_ID:
                     if entity_ID in self.world.collectibles:

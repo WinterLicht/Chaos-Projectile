@@ -45,7 +45,14 @@ class StateSystem():
                     if self.world.active_entity(entity_ID):
                         collect = self.world.collectibles[entity_ID]
                         collect.handle_collision_event(event.collider_ID)
-                
+            if hasattr(event.collidee, 'tags'):
+                tags = event.collidee.tags
+                if tags and event.collider_ID == self.world.player:
+                    if "deadly" in tags:
+                        #Player dies!
+                        self.world.hp[self.world.players[self.world.player].hp_ID].points = 0
+                        ev_die = events.EntityDies(self.world.player)
+                        self.event_manager.post(ev_die)
         if hasattr(event, 'entity_ID'):
             entity_ID = event.entity_ID
             if self.world.active_entity(entity_ID):

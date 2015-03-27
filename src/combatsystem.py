@@ -85,7 +85,7 @@ class CombatSystem():
                                         stun_ev = events.EntityStunned(player_ID, attack.stun)
                                         self.event_manager.post(stun_ev)
                                     else:
-                                        #No more Hp left
+                                        #No more Hp left. Player dies!
                                         ev_die = events.EntityDies(collider_ID)
                                         self.event_manager.post(ev_die)
                                     projectile.life = -1
