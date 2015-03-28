@@ -60,6 +60,108 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="137" name="tileset_green_01" tilewidth="64" tileheight="64">
+  <image source="tileset_green_01.png" width="640" height="640"/>
+  <tile id="0">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="curse" value="green"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="curse" value="green"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="curse" value="green"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="237" name="tileset_pink_01" tilewidth="64" tileheight="64">
+  <image source="tileset_pink_01.png" width="640" height="640"/>
+  <tile id="1">
+   <properties>
+    <property name="curse" value="pink"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="curse" value="pink"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="curse" value="pink"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="curse" value="pink"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="curse" value="pink"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="bg" width="25" height="15">
   <data encoding="base64" compression="zlib">
    eJxTZGBgUBzFo5hOWBOItYBYm4Z2GAOxCRCb0tD9ClBsTyP3yxMwX5PGYQjCtjTy3yimDwYAfKwxUg==
@@ -67,7 +169,7 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdRnYwArEoA/ZwZKaiHTxQmhtKI7MptQdmB7mACckNojjcQ6kdIADyLysD7nilRpwDzT8Aw7jsoNQfhADMDlC4Esqr5MY90H8JfBS4kYUINSB/UGIHMXpJtQPd3SC92MIROU+LA7EEA/HlJ7paEB+WV1mRMC8Dan4GAIrKCYc=
+   eJzjZmBgEKMx5magLeAdxHb0kGgHIxCLMmAPR2Y09V1APA+IF0DpbhLs4IHS3FAamY1uD6kAZge5gAnJDXMZsPuLUjtAAORfViCejEP+JwPl6Qpo/gEYxmUHpf4gBGB2gMKVUF4lJu7fgcwCGvgeSQzovwQ+CtzIQoQaUJxTYgcxekm1A93dIL3YwhE5T4sDsQQD8eUnuloQH5ZXWZEwLwNqfgYAlSgTQA==
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
@@ -82,7 +184,7 @@
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJxjYBh+IBWI02hsRzYQ59DYjlEwCoYDSAfiDBrbkQvEeTS2Y6gBAP77A00=
+   eJxjYBh+IBWI02hsRzYQ59DYjlEweEE6EGfQ2I5cIM6jsR30AKNhNTAAAAtKBPc=
   </data>
  </layer>
 </map>

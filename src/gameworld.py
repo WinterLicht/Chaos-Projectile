@@ -88,6 +88,9 @@ class GameWorld(object):
                                     if tile_properties["type"] == "deadly":
                                         #Deadly tile, instant death on player collision
                                         tags.append("deadly")
+                                if "curse" in tile_properties:
+                                    if tile_properties["curse"] == "green":
+                                        tags.append("green")
                             coll = components.Collider(x*64, y*64, 64, 64, tags)
                             walls.append(coll)
         #Create Level curse:
@@ -104,9 +107,16 @@ class GameWorld(object):
         effect_ID = self.create_entity((eff_sprite, ))
         curse_AI = ai.Level1_curse(self, 0, self.event_manager)
         curse_ID = self.create_entity((curse_AI, ))
-        curse_AI.entity_ID = curse_ID 
+        curse_AI.entity_ID = curse_ID
+        #Create projectile image
+        proj_image = "projectile_fly_orange.png"
+        proj_anim_list = [2, 2]
+        proj_anim_time_list = [30, 13]
+        proj_width = 32
+        proj_height = 32
         particle_emitter = components.Attack(self, damage, stun, cooldown, position,
-                                             1, 'proj.png', 60,
+                                             1, proj_image, proj_anim_list, proj_anim_time_list,
+                                             proj_width, proj_height, 60,
                                              3, [0, 0], 15, effect_ID)
         attack_list = list()
         attack_list.append(particle_emitter)
@@ -144,9 +154,14 @@ class GameWorld(object):
                     ai_ID = tile_properties["ai"]
                 #Create enemy attacks
                 #Attack 1:
-                projectile_image = "proj.png"
+                #Create projectile image
+                proj_image = "proj.png"
+                proj_anim_list = [2, 2]
+                proj_anim_time_list = [50, 13]
                 particle_emitter = self.create_attack(position, damage1, stun1,
-                                                      cooldown1, proj1, projectile_image,
+                                                      cooldown1, proj1, proj_image,
+                                                      proj_anim_list, proj_anim_time_list,
+                                                      25, 25,
                                                       proj_life1, proj_speed1, [0,0],
                                                       spread1)
                 attack_list = list()
@@ -164,28 +179,33 @@ class GameWorld(object):
                     max_y_vel = int(tile_properties["max_y_vel"])
                 #Attack related:
                 if "att_1_damage" in tile_properties:
-                    damage = int(tile_properties["att_1_damage"])
+                    damage1 = int(tile_properties["att_1_damage"])
                 if "att_1_stun" in tile_properties:
-                    stun = int(tile_properties["att_1_stun"])
+                    stun1 = int(tile_properties["att_1_stun"])
                 if "att_1_cooldown" in tile_properties:
-                    cooldown = int(tile_properties["att_1_cooldown"])
+                    cooldown1 = int(tile_properties["att_1_cooldown"])
                 if "att_1_projectile_amount" in tile_properties:
-                    proj = int(tile_properties["att_1_projectile_amount"])
+                    proj1 = int(tile_properties["att_1_projectile_amount"])
                 if "att_1_projectile_lifetime" in tile_properties:
-                    proj_life = int(tile_properties["att_1_projectile_lifetime"])
+                    proj_life1 = int(tile_properties["att_1_projectile_lifetime"])
                 if "att_1_spread_angle" in tile_properties:
-                    spread = int(tile_properties["att_1_spread_angle"])
+                    spread1 = int(tile_properties["att_1_spread_angle"])
                 if "att_1_projectile_speed" in tile_properties:
                     proj_speed1 = int(tile_properties["att_1_projectile_speed"])
                 #Create players attacks
                 #Attack 1:
                 effect_ID = self.create_attack_effect('char_attack1_effect.png',
                                                       250, 250, 8, 30)
-                projectile_image = "proj.png"
-                particle_emitter = self.create_attack(position, damage, stun,
-                                                      cooldown, proj, projectile_image,
-                                                      proj_life, proj_speed1, [0,0],
-                                                      spread, effect_ID)
+                #Create projectile image
+                proj_image = "simple_projectile_light_circle.png"
+                proj_anim_list = [2, 4]
+                proj_anim_time_list = [20, 13]
+                particle_emitter = self.create_attack(position, damage1, stun1,
+                                                      cooldown1, proj1, proj_image,
+                                                      proj_anim_list, proj_anim_time_list,
+                                                      25, 25,
+                                                      proj_life1, proj_speed1, [0,0],
+                                                      spread1, effect_ID)
                 attack_list = list()
                 attack_list.append(particle_emitter)
                 self.create_player(position, hp, max_x_vel, max_y_vel,
@@ -224,7 +244,8 @@ class GameWorld(object):
                 portal.entity_ID = colle_ID
 
     def create_attack(self, position, damage, stun, cooldown, proj_amount,
-                      projectile_image, projlife, projspeed, accel, spread, effect_ID=None):
+                      projectile_image, proj_anim_list, proj_anim_time_list,
+                      width, height, projlife, projspeed, accel, spread, effect_ID=None):
         """
         :param position: position of attack
         :type position: 2D list 
@@ -263,7 +284,8 @@ class GameWorld(object):
         if not spread:
             spread = 15
         attack = components.Attack(self, damage, stun, cooldown, position,
-                                   proj_amount, projectile_image, projlife,
+                                   proj_amount, projectile_image, proj_anim_list,
+                                   proj_anim_time_list, width, height, projlife,
                                    projspeed, [0, 0], spread, effect_ID)
         return attack
 
@@ -452,8 +474,15 @@ class GameWorld(object):
         curse_AI = ai.Level1_curse(self, 0, self.event_manager)
         curse_ID = self.create_entity((curse_AI, ))
         curse_AI.entity_ID = curse_ID 
+        #Create projectile image
+        proj_image = "projectile_fly_orange.png"
+        proj_anim_list = [2, 2]
+        proj_anim_time_list = [30, 13]
+        proj_width = 32
+        proj_height = 32
         particle_emitter = components.Attack(self, damage, stun, cooldown, position,
-                                             1, 'proj.png', 60,
+                                             1, proj_image, proj_anim_list, proj_anim_time_list,
+                                             proj_width, proj_height, 60,
                                              3, [0, 0], 15, effect_ID)
         attack_list = list()
         attack_list.append(particle_emitter)

@@ -13,17 +13,25 @@ import os
 import pygame
 
 class Projectile(chaosparticle.Particle):
-    def __init__(self, sprite, life, position, velocity, acceleration):
+    def __init__(self, sprite, proj_anim_list, proj_anim_time_list, width, height,
+                life, position, velocity, acceleration):
         chaosparticle.Particle.__init__(self, sprite, life, position, velocity, acceleration)
-        self.entity_ID = None 
+        self.entity_ID = None
+        self.proj_anim_list = proj_anim_list
+        self.proj_anim_time_list = proj_anim_time_list
+        self.width = width
+        self.height = height
         
     def load_grafic(self, gameworld, angle):
         proj_temp = pygame.image.load(os.path.join('data', self.sprite))
-        proj_anim_list = [2, 2]
-        proj_anim_time_list = [50, 13]
-        #Die groesse des Bildes muss mit uebergeben werden?!
-        proj_anim = Appearance(proj_temp, 25, 25, proj_anim_list, proj_anim_time_list)
+        proj_anim = Appearance(proj_temp, self.width, self.height,
+                               self.proj_anim_list, self.proj_anim_time_list)
         proj_anim.rect.center = self.position
+        if self.velocity[0] < 0:
+            proj_anim.flip = True
+            angle = 180 + angle
+        if self.velocity[1] > 0:
+            angle = -angle
         proj_anim.angle = angle
         proj_c = (proj_anim,)
         self.entity_ID = gameworld.create_entity(proj_c)
@@ -39,7 +47,8 @@ class Attack(chaosparticle.Emitter):
     """
     
     def __init__(self, world, damage, stun, cooldown, position, amount,
-                 sprite_sheet, life, projectile_speed, acceleration,
+                 sprite_sheet, proj_anim_list, proj_anim_time_list, width, height, life,
+                 projectile_speed, acceleration,
                  spread_angle=0, effect_ID=None):
         """
         :param character_ID: this character fired the projectile
@@ -71,26 +80,30 @@ class Attack(chaosparticle.Emitter):
         self.stun = stun
         self.effect_ID = effect_ID
         self.world = world
+        self.proj_anim_list = proj_anim_list
+        self.proj_anim_time_list = proj_anim_time_list
+        self.width = width
+        self.height = height
+        
         
     def spawn_particles(self, direction=None, velocity=None, position=None):
         old_particles = self.particles[:]
         spawned = chaosparticle.Emitter.spawn_particles(self, velocity, position)
         if spawned:
             #Convert particles to projectiles
-            #copy_particles = self.particles[:]
             self.particles = list()
             for projectile in old_particles:
                 self.particles.append(projectile)
-            #first proj isn't rotated
-            if direction:
-                angle = chaosparticle.get_angle_between_vectors(direction, [1,0])
-                if direction[1] > 0:
-                    angle = 360-angle
-            else:
-                angle = 0
-            for particle in spawned:#copy_particles:
-                projectile = Projectile(particle.sprite, particle.life, particle.position, particle.velocity, particle.acceleration)
-                projectile.load_grafic(self.world, -(particle.angle-angle))
+            for particle in spawned:
+                #copy particles
+                projectile = Projectile(particle.sprite, self.proj_anim_list,
+                                        self.proj_anim_time_list, self.width,
+                                        self.height, particle.life,
+                                        particle.position, particle.velocity,
+                                        particle.acceleration)
+                #Determine angle for picture rotation
+                angle = chaosparticle.get_angle_between_vectors(particle.velocity, [1,0])
+                projectile.load_grafic(self.world, angle)
                 self.particles.append(projectile)
         return spawned
 
@@ -187,6 +200,7 @@ class Appearance(pygame.sprite.Sprite):
         self.play_animation = True
 
         self.flip = False
+        self.flip_y = False
         self.play_animation_till_end = False
         self.angle = 0
         #If there is no animation and the resolution is not set 
@@ -244,12 +258,14 @@ class Appearance(pygame.sprite.Sprite):
         if not self.angle == 0:
             #self.image = pygame.transform.rotate(self.original,
             #                                     self.angle)
-            self.image = self.rot_center(self.original, self.angle)
-            self.image = pygame.transform.flip(self.image, self.flip,
-                                               False)
+            self.image = pygame.transform.flip(self.original, self.flip,
+                                               self.flip_y)
+            self.image = self.rot_center(self.image, self.angle)
+            #self.image = pygame.transform.flip(self.image, self.flip,
+            #                                  self.flip_y)
         else:
             self.image = pygame.transform.flip(self.original, self.flip,
-                                               False)
+                                               self.flip_y)
             
     def set_animation_duration(self, animation_index, duration):
         #Compute delay between frames

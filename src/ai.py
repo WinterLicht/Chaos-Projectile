@@ -312,17 +312,24 @@ class Level1_curse(AI):
 
     def cast_curse(self, event):
         if isinstance(event, events.CollisionOccured):
+            #If player collided
             if event.collider_ID == self.world.player:
-                player_position = self.world.collider[self.world.player].center
-                spawn_attack_position = self.calculate_random_position_in_radius(player_position, 200, 300)
-                direction = [player_position[0] - spawn_attack_position[0],
-                             player_position[1] - spawn_attack_position[1]]
-                direction = calculate_octant(direction)
-                if direction[0] == 0 and direction[1] == 0:
-                    #Direction (0,0) is not valid
-                    direction = (1, 0)
-                self.attack(0, spawn_attack_position, direction)
-                self.current_action = self.idle
+                #And if collidee is a green cursed platform
+                if hasattr(event.collidee, 'tags'):
+                    tags = event.collidee.tags
+                    if tags:
+                        if "green" in tags:
+                            #Cast curse
+                            player_position = self.world.collider[self.world.player].center
+                            spawn_attack_position = self.calculate_random_position_in_radius(player_position, 200, 300)
+                            direction = [player_position[0] - spawn_attack_position[0],
+                                         player_position[1] - spawn_attack_position[1]]
+                            direction = calculate_octant(direction)
+                            if direction[0] == 0 and direction[1] == 0:
+                                #Direction (0,0) is not valid
+                                direction = (1, 0)
+                            self.attack(0, spawn_attack_position, direction)
+                            self.current_action = self.idle
 
     def calculate_random_position_in_radius(self, point, min_distance, max_distance):
         radius = random_(min_distance, max_distance)
