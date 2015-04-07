@@ -200,13 +200,14 @@ class GameWorld(object):
                 proj_image = "simple_projectile_light_circle.png"
                 proj_anim_list = [2, 4]
                 proj_anim_time_list = [20, 13]
+                attack_list = list()
                 particle_emitter = self.create_attack(position, damage1, stun1,
                                                       cooldown1, proj1, proj_image,
                                                       proj_anim_list, proj_anim_time_list,
                                                       25, 25,
                                                       proj_life1, proj_speed1, [0,0],
                                                       spread1, effect_ID)
-                attack_list = list()
+                particle_emitter.piercing = True
                 attack_list.append(particle_emitter)
                 self.create_player(position, hp, max_x_vel, max_y_vel,
                                    attack_list)

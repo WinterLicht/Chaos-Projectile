@@ -21,6 +21,7 @@ class Projectile(chaosparticle.Particle):
         self.proj_anim_time_list = proj_anim_time_list
         self.width = width
         self.height = height
+
         
     def load_grafic(self, gameworld, angle):
         proj_temp = pygame.image.load(os.path.join('data', self.sprite))
@@ -84,8 +85,9 @@ class Attack(chaosparticle.Emitter):
         self.proj_anim_time_list = proj_anim_time_list
         self.width = width
         self.height = height
-        
-        
+        self.piercing = False
+        self.pierced_objects = list()
+
     def spawn_particles(self, direction=None, velocity=None, position=None):
         old_particles = self.particles[:]
         spawned = chaosparticle.Emitter.spawn_particles(self, velocity, position)

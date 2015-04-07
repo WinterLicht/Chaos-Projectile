@@ -73,45 +73,54 @@ class CombatSystem():
                         if not collider_ID in self.world.to_remove:
                             #Check overlapping
                             if self.world.collider[collider_ID].colliderect(projectile_rect):
-                                #Enemy hits player
-                                if collider_ID == player_ID and attacks_ID in self.world.ai:
-                                    if self.world.hp[self.world.players[player_ID].hp_ID].points > 0:
-                                        players_health = self.world.hp[self.world.players[player_ID].hp_ID]
-                                        #Decrease HP 
-                                        players_health.points -= attack.damage
-                                        update_ui_ev = events.UpdatePlayersHpUI(player_ID)
-                                        self.event_manager.post(update_ui_ev)
-                                        #Send stun event
-                                        stun_ev = events.EntityStunned(player_ID, attack.stun)
-                                        self.event_manager.post(stun_ev)
-                                    else:
-                                        #No more Hp left. Player dies!
-                                        ev_die = events.EntityDies(collider_ID)
+                                # Damage calculation only if collider wasn't already pierced
+                                if not collider_ID in attack.pierced_objects:
+                                    #Enemy hits player
+                                    if collider_ID == player_ID and attacks_ID in self.world.ai:
+                                        if self.world.hp[self.world.players[player_ID].hp_ID].points > 0:
+                                            players_health = self.world.hp[self.world.players[player_ID].hp_ID]
+                                            #Decrease HP 
+                                            players_health.points -= attack.damage
+                                            update_ui_ev = events.UpdatePlayersHpUI(player_ID)
+                                            self.event_manager.post(update_ui_ev)
+                                            #Send stun event
+                                            stun_ev = events.EntityStunned(player_ID, attack.stun)
+                                            self.event_manager.post(stun_ev)
+                                        else:
+                                            #No more Hp left. Player dies!
+                                            ev_die = events.EntityDies(collider_ID)
+                                            self.event_manager.post(ev_die)
+                                        '''
+                                        projectile.life = -1
+                                        ev_die = events.EntityDies(projectile.entity_ID)
                                         self.event_manager.post(ev_die)
-                                    projectile.life = -1
-                                    ev_die = events.EntityDies(projectile.entity_ID)
-                                    self.event_manager.post(ev_die)
-                                #Player hits enemy
-                                elif collider_ID in self.world.ai and attacks_ID == player_ID:
-                                    if self.world.hp[collider_ID].points > 0:
-                                        enemys_health = self.world.hp[collider_ID]
-                                        #Decrease HP 
-                                        enemys_health.points -= attack.damage
-                                        #Send stun event
-                                        stun_ev = events.EntityStunned(collider_ID, attack.stun)
-                                        self.event_manager.post(stun_ev)
-                                    else:
-                                        ev_die = events.EntityDies(collider_ID)
+                                        '''
+                                    #Player hits enemy
+                                    elif collider_ID in self.world.ai and attacks_ID == player_ID:
+                                        if self.world.hp[collider_ID].points > 0:
+                                            enemys_health = self.world.hp[collider_ID]
+                                            #Decrease HP 
+                                            enemys_health.points -= attack.damage
+                                            #Send stun event
+                                            stun_ev = events.EntityStunned(collider_ID, attack.stun)
+                                            self.event_manager.post(stun_ev)
+                                        else:
+                                            ev_die = events.EntityDies(collider_ID)
+                                            self.event_manager.post(ev_die)
+                                if not collider_ID == attacks_ID: 
+                                    if (attack.piercing): # Remember pierced object
+                                        attack.pierced_objects.append(collider_ID)
+                                    else: # Remove projectile from the game
+                                        projectile.life = -1
+                                        ev_die = events.EntityDies(projectile.entity_ID)
                                         self.event_manager.post(ev_die)
-                                    projectile.life = -1
-                                    ev_die = events.EntityDies(projectile.entity_ID)
-                                    self.event_manager.post(ev_die)
                     #Collision between walls
                     hit_items = self.world.tree.hit(projectile_rect)
                     if hit_items:
-                        projectile.life = -1
-                        ev_die = events.EntityDies(projectile.entity_ID)
-                        self.event_manager.post(ev_die)
+                        if not attack.piercing: # Remove projectile from the game
+                            projectile.life = -1
+                            ev_die = events.EntityDies(projectile.entity_ID)
+                            self.event_manager.post(ev_die)
 
     def remove_dead_entities(self):
         for entity_ID in self.world.to_remove:

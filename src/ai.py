@@ -342,3 +342,75 @@ class Level1_curse(AI):
         vector = map(int, vector)
         return vector
 
+class Level2_curse(AI):
+    """Handles Level curse's AI.
+    
+    Spawns attack from the ground if player collides with this ground.
+
+    :Attributes:
+        - *event_manager* (:class:`events.EventManager`): event manager
+        - *world* (:class:`gameWorld.GameWorld`): game world contains entities
+        - *current_action* (function): current update function for AI
+        - *entity_ID* (int): this AI belongs to this entity
+    """
+
+    def __init__(self, world, entity_ID, event_manager):
+        """
+        :param world: game world contains entities
+        :type world: gameWorld.GameWorld
+        """
+        AI.__init__(self, world, entity_ID, event_manager)
+        #Set idle function for the AI
+        self.current_action = self.idle
+    
+    def idle(self, event):
+        """Idle, lasts ... frames long.
+        
+        No action happen here.
+
+        :param event: occured event
+        :type event: events.Event
+        """
+        if isinstance(event, events.TickEvent):
+            self.counter -= 1
+            if self.counter == 0:
+                self.counter = 60
+                self.current_action = self.cast_curse
+
+    def cast_curse(self, event):
+        if isinstance(event, events.CollisionOccured):
+            #If player collided
+            if event.collider_ID == self.world.player:
+                #And if collidee is a green cursed platform
+                if hasattr(event.collidee, 'tags'):
+                    collidee = event.collidee 
+                    tags = collidee.tags
+                    if tags:
+                        if "pink" in tags:
+                            #Cast curse
+                            spawn_attack_position = collidee.x - 32 
+                            direction = (-1, 0)
+                            print("Spawn")
+                            '''
+                            player_position = self.world.collider[self.world.player].center
+                            spawn_attack_position = self.calculate_random_position_in_radius(player_position, 200, 300)
+                            direction = [player_position[0] - spawn_attack_position[0],
+                                         player_position[1] - spawn_attack_position[1]]
+                            direction = calculate_octant(direction)
+                            if direction[0] == 0 and direction[1] == 0:
+                                #Direction (0,0) is not valid
+                                direction = (1, 0)
+                            self.attack(0, spawn_attack_position, direction)
+                            '''
+                            self.current_action = self.idle
+
+    def calculate_random_position_in_radius(self, point, min_distance, max_distance):
+        radius = random_(min_distance, max_distance)
+        vector = [1, 0]
+        angle = random_(0, 360)
+        vector = chaosparticle.get_rotated_vector(vector, angle)
+        #Vector is rotated and normalized now
+        #Scale and translate vector
+        vector = [vector[0]*radius + point[0], vector[1]*radius + point[1]]
+        vector = map(int, vector)
+        return vector
