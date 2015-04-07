@@ -4,10 +4,14 @@
     :synopsis: AI
 """
 
+import pygame
+import os
+
 from math import sqrt
 import random
 import events
 import chaosparticle
+import components
 
 def calculate_octant(vector):
     """Calculates in which octant vector lies and returns the normalized vector for this octant.
@@ -82,7 +86,6 @@ class AI():
         #Throws
         #RuntimeError: dictionary changed size during iteration
         #self.event_manager.register_listener(self)
-        self.aggresion_range = 200
 
     '''
     def notify(self, event):
@@ -194,6 +197,7 @@ class AI_1(AI):
         :type world: gameWorld.GameWorld
         """
         AI.__init__(self, world, entity_ID, event_manager)
+        self.aggresion_range = 200
         #Set idle function for the AI
         self.current_action = self.idle
 
@@ -360,57 +364,64 @@ class Level2_curse(AI):
         :type world: gameWorld.GameWorld
         """
         AI.__init__(self, world, entity_ID, event_manager)
+        self.counter = list()
+        self.time_till_attack = 30 # Delayed attack
         #Set idle function for the AI
         self.current_action = self.idle
+        self.cast_pos = list() # needed to store position of curse
+        self.sleep_reset = 60
+        self.sleep = 0 # Only if sleep cooldown is over, collision is registered
     
     def idle(self, event):
-        """Idle, lasts ... frames long.
-        
-        No action happen here.
-
+        """Idle.
         :param event: occured event
         :type event: events.Event
         """
-        if isinstance(event, events.TickEvent):
-            self.counter -= 1
-            if self.counter == 0:
-                self.counter = 60
-                self.current_action = self.cast_curse
-
-    def cast_curse(self, event):
         if isinstance(event, events.CollisionOccured):
-            #If player collided
-            if event.collider_ID == self.world.player:
-                #And if collidee is a green cursed platform
+            if self.sleep == 0 and event.collider_ID == self.world.player:
                 if hasattr(event.collidee, 'tags'):
-                    collidee = event.collidee 
-                    tags = collidee.tags
+                    tags = event.collidee.tags
                     if tags:
                         if "pink" in tags:
-                            #Cast curse
-                            spawn_attack_position = collidee.x - 32 
-                            direction = (-1, 0)
-                            print("Spawn")
-                            '''
                             player_position = self.world.collider[self.world.player].center
-                            spawn_attack_position = self.calculate_random_position_in_radius(player_position, 200, 300)
-                            direction = [player_position[0] - spawn_attack_position[0],
-                                         player_position[1] - spawn_attack_position[1]]
-                            direction = calculate_octant(direction)
-                            if direction[0] == 0 and direction[1] == 0:
-                                #Direction (0,0) is not valid
-                                direction = (1, 0)
-                            self.attack(0, spawn_attack_position, direction)
+                            #new_position = (event.collidee.center[0], event.collidee.center[1] - 32)
+                            new_position = (player_position[0], event.collidee.center[1] - 32)
+                            #self.cast_curse(new_position)                            
                             '''
-                            self.current_action = self.idle
-
-    def calculate_random_position_in_radius(self, point, min_distance, max_distance):
-        radius = random_(min_distance, max_distance)
-        vector = [1, 0]
-        angle = random_(0, 360)
-        vector = chaosparticle.get_rotated_vector(vector, angle)
-        #Vector is rotated and normalized now
-        #Scale and translate vector
-        vector = [vector[0]*radius + point[0], vector[1]*radius + point[1]]
-        vector = map(int, vector)
-        return vector
+                            # Avoid duplicate position:
+                            if len(self.cast_pos)>0:
+                                last_position = self.cast_pos[len(self.cast_pos)-1]
+                                if not (last_position[0] == new_position[0] and last_position[1] == new_position[1]):
+                                    print(new_position)
+                                    self.cast_pos.append(new_position)
+                                    self.counter.append(self.time_till_attack)
+                            else:
+                            '''
+                            self.cast_pos.append(new_position)
+                            self.counter.append(self.time_till_attack)
+                            #Create animation, so player knows, where attack is casted
+                            temp_eff = pygame.image.load(os.path.join('data', 'curse_green_effect.png'))
+                            eff_sprite = components.Appearance(temp_eff.convert_alpha(), 170, 170, [5], [self.time_till_attack])
+                            eff_sprite.play_animation_till_end = True
+                            eff_sprite.play_once = True
+                            #eff_sprite.self_destruct = True
+                            eff_sprite.rect.center = (new_position)
+                            effect_ID = self.world.create_entity((eff_sprite, ))
+                            self.sleep = self.sleep_reset
+                            
+        elif isinstance(event, events.TickEvent):
+            if self.sleep > 0:
+                self.sleep -= 1
+            to_remove = list()
+            for i in range(len(self.counter)):
+                self.counter[i] -= 1
+                if self.counter[i] == 0:
+                    to_remove.append(i)
+            for i in range(len(to_remove)):
+                self.counter.pop(to_remove[i])
+                position = self.cast_pos.pop(i)
+                self.cast_curse(position)
+                         
+    def cast_curse(self, position):
+        direction = (0, -1)
+        self.attack(0, position, direction)

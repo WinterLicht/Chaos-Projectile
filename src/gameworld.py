@@ -91,10 +91,18 @@ class GameWorld(object):
                                 if "curse" in tile_properties:
                                     if tile_properties["curse"] == "green":
                                         tags.append("green")
+                                    if tile_properties["curse"] == "pink":
+                                        tags.append("pink")
                             coll = components.Collider(x*64, y*64, 64, 64, tags)
                             walls.append(coll)
-        #Create Level curse:
+        self.create_curse()
         #---
+        #Quad Tree
+        self.tree = quadTree.QuadTree(walls)
+
+    def create_curse(self):
+        #Create Level curse
+        # GREEN
         damage = 10
         stun = 10
         cooldown = 50
@@ -114,16 +122,47 @@ class GameWorld(object):
         proj_anim_time_list = [30, 13]
         proj_width = 32
         proj_height = 32
+        proj_life = 30
+        speed = 3
         particle_emitter = components.Attack(self, damage, stun, cooldown, position,
                                              1, proj_image, proj_anim_list, proj_anim_time_list,
-                                             proj_width, proj_height, 60,
-                                             3, [0, 0], 15, effect_ID)
+                                             proj_width, proj_height, proj_life,
+                                             speed, [0, 0], 15, effect_ID)
         attack_list = list()
         attack_list.append(particle_emitter)
         self.add_component_to_entity(curse_ID, attack_list)
-        #---
-        #Quad Tree
-        self.tree = quadTree.QuadTree(walls)
+        # PINK
+        damage = 10
+        stun = 27
+        cooldown = 0
+        position = [0,0]
+        
+        '''
+        temp_eff = pygame.image.load(os.path.join('data', 'curse_green_effect.png'))
+        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 170, 170, [5], [40])
+        eff_sprite.play_animation_till_end = True
+        eff_sprite.play_once = True
+        effect_ID = self.create_entity((eff_sprite, ))
+        '''
+        curse_AI = ai.Level2_curse(self, 0, self.event_manager)
+        curse_ID = self.create_entity((curse_AI, ))
+        curse_AI.entity_ID = curse_ID
+        #Create projectile image
+        proj_image = "projectile_fly_orange.png"
+        proj_anim_list = [2, 2]
+        proj_anim_time_list = [30, 13]
+        proj_width = 32
+        proj_height = 32
+        speed = 2
+        proj_life = 10 
+        particle_emitter = components.Attack(self, damage, stun, cooldown, position,
+                                             1, proj_image, proj_anim_list, proj_anim_time_list,
+                                             proj_width, proj_height, proj_life,
+                                             speed, [0, 0], 15)#, effect_ID)
+        particle_emitter.piercing = True
+        attack_list = list()
+        attack_list.append(particle_emitter)
+        self.add_component_to_entity(curse_ID, attack_list)
 
     def create_game_object(self, x, y, tile_properties):
         if "type" in tile_properties:
@@ -152,7 +191,10 @@ class GameWorld(object):
                     proj_speed1 = int(tile_properties["att_1_projectile_speed"])
                 if "ai" in tile_properties:
                     ai_ID = tile_properties["ai"]
+                if "att_1_pierce" in tile_properties:
+                    att1_pierce = tile_properties["att_1_pierce"] == "1"
                 #Create enemy attacks
+                attack_list = list()
                 #Attack 1:
                 #Create projectile image
                 proj_image = "proj.png"
@@ -164,7 +206,7 @@ class GameWorld(object):
                                                       25, 25,
                                                       proj_life1, proj_speed1, [0,0],
                                                       spread1)
-                attack_list = list()
+                particle_emitter.piercing = att1_pierce
                 attack_list.append(particle_emitter)
                 self.create_enemy(position, hp, max_x_vel, max_y_vel,
                                   attack_list, ai_ID)
@@ -192,7 +234,10 @@ class GameWorld(object):
                     spread1 = int(tile_properties["att_1_spread_angle"])
                 if "att_1_projectile_speed" in tile_properties:
                     proj_speed1 = int(tile_properties["att_1_projectile_speed"])
+                if "att_1_pierce" in tile_properties:
+                    att1_pierce = tile_properties["att_1_pierce"] == "1"
                 #Create players attacks
+                attack_list = list()
                 #Attack 1:
                 effect_ID = self.create_attack_effect('char_attack1_effect.png',
                                                       250, 250, 8, 30)
@@ -200,14 +245,13 @@ class GameWorld(object):
                 proj_image = "simple_projectile_light_circle.png"
                 proj_anim_list = [2, 4]
                 proj_anim_time_list = [20, 13]
-                attack_list = list()
                 particle_emitter = self.create_attack(position, damage1, stun1,
                                                       cooldown1, proj1, proj_image,
                                                       proj_anim_list, proj_anim_time_list,
                                                       25, 25,
                                                       proj_life1, proj_speed1, [0,0],
                                                       spread1, effect_ID)
-                particle_emitter.piercing = True
+                particle_emitter.piercing = att1_pierce
                 attack_list.append(particle_emitter)
                 self.create_player(position, hp, max_x_vel, max_y_vel,
                                    attack_list)
@@ -460,33 +504,5 @@ class GameWorld(object):
                 if self.level.tmx_data.layers[layer_index].name == "characters":
                     if tile_properties:
                         self.create_game_object(x, y, tile_properties)
-        #Create Level curse:
-        #---
-        damage = 10
-        stun = 10
-        cooldown = 50
-        position = [0,0]
-        
-        temp_eff = pygame.image.load(os.path.join('data', 'curse_green_effect.png'))
-        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 170, 170, [5], [40])
-        eff_sprite.play_animation_till_end = True
-        eff_sprite.play_once = True
-        effect_ID = self.create_entity((eff_sprite, ))
-        curse_AI = ai.Level1_curse(self, 0, self.event_manager)
-        curse_ID = self.create_entity((curse_AI, ))
-        curse_AI.entity_ID = curse_ID 
-        #Create projectile image
-        proj_image = "projectile_fly_orange.png"
-        proj_anim_list = [2, 2]
-        proj_anim_time_list = [30, 13]
-        proj_width = 32
-        proj_height = 32
-        particle_emitter = components.Attack(self, damage, stun, cooldown, position,
-                                             1, proj_image, proj_anim_list, proj_anim_time_list,
-                                             proj_width, proj_height, 60,
-                                             3, [0, 0], 15, effect_ID)
-        attack_list = list()
-        attack_list.append(particle_emitter)
-        self.add_component_to_entity(curse_ID, attack_list)
-        ###
+        self.create_curse()
         

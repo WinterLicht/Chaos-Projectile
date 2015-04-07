@@ -94,6 +94,10 @@ class AnimationSystem(object):
                             if animation.play_once:
                                 #Animation played once
                                 animation.play_animation = False
+                                #Self destructing image?
+                                if animation.self_destruct:
+                                    ev_remove_ent = events.RemoveEntityFromTheGame(entity_ID)
+                                    self.event_manager.post(ev_remove_ent)
                                 #Death animation ended
                                 if self.death_animation_running(entity_ID):
                                     ev_remove_ent = events.RemoveEntityFromTheGame(entity_ID)

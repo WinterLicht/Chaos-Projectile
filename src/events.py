@@ -188,10 +188,11 @@ class UpdatePlayersHpUI(Event):
 
 class CollisionOccured(Event):
     """This event is sent when two objects collide.
+    Moved collider collides with collidee
     
     :Attributes:
         - *collider_ID* (int): Collider ID
-        - *tags* (list): Tags of Collidee
+        - *collidee* ( ): Collidee
     """
 
     def __init__(self, collider_ID, collidee):

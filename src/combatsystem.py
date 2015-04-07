@@ -74,7 +74,7 @@ class CombatSystem():
                             #Check overlapping
                             if self.world.collider[collider_ID].colliderect(projectile_rect):
                                 # Damage calculation only if collider wasn't already pierced
-                                if not collider_ID in attack.pierced_objects:
+                                if not collider_ID in projectile.pierced_objects:
                                     #Enemy hits player
                                     if collider_ID == player_ID and attacks_ID in self.world.ai:
                                         if self.world.hp[self.world.players[player_ID].hp_ID].points > 0:
@@ -108,8 +108,8 @@ class CombatSystem():
                                             ev_die = events.EntityDies(collider_ID)
                                             self.event_manager.post(ev_die)
                                 if not collider_ID == attacks_ID: 
-                                    if (attack.piercing): # Remember pierced object
-                                        attack.pierced_objects.append(collider_ID)
+                                    if (projectile.piercing): # Remember pierced object
+                                        projectile.pierced_objects.append(collider_ID)
                                     else: # Remove projectile from the game
                                         projectile.life = -1
                                         ev_die = events.EntityDies(projectile.entity_ID)
@@ -117,7 +117,7 @@ class CombatSystem():
                     #Collision between walls
                     hit_items = self.world.tree.hit(projectile_rect)
                     if hit_items:
-                        if not attack.piercing: # Remove projectile from the game
+                        if not projectile.piercing: # Remove projectile from the game
                             projectile.life = -1
                             ev_die = events.EntityDies(projectile.entity_ID)
                             self.event_manager.post(ev_die)

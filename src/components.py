@@ -21,6 +21,8 @@ class Projectile(chaosparticle.Particle):
         self.proj_anim_time_list = proj_anim_time_list
         self.width = width
         self.height = height
+        self.piercing = False
+        self.pierced_objects = list()
 
         
     def load_grafic(self, gameworld, angle):
@@ -86,7 +88,7 @@ class Attack(chaosparticle.Emitter):
         self.width = width
         self.height = height
         self.piercing = False
-        self.pierced_objects = list()
+        self.delay = 0
 
     def spawn_particles(self, direction=None, velocity=None, position=None):
         old_particles = self.particles[:]
@@ -103,6 +105,7 @@ class Attack(chaosparticle.Emitter):
                                         self.height, particle.life,
                                         particle.position, particle.velocity,
                                         particle.acceleration)
+                projectile.piercing = self.piercing
                 #Determine angle for picture rotation
                 angle = chaosparticle.get_angle_between_vectors(particle.velocity, [1,0])
                 projectile.load_grafic(self.world, angle)
@@ -198,6 +201,7 @@ class Appearance(pygame.sprite.Sprite):
         """
         pygame.sprite.Sprite.__init__(self)
 
+        self.self_destruct = False
         self.play_once = False
         self.play_animation = True
 
