@@ -389,9 +389,9 @@ class GameWorld(object):
         coll = components.Collider(position[0], position[1], 50, 96)
         vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
         #Create enemy's animations
-        temp = pygame.image.load(os.path.join('data', 'enemy_green_1.png')).convert_alpha()
-        anim_list = [2, 10, 4, 8, 2, 1]
-        anim_time_list = [240, 60, 44, 120, 10, 10]
+        temp = pygame.image.load(os.path.join('data', 'enemy_pink_1.png')).convert_alpha()
+        anim_list = [2, 10, 4, 8, 2, 1, 1]
+        anim_time_list = [240, 60, 44, 120, 10, 10, 10]
         anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
         anim.rect.center = coll.center
         direction = components.Direction([1, 0])
@@ -400,7 +400,7 @@ class GameWorld(object):
         enemy_ID = self.create_entity(c)
 
         if ai_ID == "green_1":
-            enemy_AI = ai.AI_1(self, enemy_ID, self.event_manager)
+            enemy_AI = ai.AI_2(self, enemy_ID, self.event_manager)
         self.add_component_to_entity(enemy_ID, enemy_AI)
         self.add_component_to_entity(enemy_ID, attack_list)
 

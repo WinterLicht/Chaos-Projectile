@@ -177,7 +177,6 @@ class AI():
         distance = sqrt(vector[0]*vector[0] + vector[1]*vector[1])
         return distance < radius
         
-        
 
 class AI_1(AI):
     """Handles simple AI.
@@ -270,6 +269,130 @@ class AI_1(AI):
                 #Direction (0,0) is not valid
                 direction = (1, 0)
             self.world.direction[self.entity_ID] = direction
+            # Flip appearance according to attack direction
+            if direction[0] < 0 and not self.world.appearance[self.entity_ID].flip:
+                self.world.appearance[self.entity_ID].flip = True
+            elif direction[0] > 0 and self.world.appearance[self.entity_ID].flip:
+                self.world.appearance[self.entity_ID].flip = False
+            #Do attack
+            self.attack(0, None, direction)
+            #Check if state should be changed
+            #Enemy doesn't sees player or player is not in range
+            if not self.sees_player(self.world.collider[self.world.player].center) or not self.point_in_radius(self.aggresion_range, players_position):
+                #Set duration of idle state
+                self.counter = 30
+                self.current_action = self.idle
+                
+class AI_2(AI):
+    """Handles simple AI.
+    
+    Enemy is searching for the player and attacks, if player is on the sight.
+
+    :Attributes:
+        - *event_manager* (:class:`events.EventManager`): event manager
+        - *world* (:class:`gameWorld.GameWorld`): game world contains entities
+        - *current_action* (function): current update function for AI
+        - *entity_ID* (int): this AI belongs to this entity
+    """
+
+    def __init__(self, world, entity_ID, event_manager):
+        """
+        :param world: game world contains entities
+        :type world: gameWorld.GameWorld
+        """
+        AI.__init__(self, world, entity_ID, event_manager)
+        self.aggresion_range = 200
+        #Set idle function for the AI
+        self.current_action = self.idle
+
+    def check_near_projectiles(self, radius):
+        player_att = self.world.attacks[self.world.player]
+        for player_proj in player_att[0].particles:
+            if (self.point_in_radius(radius, player_proj.position)):
+                self.current_action = self.idle
+                ev = events.EntityJumpRequest(self.entity_ID)
+                self.event_manager.post(ev)
+
+    def cruise(self, event):
+        """Function for simple enemy AI implements cruising logic.
+
+        Enemy is walking on the level.
+        
+        :param event: Occured event
+        :typy event: events.Event
+        """
+        #Check if walk direction should be inverted
+        players_position = self.world.collider[self.world.player].center
+        if isinstance(event, events.CollisionOccured):
+            self_collider = self.world.collider[self.entity_ID]
+            if hasattr(event.collidee, 'tags'):
+                tags = event.collidee.tags
+                if tags and event.collider_ID == self.entity_ID:
+                    if "corner" in tags:
+                        if self.walking_left() and self_collider.left < event.collidee.right:
+                            self.invert_walk_direction()
+                        elif self.walking_right() and self_collider.right > event.collidee.left:
+                            self.invert_walk_direction()
+            random_number = random_(300)
+            #Randomly go in idle state
+            if random_number == 0:
+                #Set duration of idle state####
+                self.counter = 60
+                self.current_action = self.idle
+
+        elif isinstance(event, events.TickEvent):
+            #Check if enemy sees the player and if player is in range
+            
+            if self.sees_player(players_position) and self.point_in_radius(self.aggresion_range, players_position):
+                self.current_action = self.hunt
+        if not (self.point_in_radius(200, players_position)):
+                self.check_near_projectiles(200)
+
+    def idle(self, event):
+        """Idle, lasts ... frames long.
+
+        :param event: occured event
+        :type event: events.Event
+        """
+        if isinstance(event, events.TickEvent):
+            #Do not attack
+            #self.stop_attack()
+            self.stop_movement()
+            self.counter -= 1
+            if self.counter == 0:
+                self.counter = 60
+                #Start moving / cruising in an random direction
+                self.random_switch_movement(2)
+                self.current_action = self.cruise
+            players_position = self.world.collider[self.world.player].center
+            if not (self.point_in_radius(200, players_position)):
+                self.check_near_projectiles(200)
+
+    def hunt(self, event):
+        """Attacks the player.
+
+        :param event: occured event
+        :type event: events.Event
+        """
+        if isinstance(event, events.TickEvent):
+            #Stop movement first
+            self.stop_movement()
+            #Get needed positions
+            players_position = self.world.collider[self.world.player].center
+            self_position = self.world.collider[self.entity_ID].center
+            #Change aim direction
+            direction = [players_position[0] - self_position[0],
+                         players_position[1] - self_position[1]]
+            direction = calculate_octant(direction)
+            if direction[0] == 0 and direction[1] == 0:
+                #Direction (0,0) is not valid
+                direction = (1, 0)
+            self.world.direction[self.entity_ID] = direction
+            # Flip appearance according to attack direction
+            if direction[0] < 0 and not self.world.appearance[self.entity_ID].flip:
+                self.world.appearance[self.entity_ID].flip = True
+            elif direction[0] > 0 and self.world.appearance[self.entity_ID].flip:
+                self.world.appearance[self.entity_ID].flip = False
             #Do attack
             self.attack(0, None, direction)
             #Check if state should be changed

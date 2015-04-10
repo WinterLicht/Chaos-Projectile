@@ -71,7 +71,7 @@ class StateSystem():
                     vel_y = self.world.velocity[entity_ID].max_y
                     if isinstance(event, events.EntityJumpRequest):
                         if self.world.velocity[entity_ID].y == 0:
-                            self.world.velocity[self.world.player].y = -vel_y
+                            self.world.velocity[entity_ID].y = -vel_y
             else:
                 if entity_ID in self.world.velocity:
                     #Inactive entities stop movement

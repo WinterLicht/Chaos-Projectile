@@ -57,7 +57,7 @@
     <property name="att_1_stun" value="20"/>
     <property name="max_hp" value="100"/>
     <property name="max_x_vel" value="4"/>
-    <property name="max_y_vel" value="0"/>
+    <property name="max_y_vel" value="9"/>
     <property name="type" value="enemy"/>
    </properties>
   </tile>
@@ -171,7 +171,7 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdRnYwArEoA2r4MTFSht9jsYMHSnNDaWQ2M5X8QS5gQnLDXCDupoEdIADyLysQT8Yh/5OB8jgHmn8AhnHZQak/CAGYHaBwJZRXiYn7dwyY6QrovwQ+CtzIQoQaUJxTYgcxekm1A93dIL3YwhE5T4sDsQQD8eUnuloQH5ZXWZEwLwNqfgYAyaMQsw==
+   eJzjZmBgEKMx5magLeAdonZ8wGIHIxCLMqCGHxMjBL9HUvsOSRwfZkHTB7ODB0pzQ2lkNjOJ/uBjxO4PcgETkhvmAnE3FjWU2gECIP+yAvFkHPI/GSiPc6D5B2AYlx2U+oMQgNkBCldCeZWYuIelPeR0BfRfAh8FbmQhQg0ozimxgxi9pNqB7m6QXmzhiJynxYFYgoH48hNdLYgPy6usSJiXATU/AwCyihOF
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
