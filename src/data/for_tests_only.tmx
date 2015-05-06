@@ -57,6 +57,23 @@
     <property name="att_1_stun" value="20"/>
     <property name="max_hp" value="100"/>
     <property name="max_x_vel" value="4"/>
+    <property name="max_y_vel" value="0"/>
+    <property name="type" value="enemy"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="ai" value="pink_1"/>
+    <property name="att_1_cooldown" value="60"/>
+    <property name="att_1_damage" value="20"/>
+    <property name="att_1_pierce" value="1"/>
+    <property name="att_1_projectile_amount" value="1"/>
+    <property name="att_1_projectile_lifetime" value="15"/>
+    <property name="att_1_projectile_speed" value="7"/>
+    <property name="att_1_spread_angle" value="0"/>
+    <property name="att_1_stun" value="10"/>
+    <property name="max_hp" value="100"/>
+    <property name="max_x_vel" value="4"/>
     <property name="max_y_vel" value="9"/>
     <property name="type" value="enemy"/>
    </properties>
@@ -171,7 +188,7 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdonZ8wGIHIxCLMqCGHxMjBL9HUvsOSRwfZkHTB7ODB0pzQ2lkNjOJ/uBjxO4PcgETkhvmAnE3FjWU2gECIP+yAvFkHPI/GSiPc6D5B2AYlx2U+oMQgNkBCldCeZWYuIelPeR0BfRfAh8FbmQhQg0ozimxgxi9pNqB7m6QXmzhiJynxYFYgoH48hNdLYgPy6usSJiXATU/AwCyihOF
+   eJzjZmBgEKMx5magLeAdonZ8wGIHIxCLMuAPT2Y0fUxo8kyMCMwCxO+x2MEDpbmhNDIb3XxCgI8Ruz/IBUxIbpgLxN1Y1FBqBwiA/MsKxJNxyP9koDzOgeYfgGFcdlDqD0IAZgd6OiEFI6eJdwyQtIWcroD+S+CjwI0sRKgBxTkldhCjl1Q70N0N0ostjyLnaXEglmAgPuzR1YL4sLzKioR5GVDzMwAG9hKz
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
@@ -186,7 +203,7 @@
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJxjYBg+IBWI02hsRzYQ59DYjlEw+EE6EGfQ2I5cIM6jsR30AKNhNTAAABhaBPc=
+   eJxjYBg+IBWI02hsRzYQ59DYjlEw+EEmEGfR2I58IC6gsR30AOlAnEFjO3KBOI/Gdgw1AAAr2gT/
   </data>
  </layer>
 </map>

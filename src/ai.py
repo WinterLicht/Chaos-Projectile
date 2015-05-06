@@ -333,7 +333,7 @@ class AI_2(AI):
                             self.invert_walk_direction()
                         elif self.walking_right() and self_collider.right > event.collidee.left:
                             self.invert_walk_direction()
-            random_number = random_(300)
+            random_number = random_(700)
             #Randomly go in idle state
             if random_number == 0:
                 #Set duration of idle state####
