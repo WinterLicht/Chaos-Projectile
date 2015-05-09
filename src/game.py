@@ -1,5 +1,5 @@
 """
-.. module:: game
+.. mo5dule:: game
     :platform: Unix, Windows
     :synopsis: The main game module contains CPUSpiner to control CPU-ticks and the main game loop.
 """

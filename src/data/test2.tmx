@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="200" height="200" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" name="characters" tilewidth="64" tileheight="64">
+  <image source="characters.png" width="384" height="384"/>
+  <tile id="0">
+   <properties>
+    <property name="att_1_cooldown" value="30"/>
+    <property name="att_1_damage" value="10"/>
+    <property name="att_1_pierce" value="0"/>
+    <property name="att_1_projectile_amount" value="1"/>
+    <property name="att_1_projectile_lifetime" value="60"/>
+    <property name="att_1_projectile_speed" value="12"/>
+    <property name="att_1_spread_angle" value="15"/>
+    <property name="att_1_stun" value="30"/>
+    <property name="max_hp" value="150"/>
+    <property name="max_x_vel" value="7"/>
+    <property name="max_y_vel" value="14"/>
+    <property name="type" value="player"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="ai" value="green_1"/>
+    <property name="att_1_cooldown" value="40"/>
+    <property name="att_1_damage" value="150"/>
+    <property name="att_1_pierce" value="0"/>
+    <property name="att_1_projectile_amount" value="1"/>
+    <property name="att_1_projectile_lifetime" value="60"/>
+    <property name="att_1_projectile_speed" value="4"/>
+    <property name="att_1_spread_angle" value="15"/>
+    <property name="att_1_stun" value="20"/>
+    <property name="max_hp" value="1"/>
+    <property name="max_x_vel" value="4"/>
+    <property name="max_y_vel" value="0"/>
+    <property name="type" value="enemy"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="37" name="Tileset_Neutra_l01" tilewidth="64" tileheight="64">
+  <image source="tileset_neutral_01.png" width="640" height="640"/>
+  <tile id="1">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="type" value="deadly"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="137" name="field" tilewidth="64" tileheight="64">
+  <image source="field.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="mass" value="-100"/>
+    <property name="type" value="field"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="138" name="heal_pot" tilewidth="64" tileheight="64">
+  <image source="heal_pot.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="recovery" value="50"/>
+    <property name="type" value="heal_potion"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="139" name="skill_pot" tilewidth="64" tileheight="64">
+  <image source="skill_pot.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="skill_up"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="140" name="portal" tilewidth="64" tileheight="64">
+  <image source="portal.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="portal"/>
+    <property name="x" value="2"/>
+    <property name="y" value="2"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="141" name="Barke_heck" tilewidth="64" tileheight="64">
+  <image source="barke2_448x448.png" width="448" height="448"/>
+ </tileset>
+ <tileset firstgid="190" name="Barke_buk" tilewidth="64" tileheight="64">
+  <image source="barke1_385x385.png" width="385" height="384"/>
+ </tileset>
+ <tileset firstgid="226" name="bg_Felsen_D" tilewidth="64" tileheight="64">
+  <image source="sprite_felsentiles2d_mitBG.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="290" name="bg_Felsen_E" tilewidth="64" tileheight="64">
+  <image source="sprite_felsentiles2e_mitBG.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="354" name="bg_Felsen_F" tilewidth="64" tileheight="64">
+  <image source="sprite_felsentiles2f_mitBG.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="418" name="Background_pfeile" tilewidth="64" tileheight="64">
+  <image source="bg_pfeile.png" width="192" height="192"/>
+ </tileset>
+ <tileset firstgid="427" name="tileset_green_01" tilewidth="64" tileheight="64">
+  <image source="tileset_green_01.png" width="640" height="640"/>
+  <tile id="0">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="curse" value="green"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="curse" value="green"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="527" name="tileset_pink_01" tilewidth="64" tileheight="64">
+  <image source="tileset_pink_01.png" width="640" height="640"/>
+  <tile id="1">
+   <properties>
+    <property name="curse" value="pink"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="curse" value="pink"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="curse" value="pink"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="curse" value="pink"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="curse" value="pink"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="bg" width="200" height="200">
+  <data encoding="base64" compression="zlib">
+   eJzt2TEKwkAQBdC9m6RUS02p3v8OjoggcUcQFrJuXvH6KSZs/vyplDIBAACsbB8O4djBLNCbUziHuYNZoDeXcA23DmYBAEC+h2/ke8jJ9wAsyRaQq2UL3ww81bKFPA45eRwAAFibuxYjab3P7lqMpPU+u2sxEvsMbckYkJMxIOefDAAAAIB/9upHdCTw6b0fcQNmC37pzPUjbM3jTdgVnTnUeBMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAlu792yXM
+  </data>
+ </layer>
+ <layer name="walls" width="200" height="200">
+  <data encoding="base64" compression="zlib">
+   eJzt2rFOwlAAheH7MipOREbt4OTLMDvbR5eKTZqmV4q3MYf4fckdSEAZzh+hdV9K2QcdSJKyyaeS815glLJJfZAoZZP6IFHKJvVBopRN6oNEwyYfK+f5dB7+6H3og0SXrre+l/La+jt2K56jDxIt3X8Ymui/u9iij8OK5+iDREv35o76gC/jJvtZB+Pjoz74x8ZNflT62II+uFW1TfYNfcy/j+uDW1Xb5PzvyTXmPeiDW7X1Ju9Ppyvneyfj6Va8Th8kat3k0MP8HuLbhcdL9EGilE3qg0Qpm9QHiVo2OXy2mn7PaPlfLX2QKGWT+iBRyib1QaKfNjn//LT2c9RvXqcPEqVsUh8kStmkPkjk+hXUpWxSHyRK2aQ+SOT6FdSlbFIfJErZpD5I5PoV1KVsUh8kStmkPkjk+hXUpWxSHyRK2aQ+SNS6yd3ktNAHiVo3eZicFvog0bDJpe/Sa083OS0/56XogzzDJu9Cjj5Iow+o0wcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDZJ/S5UVg=
+  </data>
+ </layer>
+ <layer name="decoration behind" width="200" height="200">
+  <data encoding="base64" compression="zlib">
+   eJzt2EtOAkEYhdHeOUsAJRE0ESERcBWCiULCYwAswK14d9AD0l00npN8s39wh5WqKgAAAAAAAAAAAAAAAAAAAKjXKz0AAOAf8gYDAGiPtxcAAAAATbrm/8nfFfeqnwbpIT2mYdk5cFOe0iiN03N6qbn/TKu0Tl+NLoPyXtMkvaVpmtXcf6eftEnbRpdBee9pnhZpmT5q7ndpnw7p2Ow06KRTOqdL6SEAdNJv6QEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0JI/azsbOQ==
+  </data>
+ </layer>
+ <layer name="decoration front" width="200" height="200">
+  <data encoding="base64" compression="zlib">
+   eJzt2clO21AYhuFcGrfQsmxZFhbONtwFUIbSMnagLXMLdKTAvfFFMiKqZBpCFtTneaRXkWVH3uTXybE7HQAAAAAAAAAAAAAAAAAAYFi9Tmei/zlbfwK3zAc0q+q56JoPCtUb+O3fd53of7dndmixauD3fd91ojIfcCfzQclu/nM1zUFlPijYv+YDSnazJ7FOUKrZEfbZg+uK9yO02Sjz0TUfFKL7gOe0lfmgAE37i2Hmxvt1SuW5FaWYS/NpIb1Mi2kpLd/xHc+tKMVKepVW0+v0Jq2l9fr8sPuI3l/vRKwxtMFG2kxbaTu9Te/S+/r8qPNhjaENPqSd9DF9Sp/Tbtqrzw+7z67MBS3wJD1Nk/XxfjpIh+koHacv6WvD9eO+Pzwmz9LzNFUfn6TTdJa+pe/pR/rZcP247w+PyYs0nWbq41/pdzpPf9JFukxXDdeP+/4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8D+5Bk5KTW4=
+  </data>
+ </layer>
+ <layer name="characters" width="200" height="200" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt3dkKgzAQBVC7QBdoP1z70Z1naaGIZZLJOTD4FLggolyMThMAAAAAAAAAAABAP17ZAQAAAAAYwinmnLAWenCLuSesBaC2JTsAAEBn9Ffwnf4KAAAA8m3toHRXjGBrB6W7AgAAPjnEHLNDQKMuMdfsEAAAAAAAAAAAAAAAAAAAAAAAAAADmrMDAAAAAAAAAAAAAABAId7TBwAAAAAAAAAAAAAAAAAAqMU+cgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAID9+Ic8AAAAAAAAAAAAAAAAAAAAAAAAANTlu4MAAAAAAAAAAAAAAAAAAIzMftv2OUdQ15IdAAAAAABgMPPqCLgeAAD25NkKgAy/3H8eMc9/BwEAaMAbrBII5A==
+  </data>
+ </layer>
+</map>
