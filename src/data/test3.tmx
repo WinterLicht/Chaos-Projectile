@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="69" height="181" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" name="characters" tilewidth="64" tileheight="64">
+  <image source="characters.png" width="384" height="384"/>
+  <tile id="0">
+   <properties>
+    <property name="att_1_cooldown" value="15"/>
+    <property name="att_1_damage" value="10"/>
+    <property name="att_1_pierce" value="0"/>
+    <property name="att_1_projectile_amount" value="1"/>
+    <property name="att_1_projectile_lifetime" value="25"/>
+    <property name="att_1_projectile_speed" value="15"/>
+    <property name="att_1_spread_angle" value="10"/>
+    <property name="att_1_stun" value="10"/>
+    <property name="max_hp" value="150"/>
+    <property name="max_x_vel" value="7"/>
+    <property name="max_y_vel" value="14"/>
+    <property name="type" value="player"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="ai" value="green_1"/>
+    <property name="att_1_cooldown" value="30"/>
+    <property name="att_1_damage" value="50"/>
+    <property name="att_1_pierce" value="0"/>
+    <property name="att_1_projectile_amount" value="1"/>
+    <property name="att_1_projectile_lifetime" value="100"/>
+    <property name="att_1_projectile_speed" value="5"/>
+    <property name="att_1_spread_angle" value="15"/>
+    <property name="att_1_stun" value="10"/>
+    <property name="max_hp" value="1"/>
+    <property name="max_x_vel" value="4"/>
+    <property name="max_y_vel" value="0"/>
+    <property name="type" value="enemy"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="ai" value="pink_1"/>
+    <property name="att_1_cooldown" value="60"/>
+    <property name="att_1_damage" value="20"/>
+    <property name="att_1_pierce" value="1"/>
+    <property name="att_1_projectile_amount" value="1"/>
+    <property name="att_1_projectile_lifetime" value="15"/>
+    <property name="att_1_projectile_speed" value="7"/>
+    <property name="att_1_spread_angle" value="0"/>
+    <property name="att_1_stun" value="10"/>
+    <property name="max_hp" value="100"/>
+    <property name="max_x_vel" value="4"/>
+    <property name="max_y_vel" value="9"/>
+    <property name="type" value="enemy"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="37" name="Tileset_Neutra_l01" tilewidth="64" tileheight="64">
+  <image source="tileset_neutral_01.png" width="640" height="640"/>
+  <tile id="1">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="type" value="deadly"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="137" name="field" tilewidth="64" tileheight="64">
+  <image source="field.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="mass" value="-100"/>
+    <property name="type" value="field"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="138" name="heal_pot" tilewidth="64" tileheight="64">
+  <image source="heal_pot.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="recovery" value="150"/>
+    <property name="type" value="heal_potion"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="139" name="skill_pot" tilewidth="64" tileheight="64">
+  <image source="skill_pot.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="skill_up"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="140" name="portal" tilewidth="64" tileheight="64">
+  <image source="portal.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="portal"/>
+    <property name="x" value="45"/>
+    <property name="y" value="8"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="141" name="Barke_heck" tilewidth="64" tileheight="64">
+  <image source="barke2_448x448.png" width="448" height="448"/>
+ </tileset>
+ <tileset firstgid="190" name="Barke_buk" tilewidth="64" tileheight="64">
+  <image source="barke1_385x385.png" width="385" height="384"/>
+ </tileset>
+ <tileset firstgid="226" name="bg_Felsen_D" tilewidth="64" tileheight="64">
+  <image source="sprite_felsentiles2d_mitBG.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="290" name="bg_Felsen_E" tilewidth="64" tileheight="64">
+  <image source="sprite_felsentiles2e_mitBG.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="354" name="bg_Felsen_F" tilewidth="64" tileheight="64">
+  <image source="sprite_felsentiles2f_mitBG.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="418" name="Background_pfeile" tilewidth="64" tileheight="64">
+  <image source="bg_pfeile.png" width="192" height="192"/>
+ </tileset>
+ <tileset firstgid="427" name="tileset_green_01" tilewidth="64" tileheight="64">
+  <image source="tileset_green_01.png" width="640" height="640"/>
+  <tile id="0">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="curse" value="green"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="curse" value="green"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="curse" value="green"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="527" name="tileset_pink_01" tilewidth="64" tileheight="64">
+  <image source="tileset_pink_01.png" width="640" height="640"/>
+  <tile id="1">
+   <properties>
+    <property name="curse" value="pink"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="curse" value="pink"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="curse" value="pink"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="curse" value="pink"/>
+    <property name="type" value="corner"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="curse" value="pink"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="627" name="Festival-LevelEnd" tilewidth="64" tileheight="64">
+  <image source="festival_testlevelEnd.png" width="384" height="320"/>
+ </tileset>
+ <layer name="bg" width="69" height="181">
+  <data encoding="base64" compression="zlib">
+   eJztnc2O3CAQhOfdkhyzOSY5JnkxP2pYrUYaLWDz09VV4C6pbrMYPpoGvNh+PHT1bcC7K5jkCia5gkmuYJIrmOQKJrmCSa5gkiuY5AomuYJJrmCSK5jkuhOTkbYGE18riM0gmASTYBJMgsmHvye/Jf8A/o2Cepj8TP6V/Bv4NwrqYfIn+W/yP+DfKIidP4JJMNmRycg8szqTq/qNzDO7MxmZZ3ZnwvBObVmByWt+fJrRRq+1fcu1GfmxZK+1fcu1Gfmx5Nm1vee1VW3JZBf3MGGsKdWZqORMJSa75AtLJnexEhOVfKXERCVfKTFRyVdKTFTcw0RlvCsxURnvFj7r3x4mFuNdJdbO+reHCbounj7rX28mnnPLaEx6M/H0aEzuzGQ0JhWZsPOwIhN2HlZkwl7jKzJhm8WEnTMUmbBzhiITds5QZKLsYLKHvfOz8nzwtHd+Vp4PnvbOzzvdN1LyCrHmbcW1R0/s3iXOe2L382/ZUojdz79lix1PJbPFbn8wCSYrMGG3NZjUfbUe8RSbxdNXaxfluqN8tXZZjYnHOnw1Jh77zdWYeOw32UwU96RsJor3XthMFO+9sJkoWomJSm5RYmJ19gohFhOrs1cIMePWKtYR7e8d28xcYK3adXrHtsc6o8bdWrXr945tj3VGjbu1vON8xjXu1vJqDzLfWMuLCTLfWIsd93dmgrS12O0JJsFEZZ/byxJ5TcV7aBZMZvp6ZK5BxFbvnkCtrxHX690TIPp6JgYQ65jePYFH37Ni7sqWsu4vC4/kIbTYfT4Sg2ixmYzEIFpsJq9uHUdosTm8unUcocXm8OrWcYSWwljoNVrINqDWNWgh24Ba17S0xaocxfMTpdj1ZHJWj9H6z/62FLtoJqVyR8fQzLM3NZdil8FkdAzNPHuDinkrJuoOJsEkmOzH5Gw+tXrnWo8UmJzNp4xzf15Mzvr7bD69mmsRZ5e8mKD2cYizS15MUHsgxNklFJPR8q08o2AyX2d0+bWc6fm9TDUmtZzp+b1MNSa1nOn5vUw1JlaeUTCZrzO6fAU+auXPOuWdI+XjI81TRzD5cMrDR5qfjrfFmCDPQ6Z56Ujz9fFjMSbe55Us6owu3/t/YhZ1Zpa/ExOv9nmcW1uNice5tdWYeJxbW43JiINJMHl3aT1/dyal9fzdmZTW83dnMlrnYLIeE6Xn1FWYKD2nrsJE6Tl1FSYlW42nnZiwnlNSZsJ6TkmZyYgtFEzm22JVTjAJJsFkrJxgsi6TlnVjSzmrtL2lLS3rxpZydmLSsm5sKWcnJjN1Kf1W6Z5Ij5B9qXRPpEdIJq17OLV3l1xd2+N9Yu/x9PWh8+4SZvz3xpMKE8VnytlMVI0Uu20rMfF6VyPjGcgr1a75nlu/PPBnExW/fVDrJ6/cqvjtA7V36ykwee2nUKim/6BrM1U=
+  </data>
+ </layer>
+ <layer name="walls" width="69" height="181">
+  <data encoding="base64" compression="zlib">
+   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
+  </data>
+ </layer>
+ <layer name="decoration behind" width="69" height="181">
+  <data encoding="base64" compression="zlib">
+   eJztnceO3DAMQI35l5wXmGN2/ih7S++9109KgBQgBUgBUk75ldDAGvGq2CJFUZSGDyAWGNuU9GzLsuyZHQbDMAzDMAzDMAzDMAzD0M8BIUbObobhHMR5iAsQFyEubfA5NUKt22Vo/xWIqxDXIK5D3NjIlF0aap1uQvtvQdyGuANxF+Ie0klO+SWh1uk+tP8BxEOIRxCPIZ7suZOn0P5nEM8hXkC8hHi15056KT9E7TrVLj9E7TrVLj9E7TrVLj8EpU47iNOR2AmUXxpKnbYQpyKxFSi/JNRxZO9OsGyPI3b/Mi3H1EHTGD+lHu4xMXcSyrcNbJNaFw1eluow3++h44DbyVp9UrfniJz8a9vUcELdbs3J4cryUK7Q5xgf03ZUNJx3E0tOKLly6qEFc+JT2gm1bzxDKJ8LCSc520sT64trnDuaMCc+5sRHU3+iAetPwpgTH3Pi01t/gp07dbH+JMySE2wb98EJJVcPxJxw5qeQ2y+EwM4ruZ/1Skrb9u3cMSc+uU44rjsteJpj45Mw5sTHnPhzv6G+Q+v9Tokxi8u8PynlpEW4nEx+e8GOE59W+hMpQmOUFtvBjTnx4Tx3evF5MISvPzm5Uog9Jz/KrAMHXD7cfMPg58SOuyTGaSG4nbg5Y++dSgX2/daSYy0tfUuKk5z+I3VOcypHA6WcuNtoaW8Ka04w+3lOi/PY2yHtvXDKfg71OS0cK6WcxNbX6GO7EjFy+5H559rAupjI6Sex2x4i8+dAOT4mOK8bazkkj6V5+zHft4nNNZZiqYy1c58SlPpJjy/WnLh/Y/s6tizHx1Q/yesn5Z5hqW3uMtcRFuo4jYqE/1aOjRHt8/e1fKyVSd3HWtk5f0ew17PWnLjtw0Qq2p3EHJQi59pZmhpzIbnjiZJIX5tHOMZYEkifLy04mZB0MgxtOBnROObkBPv98RHNY08OzInP6CR3Xr43KOPM3p1gif0eyj5T0kmLrscxbWknXLlLjzHnuVtxUhrXiUQ5msmZI8EevzWeF6TCMRcUy4ndRgvcPuZ5KfWoTcnntlQnJec2ayNVV3MSLqcVL5L1NCd1y6Ii/Ry09PkTGrdRkN53pe9zxqD8JqqbTxLt50+Ndwi0OxnR4GT+nZejyOeSvx9Zw0nNYyXlnqBW/aj9nwQYJ0vrYt2aEx+tTrDXnZ6dUMd6vTvh3q5lJznjtB6ccM959eJEKh/FSY33WsyJj3Ynu0H+e+raneTOc1DQ7GTCnPiYEx9z4mNOfMyJj6STEvPPrTsZMSc+5mQZjvny3pyMmBMfzU5q/mZZqe3tOOHLbU58Yk4kng9zjOFKOlmac1vqa3L7IS1OQnPm7v8XXppfx0ROm1Lbkpu79nsFLlqcaMKc+JgTH3PiY058zMlJtIzZNDjheJ9gnouyjLJeSTjr0IMT7nnqlp1wni9uXsoyynoxqPd8pfaFBidUzIlcueYEl9ec0Ms0J/T1uDEnJ6n1f1a0OMmZm6WWR1lGWY+K9HFoTnDlmRPcMsp6VMyJfH63rBwnUs+6pJyktIfjGOJA0knqeu66ms5vzjIw5UiMk9bK76EMTlqrbyqvId4Qt+3NyVuIdxDvIT4Qc/Tm5CPEJ4jPEF+IOXpz8hXiG8R3iB/EHL05+QnxC+I3xJ/jz7DfLe35uvN3+P+90tRnOlK/hbQ0R6M1SvMPCf34mg==
+  </data>
+ </layer>
+ <layer name="decoration front" width="69" height="181">
+  <data encoding="base64" compression="zlib">
+   eJztncmS2yAQhvVoeYUkxyTHTA6aHCc5mhdIKvu+7/u+L1V5tLRqRA1ugQzCEg38X1WXxxpZhl/d0CAkNw0AAAAAAAAAAAAAAACUx5mm+bfXW/de0avq35/pt+n/jcH332PHUB7HkEJX5tbQZGXRpPWoT8s0aTPXpHs1fUGx+viyy46VuyamL6x6TXYn1sPUZDdjTTg+8eKidfje1OMtzVRf8IH73lzfAwAAAAB/dG7rM4aqBa1JTE5YGjFjhlLJMWbmLrOkmDlFZdkhO7mhTHOUWapvnKByHSc7lqB8knzD5CiV6wjZYaHlS81ewvxAahxBkyF7CXMmqW2L1HJJJGVMzYlvHmIjZUzNSUweMqeP6GOHXjPaBjF5yJw+0ibUxJdUbYd0TVIcW/I8wZya5NpO51puX/haD6ks2Yblokm7oCZ8/Ytkluzr2kzmfrfdjpU6HokBmgzx0SRmDDgXc55Ln3FryrloF7Hj7bH+w6Y13zbHXHTsOY5tV8c0sR17ifalTTyv0tXxbMD319Dmhp6T0sctS+O7DmQbvpiLP5/19Mlt+GIumiwZd5JiXGIOp0mVl0vM4TSprp2E5HBLnzdJ8eRiypxPDeNS3/qZ9+jkcL5j8K2f1qR0PThjPlN6vLgY84Ha/GMKtfrNGKX7TWzum8t1lRBic98SNQmdv+RtSRdHpwvTJBRb+6oq0cTVt9ja11ruJ0Z/u4+pAzTZx9ShpByE+o+G+pGuP1nDNs7n20rSwYTyjIbyjS7vWMM2zq9hPqSD8tGG8tIuP13Dda21Bk1c2Oq+5Poqibg0scXTQkVKzpR5xhmLI4LQecYaNPHF9nwksA80GVJq/gamYT77MWlBBAFNhpSgiWvcG4vKWBPXuLdm+Li39rGtjRrWP4SypI9s8kkpPrukj+SiicnYPfFmjI3d9xBTZ4lxvEkT/XeMJmN1luYjHWOamHVx3fewqc6bfECaj3T4lsm1n94+V16YM8gLh7iuh4Bp6LgjU+ZrzXFoxh2ZIjvUrYUqIQ7Ndljf8+7Thuu444Y4BCBvFMvV+TyjCvxf92puV+x9DiiHJitLvVsPTVqmwSpDTVYOTcz/88+oEU1sn8lxzWPouj3FfMn3czkRul7Ndt5L02Sb91CXpk0MWH/hBpoMgSZDJM4tAgAAAABIXDuQGmgypPZ7flyY42Tosw40GSJxXVJq4CND4CMAADAf6HeGoN8BQB7XyK6T3ejf30pYFkncI7ufuhDCeJq6AABMRNKc0d/UBeipfe7VVXdo4r+9BkKeA1oLNdZd9e1lzbHAUf11B2hywKrBGlfl8Imx39hTheulAq7R1aSJ77783p1S4fdX+PhCjvfixFBLfISg46MGX+B9i5rQ50ryodhcwZaXqow18f39Txdaj21oIiWuxjTxGZfoNUKue0FduYnU34XRv1kzNj730UTvG/LdIb+XvCRtr4nP85oUi5FzZOf7Y1yg14tkl8gue3635PHOpvPVMk30+ytkV5v162Q3m/XrZGqDD/JtUuYQfH1eMX+6TXaH7G5zcJ3sAdlD9pnQNlaCJr7wvuAR2WOyJ83+dbJnZM/JXrDPhLYzOc+zvSR7Rfaa7A3ZW7J3ZO8d+9fwXLEPZB/JPpF9JvtC9pXsm2P/Gp4r9p3sB9lPsl9kv8n+NO7rZJ0mO41cTf4DN7CVtQ==
+  </data>
+ </layer>
+ <layer name="characters" width="69" height="181">
+  <data encoding="base64" compression="zlib">
+   eJzt3MkOgkAMAFBcEpdPVz/auXloQECcjfeSnrg0zLQ9kDIMAAAAADDtWToBAGjQq3QCAAAAjDqlOK941rNbivuKZ9CTvdb/FPXfB3c7quFuO5eohnOBHB6lE/ji1/z0t0h/o1XqOVLPdXFHoy3uaM732soZ5qx9fQaWaaWP5KSPAGts1U972j3STwHgo/ZvWwAAAAAAAAAAAAD0yx5hZO8F2nNIcSydRGUuKa6lkwAAAAAAAAAAACAr/7kFgG0t3bvZw57O0r0bezoA85k7kbkD8D/mTmTuAABzvQE9PQXL
+  </data>
+ </layer>
+</map>
