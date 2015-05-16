@@ -301,9 +301,12 @@ class AI_2(AI):
         :type world: gameWorld.GameWorld
         """
         AI.__init__(self, world, entity_ID, event_manager)
-        self.aggresion_range = 200
+        self.aggresion_range = 130
         #Set idle function for the AI
         self.current_action = self.idle
+        self.corner = False
+        self.invert_move = False
+        self.walk_left()
 
     def check_near_projectiles(self, radius):
         player_att = self.world.attacks[self.world.player]
@@ -321,9 +324,25 @@ class AI_2(AI):
         :param event: Occured event
         :typy event: events.Event
         """
-        #Check if walk direction should be inverted
-        players_position = self.world.collider[self.world.player].center
-        if isinstance(event, events.CollisionOccured):
+        #
+        if isinstance(event, events.TickEvent):
+            players_position = self.world.collider[self.world.player].center
+            #Check if enemy sees the player and if player is in range
+            if self.sees_player(players_position):
+                if self.point_in_radius(self.aggresion_range, players_position):
+                    self.current_action = self.hunt
+                else:
+                    players_position = self.world.collider[self.world.player].center
+                    self_position = self.world.collider[self.entity_ID].center
+                    #Change aim direction
+                    direction = players_position[0] - self_position[0]
+                    if direction < 0 and not self.corner:
+                        self.walk_left()
+                    elif direction > 0 and not self.corner:
+                        self.walk_right()
+            if not (self.point_in_radius(200, players_position)):
+                self.check_near_projectiles(200)
+        elif isinstance(event, events.CollisionOccured):
             self_collider = self.world.collider[self.entity_ID]
             if hasattr(event.collidee, 'tags'):
                 tags = event.collidee.tags
@@ -333,20 +352,32 @@ class AI_2(AI):
                             self.invert_walk_direction()
                         elif self.walking_right() and self_collider.right > event.collidee.left:
                             self.invert_walk_direction()
+                        self.corner = True
+                    else:
+                        self.corner = False
             random_number = random_(700)
             #Randomly go in idle state
             if random_number == 0:
                 #Set duration of idle state####
                 self.counter = 60
                 self.current_action = self.idle
+        #Check if walk direction should be inverted
+            '''
+            elif isinstance(event, events.EntityMovesRightRequest):
+                if event.entity_ID == self.entity_ID:
+                    print('moves right req')
+                    if self.corner:
+                            #self.invert_walk_direction()
+                            self.world.velocity[self.entity_ID].x = -self.world.velocity[self.entity_ID].x
+                            self.corner = False
+            elif isinstance(event, events.EntityMovesLeftRequest):
+                if event.entity_ID == self.entity_ID:
+                    print('moves left req')
+                    if self.corner:
+                            self.world.velocity[self.entity_ID].x = -self.world.velocity[self.entity_ID].x
+                            self.corner = False
+            '''
 
-        elif isinstance(event, events.TickEvent):
-            #Check if enemy sees the player and if player is in range
-            
-            if self.sees_player(players_position) and self.point_in_radius(self.aggresion_range, players_position):
-                self.current_action = self.hunt
-        if not (self.point_in_radius(200, players_position)):
-                self.check_near_projectiles(200)
 
     def idle(self, event):
         """Idle, lasts ... frames long.
