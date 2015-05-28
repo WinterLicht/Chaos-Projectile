@@ -109,7 +109,7 @@ class GameWorld(object):
         position = [0,0]
         
         temp_eff = pygame.image.load(os.path.join('data', 'curse_green_effect.png'))
-        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 170, 170, [5], [40])
+        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 114, 128, [8], [47])
         eff_sprite.play_animation_till_end = True
         eff_sprite.play_once = True
         effect_ID = self.create_entity((eff_sprite, ))
@@ -131,24 +131,25 @@ class GameWorld(object):
         attack_list = list()
         attack_list.append(particle_emitter)
         self.add_component_to_entity(curse_ID, attack_list)
+
         # PINK
         damage = 10
         stun = 27
         cooldown = 0
         position = [0,0]
-        
+        #Effect for this curse is set in ai.py
         '''
-        temp_eff = pygame.image.load(os.path.join('data', 'curse_green_effect.png'))
-        eff_sprite = components.Appearance(temp_eff.convert_alpha(), 170, 170, [5], [40])
-        eff_sprite.play_animation_till_end = True
-        eff_sprite.play_once = True
-        effect_ID = self.create_entity((eff_sprite, ))
+        temp_eff2 = pygame.image.load(os.path.join('data', 'curse_pink_effect.png'))
+        eff_sprite2 = components.Appearance(temp_eff2.convert_alpha(), 170, 170, [8], [40])
+        eff_sprite2.play_animation_till_end = True
+        eff_sprite2.play_once = True
+        effect_ID2 = self.create_entity((eff_sprite2, ))
         '''
-        curse_AI = ai.Level2_curse(self, 0, self.event_manager)
-        curse_ID = self.create_entity((curse_AI, ))
-        curse_AI.entity_ID = curse_ID
+        curse_AI2 = ai.Level2_curse(self, 0, self.event_manager)
+        curse_ID2 = self.create_entity((curse_AI2, ))
+        curse_AI2.entity_ID = curse_ID2
         #Create projectile image
-        proj_image = "projectile_fly_orange.png"
+        proj_image = "pink_proj.png"
         proj_anim_list = [2, 2]
         proj_anim_time_list = [30, 13]
         proj_width = 32
@@ -158,11 +159,11 @@ class GameWorld(object):
         particle_emitter = components.Attack(self, damage, stun, cooldown, position,
                                              1, proj_image, proj_anim_list, proj_anim_time_list,
                                              proj_width, proj_height, proj_life,
-                                             speed, [0, 0], 15)#, effect_ID)
+                                             speed, [0, 0], 15)#, effect_ID2)
         particle_emitter.piercing = True
         attack_list = list()
         attack_list.append(particle_emitter)
-        self.add_component_to_entity(curse_ID, attack_list)
+        self.add_component_to_entity(curse_ID2, attack_list)
 
     def create_game_object(self, x, y, tile_properties):
         if "type" in tile_properties:
@@ -197,13 +198,22 @@ class GameWorld(object):
                 attack_list = list()
                 #Attack 1:
                 #Create projectile image
-                proj_image = "proj.png"
-                proj_anim_list = [2, 2]
-                proj_anim_time_list = [50, 13]
+                if ai_ID == "green_1":
+                    proj_image = "proj.png"
+                    proj_anim_list = [2, 2]
+                    proj_anim_time_list = [50, 13]
+                    proj_width = 25
+                    proj_height = 25
+                elif ai_ID == "pink_1":
+                    proj_image = "pink_proj.png"
+                    proj_anim_list = [2, 2]
+                    proj_anim_time_list = [50, 13]
+                    proj_width = 32
+                    proj_height = 32
                 particle_emitter = self.create_attack(position, damage1, stun1,
                                                       cooldown1, proj1, proj_image,
                                                       proj_anim_list, proj_anim_time_list,
-                                                      25, 25,
+                                                      proj_width, proj_height,
                                                       proj_life1, proj_speed1, [0,0],
                                                       spread1)
                 particle_emitter.piercing = att1_pierce

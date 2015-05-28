@@ -553,8 +553,8 @@ class Level2_curse(AI):
                             self.cast_pos.append(new_position)
                             self.counter.append(self.time_till_attack)
                             #Create animation, so player knows, where attack is casted
-                            temp_eff = pygame.image.load(os.path.join('data', 'curse_green_effect.png'))
-                            eff_sprite = components.Appearance(temp_eff.convert_alpha(), 170, 170, [5], [self.time_till_attack])
+                            temp_eff = pygame.image.load(os.path.join('data', 'curse_pink_effect.png'))
+                            eff_sprite = components.Appearance(temp_eff.convert_alpha(), 170, 170, [8], [self.time_till_attack])
                             eff_sprite.play_animation_till_end = True
                             eff_sprite.play_once = True
                             #eff_sprite.self_destruct = True
