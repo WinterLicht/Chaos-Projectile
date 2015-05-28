@@ -410,7 +410,7 @@ class GameWorld(object):
             vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
             #Create enemy's animations
             temp = pygame.image.load(os.path.join('data', 'enemy_pink_1.png')).convert_alpha()
-            anim_list = [4, 3, 6, 8, 2, 4]
+            anim_list = [4, 8, 6, 8, 2, 4]
             anim_time_list = [240, 60, 44, 58, 10, 44]
             anim = components.Appearance(temp, 243, 128, anim_list, anim_time_list)
             anim.rect.center = coll.center
@@ -422,6 +422,7 @@ class GameWorld(object):
             enemy_AI = ai.AI_2(self, enemy_ID, self.event_manager)
             self.add_component_to_entity(enemy_ID, enemy_AI)
             self.add_component_to_entity(enemy_ID, attack_list)
+        self.deactivate_entity(enemy_ID)
 
     def add_component_to_entity(self, entity_ID, component):
         if isinstance(component, components.Collider):

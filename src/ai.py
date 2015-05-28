@@ -176,7 +176,6 @@ class AI():
                   point[1] - self_position[1]]
         distance = sqrt(vector[0]*vector[0] + vector[1]*vector[1])
         return distance < radius
-        
 
 class AI_1(AI):
     """Handles simple AI.
@@ -214,7 +213,7 @@ class AI_1(AI):
             if hasattr(event.collidee, 'tags'):
                 tags = event.collidee.tags
                 if tags and event.collider_ID == self.entity_ID:
-                    if "corner" in tags:
+                    if "corner" in tags or "deadly" in tags:
                         if self.walking_left() and self_collider.left < event.collidee.right:
                             self.invert_walk_direction()
                         elif self.walking_right() and self_collider.right > event.collidee.left:
@@ -347,7 +346,7 @@ class AI_2(AI):
             if hasattr(event.collidee, 'tags'):
                 tags = event.collidee.tags
                 if tags and event.collider_ID == self.entity_ID:
-                    if "corner" in tags:
+                    if "corner" in tags or "deadly" in tags:
                         if self.walking_left() and self_collider.left < event.collidee.right:
                             self.invert_walk_direction()
                         elif self.walking_right() and self_collider.right > event.collidee.left:

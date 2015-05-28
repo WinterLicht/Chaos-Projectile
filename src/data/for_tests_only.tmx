@@ -188,7 +188,7 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdonZ8wGIHIxCLMuAPT2Y0fUxo8kyMCMwCxO+x2MEDpbmhNDIb3XxCgI8Ruz/IBUxIbpgLxN1Y1FBqBwiA/MsKxJNxyP9koDzOgeYfgGFcdlDqD0IAZgd6OiEFI6eJdwyQtIWcroD+S+CjwI0sRKgBxTkldhCjl1Q70N0N0ostjyLnaXEglmAgPuzR1YL4sLzKioR5GVDzMwAG9hKz
+   eJzjZmBgEKMx5magLeAdonZ8wGIHIxCLMuAPT2Y0fUxo8kyMCMwCxO+x2MEDpbmhNDIb3XxCgI8Ruz9oCehhx08G2qcrkB308Ae6HehpBj1dYZNHT2PI6YqVgSGBjwI3shChBhTnlNhBjF5S7UB3N0gvtjyKnKfFgViCAX/4siJhdLUgPiyvIqvjZUDNzwCjvA0z
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">

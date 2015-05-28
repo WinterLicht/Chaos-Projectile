@@ -3,6 +3,7 @@
     :platform: Unix, Windows
     :synopsis: Handles states of an entity and calls it's AI.
 """
+from math import sqrt
 
 import events
 
@@ -26,6 +27,35 @@ class StateSystem():
         self.event_manager.register_listener(self)
 
         self.world = world
+        
+        self.timer = 150 #timer to check if enemy should be activated
+
+    def point_in_radius(self, radius, point1, point2):
+        """Checks if a given point is in radius to the enemy.
+        
+        :param radius: given radius
+        :type radius: int
+        :param point: given point
+        :type point: 2d list
+        :rtype: True if point is in given radius to the enemy
+        """
+        vector = [point1[0] - point2[0], 
+                  point1[1] - point2[1]]
+        distance = sqrt(vector[0]*vector[0] + vector[1]*vector[1])
+        return distance < radius
+
+    def check_to_deactivate(self, entity_ID):
+        """
+        """
+        if entity_ID in self.world.collider:
+            radius_to_player = 900
+            players_position = self.world.collider[self.world.player].center
+            entity_position = self.world.collider[entity_ID].center
+            if self.point_in_radius(radius_to_player, players_position, entity_position):
+                if entity_ID in self.world.inactive_entities:
+                    self.world.inactive_entities.remove(entity_ID)
+            else:
+                self.world.deactivate_entity(entity_ID)
 
     def notify(self, event):
         """Notify, when event occurs. 
@@ -33,11 +63,19 @@ class StateSystem():
         :param event: occured event
         :type event: events.Event
         """
+        #
+        if isinstance(event, events.TickEvent):
+            self.timer = self.timer - 1
+            if self.timer < 1:
+                for entity_ID, ai in self.world.ai.iteritems():
+                    self.check_to_deactivate(entity_ID)
+                self.timer = 150
+            
         #Update first enemy AI
         for entity_ID, ai in self.world.ai.iteritems():
             if self.world.active_entity(entity_ID): 
                 ai.current_action(event)
-                
+
         if isinstance(event, events.CollisionOccured):
             if hasattr(event.collidee, 'entity_ID'):
                 entity_ID = event.collidee.entity_ID
@@ -82,4 +120,5 @@ class StateSystem():
             if isinstance(event, events.EntityStunned):
                 self.world.deactivate_entity(entity_ID)
             if isinstance(event, events.ActivateEntity):
-                self.world.inactive_entities.remove(entity_ID)
+                if entity_ID in self.world.inactive_entities:
+                    self.world.inactive_entities.remove(entity_ID)

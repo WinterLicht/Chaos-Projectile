@@ -48,12 +48,13 @@ class CollisionSystem(object):
         collider_IDs = self.world.velocity.keys()
         #Check collision
         for collider_ID in collider_IDs:
-            self.calculate_collision_x(collider_ID)
-            self.calculate_collision_y(collider_ID)
-            self.check_collision_with_non_static_elements(collider_ID)
-            #Update image position of moved object
-            ev = events.UpdateImagePosition(collider_ID, self.world.collider[collider_ID].center)
-            self.event_manager.post(ev)
+            if not collider_ID in self.world.inactive_entities: 
+                self.calculate_collision_x(collider_ID)
+                self.calculate_collision_y(collider_ID)
+                self.check_collision_with_non_static_elements(collider_ID)
+                #Update image position of moved object
+                ev = events.UpdateImagePosition(collider_ID, self.world.collider[collider_ID].center)
+                self.event_manager.post(ev)
 
     def calculate_collision_x(self, collider_ID):
         #Move collider in x direction.
