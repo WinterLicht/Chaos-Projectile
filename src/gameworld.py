@@ -118,11 +118,11 @@ class GameWorld(object):
         curse_AI.entity_ID = curse_ID
         #Create projectile image
         proj_image = "projectile_fly_orange.png"
-        proj_anim_list = [2, 2]
-        proj_anim_time_list = [30, 13]
-        proj_width = 32
-        proj_height = 32
-        proj_life = 30
+        proj_anim_list = [4, 4]
+        proj_anim_time_list = [37, 13]
+        proj_width = 50
+        proj_height = 50
+        proj_life = 60
         speed = 3
         particle_emitter = components.Attack(self, damage, stun, cooldown, position,
                                              1, proj_image, proj_anim_list, proj_anim_time_list,
@@ -149,13 +149,13 @@ class GameWorld(object):
         curse_ID2 = self.create_entity((curse_AI2, ))
         curse_AI2.entity_ID = curse_ID2
         #Create projectile image
-        proj_image = "pink_proj.png"
-        proj_anim_list = [2, 2]
-        proj_anim_time_list = [30, 13]
-        proj_width = 32
-        proj_height = 32
-        speed = 2
-        proj_life = 10 
+        proj_image = "tentakel.png"
+        proj_anim_list = [5, 3]
+        proj_anim_time_list = [47, 10]
+        proj_width = 100
+        proj_height = 100
+        speed = 1
+        proj_life = 33 
         particle_emitter = components.Attack(self, damage, stun, cooldown, position,
                                              1, proj_image, proj_anim_list, proj_anim_time_list,
                                              proj_width, proj_height, proj_life,
@@ -199,11 +199,11 @@ class GameWorld(object):
                 #Attack 1:
                 #Create projectile image
                 if ai_ID == "green_1":
-                    proj_image = "proj.png"
+                    proj_image = "projectile_fly_green.png"
                     proj_anim_list = [2, 2]
-                    proj_anim_time_list = [50, 13]
-                    proj_width = 25
-                    proj_height = 25
+                    proj_anim_time_list = [28, 13]
+                    proj_width = 40
+                    proj_height = 40
                 elif ai_ID == "pink_1":
                     proj_image = "pink_proj.png"
                     proj_anim_list = [2, 2]

@@ -573,6 +573,7 @@ class Level2_curse(AI):
             for i in range(len(to_remove)):
                 self.counter.pop(to_remove[i])
                 position = self.cast_pos.pop(i)
+                position = (position[0], position[1] + 24)
                 self.cast_curse(position)
                          
     def cast_curse(self, position):
