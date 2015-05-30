@@ -303,8 +303,6 @@ class AI_2(AI):
         self.aggresion_range = 130
         #Set idle function for the AI
         self.current_action = self.idle
-        self.corner = False
-        self.invert_move = False
         self.walk_left()
 
     def check_near_projectiles(self, radius):
@@ -335,9 +333,9 @@ class AI_2(AI):
                     self_position = self.world.collider[self.entity_ID].center
                     #Change aim direction
                     direction = players_position[0] - self_position[0]
-                    if direction < 0 and not self.corner:
+                    if direction < 0:
                         self.walk_left()
-                    elif direction > 0 and not self.corner:
+                    elif direction > 0:
                         self.walk_right()
             if not (self.point_in_radius(200, players_position)):
                 self.check_near_projectiles(200)
@@ -351,32 +349,12 @@ class AI_2(AI):
                             self.invert_walk_direction()
                         elif self.walking_right() and self_collider.right > event.collidee.left:
                             self.invert_walk_direction()
-                        self.corner = True
-                    else:
-                        self.corner = False
             random_number = random_(700)
             #Randomly go in idle state
             if random_number == 0:
                 #Set duration of idle state####
                 self.counter = 60
                 self.current_action = self.idle
-        #Check if walk direction should be inverted
-            '''
-            elif isinstance(event, events.EntityMovesRightRequest):
-                if event.entity_ID == self.entity_ID:
-                    print('moves right req')
-                    if self.corner:
-                            #self.invert_walk_direction()
-                            self.world.velocity[self.entity_ID].x = -self.world.velocity[self.entity_ID].x
-                            self.corner = False
-            elif isinstance(event, events.EntityMovesLeftRequest):
-                if event.entity_ID == self.entity_ID:
-                    print('moves left req')
-                    if self.corner:
-                            self.world.velocity[self.entity_ID].x = -self.world.velocity[self.entity_ID].x
-                            self.corner = False
-            '''
-
 
     def idle(self, event):
         """Idle, lasts ... frames long.
@@ -431,6 +409,204 @@ class AI_2(AI):
                 #Set duration of idle state
                 self.counter = 30
                 self.current_action = self.idle
+
+class AI_Boss_2(AI):
+    """Handles simple AI.
+    
+    Enemy is searching for the player and attacks, if player is on the sight.
+
+    :Attributes:
+        - *event_manager* (:class:`events.EventManager`): event manager
+        - *world* (:class:`gameWorld.GameWorld`): game world contains entities
+        - *current_action* (function): current update function for AI
+        - *entity_ID* (int): this AI belongs to this entity
+    """
+
+    def __init__(self, world, entity_ID, event_manager):
+        """
+        :param world: game world contains entities
+        :type world: gameWorld.GameWorld
+        """
+        AI.__init__(self, world, entity_ID, event_manager)
+        #player too far away
+        self.aggresion_range = 550
+        #player in melee range
+        self.melee_range = 250
+        #player too near
+        self.too_near_range = 120
+        #Set idle function for the AI
+        self.current_action = self.idle
+        self.walk_left()
+
+    def check_near_projectiles(self, radius):
+        player_att = self.world.attacks[self.world.player]
+        for player_proj in player_att[0].particles:
+            if (self.point_in_radius(radius, player_proj.position)):
+                #self.current_action = self.idle
+                if self.walking_left():
+                    direction = (-1, 0)
+                else:
+                    direction = (1, 0)
+                self.stop_movement()
+                self.attack(0, None, direction)
+                player_proj.life = 0
+
+    def cruise(self, event):
+        """Function for simple enemy AI implements cruising logic.
+
+        Enemy is walking on the level.
+        
+        :param event: Occured event
+        :typy event: events.Event
+        """
+        #
+        if isinstance(event, events.TickEvent):
+            players_position = self.world.collider[self.world.player].center
+            #Check if enemy sees the player and if player is in range
+            if self.point_in_radius(self.aggresion_range, players_position):
+                self_position = self.world.collider[self.entity_ID].center
+                #Change aim direction
+                direction = [players_position[0] - self_position[0],
+                             players_position[1] - self_position[1]]
+                direction = calculate_octant(direction)
+                if direction[0] == 0 and direction[1] == 0:
+                    #Direction (0,0) is not valid
+                    direction = (1, 0)
+                random_number = random_(300)
+                #Randomly change cooldown... minimum is 100
+                self.world.attacks[self.entity_ID][2].cooldown = 100 + random_number
+                '''
+                # Flip appearance according to attack direction
+                if direction[0] < 0 and not self.world.appearance[self.entity_ID].flip:
+                    self.world.appearance[self.entity_ID].flip = True
+                elif direction[0] > 0 and self.world.appearance[self.entity_ID].flip:
+                    self.world.appearance[self.entity_ID].flip = False
+                '''
+                offset = 340
+                att_position = (self_position[0] + offset*direction[0], self_position[1] + offset*direction[1])
+                direction = (-direction[0], -direction[1])
+                self.attack(2, att_position, direction)
+                
+            if self.sees_player(players_position):
+                players_position = self.world.collider[self.world.player].center
+                self_position = self.world.collider[self.entity_ID].center
+                #Walk towards player
+                direction = players_position[0] - self_position[0]
+                if direction < 0:
+                    self.walk_left()
+                elif direction > 0:
+                    self.walk_right()
+                if self.point_in_radius(self.aggresion_range-150, players_position):
+                    self.current_action = self.hunt
+            if not (self.point_in_radius(200, players_position)):
+                # When player is far enough
+                # Check if he is attacking
+                self.check_near_projectiles(200)
+        elif isinstance(event, events.CollisionOccured):
+            self_collider = self.world.collider[self.entity_ID]
+            if hasattr(event.collidee, 'tags'):
+                tags = event.collidee.tags
+                if tags and event.collider_ID == self.entity_ID:
+                    if "corner" in tags or "deadly" in tags:
+                        if self.walking_left() and self_collider.left < event.collidee.right:
+                            self.invert_walk_direction()
+                        elif self.walking_right() and self_collider.right > event.collidee.left:
+                            self.invert_walk_direction()
+            random_number = random_(700)
+            #Randomly go in idle state
+            if random_number == 0:
+                #Set duration of idle state####
+                self.counter = 60
+                self.current_action = self.idle
+
+    def idle(self, event):
+        """Idle, lasts ... frames long.
+
+        :param event: occured event
+        :type event: events.Event
+        """
+        if isinstance(event, events.TickEvent):
+            #Do not attack
+            #self.stop_attack()
+            self.stop_movement()
+            self.counter -= 1
+            if self.counter == 0:
+                self.counter = 60
+                #Start moving / cruising in an random direction
+                self.random_switch_movement(2)
+                self.current_action = self.cruise
+            players_position = self.world.collider[self.world.player].center
+            if not (self.point_in_radius(200, players_position)):
+                self.check_near_projectiles(200)
+
+    def hunt(self, event):
+        """Attacks the player.
+
+        :param event: occured event
+        :type event: events.Event
+        """
+        if isinstance(event, events.TickEvent):
+            #Stop movement first
+            self.stop_movement()
+            #Get needed positions
+            players_position = self.world.collider[self.world.player].center
+            self_position = self.world.collider[self.entity_ID].center
+            if not (self.point_in_radius(200, players_position)):
+                # When player is far enough
+                # Check if he is attacking
+                self.check_near_projectiles(200)
+            #Change aim direction
+            direction = [players_position[0] - self_position[0],
+                         players_position[1] - self_position[1]]
+            direction = calculate_octant(direction)
+            if direction[0] == 0 and direction[1] == 0:
+                #Direction (0,0) is not valid
+                direction = (1, 0)
+            # Range to player:
+            melee_range = self.point_in_radius(self.melee_range, players_position)
+            too_near = self.point_in_radius(self.too_near_range, players_position)
+            if melee_range and not too_near:
+                # Melee range start attacking
+                self.world.direction[self.entity_ID] = direction
+                # Flip appearance according to attack direction
+                if direction[0] < 0 and not self.world.appearance[self.entity_ID].flip:
+                    self.world.appearance[self.entity_ID].flip = True
+                elif direction[0] > 0 and self.world.appearance[self.entity_ID].flip:
+                    self.world.appearance[self.entity_ID].flip = False
+                #Do attack
+                self.attack(1, None, direction)
+            else:
+                if too_near:
+                    #small posibillity that enemy attacks normally if player is too near
+                    random_number = random_(124)
+                    if random_number == 0:
+                        self.world.direction[self.entity_ID] = direction
+                        # Flip appearance according to attack direction
+                        if direction[0] < 0 and not self.world.appearance[self.entity_ID].flip:
+                            self.world.appearance[self.entity_ID].flip = True
+                        elif direction[0] > 0 and self.world.appearance[self.entity_ID].flip:
+                            self.world.appearance[self.entity_ID].flip = False
+                        #Do attack
+                        self.attack(1, None, direction)   
+                random_number = random_(300)
+                #Randomly change cooldown... minimum is 100
+                self.world.attacks[self.entity_ID][2].cooldown = 100 + random_number
+                # Flip appearance according to attack direction
+                if direction[0] < 0 and not self.world.appearance[self.entity_ID].flip:
+                    self.world.appearance[self.entity_ID].flip = True
+                elif direction[0] > 0 and self.world.appearance[self.entity_ID].flip:
+                    self.world.appearance[self.entity_ID].flip = False
+                #
+                offset = 340
+                att_position = (self_position[0] + offset*direction[0], self_position[1] + offset*direction[1])
+                direction = (-direction[0], -direction[1])
+                self.attack(2, att_position, direction)
+            #Check if state should be changed
+            #Enemy doesn't sees player or player is not in range
+            if not self.sees_player(self.world.collider[self.world.player].center) or not self.point_in_radius(self.aggresion_range, players_position):
+                #Set duration of idle state
+                self.counter = 30
+                self.current_action = self.cruise
 
 class Level1_curse(AI):
     """Handles Level curse's AI.

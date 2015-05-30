@@ -176,6 +176,9 @@ class GameWorld(object):
                 if "max_y_vel" in tile_properties:
                     max_y_vel = int(tile_properties["max_y_vel"])
                 #Attack related:
+                #Create enemy attacks
+                attack_list = list()
+                #Attack 1:
                 if "att_1_damage" in tile_properties:
                     damage1 = int(tile_properties["att_1_damage"])
                 if "att_1_stun" in tile_properties:
@@ -194,9 +197,6 @@ class GameWorld(object):
                     ai_ID = tile_properties["ai"]
                 if "att_1_pierce" in tile_properties:
                     att1_pierce = tile_properties["att_1_pierce"] == "1"
-                #Create enemy attacks
-                attack_list = list()
-                #Attack 1:
                 #Create projectile image
                 if ai_ID == "green_1":
                     proj_image = "projectile_fly_green.png"
@@ -210,14 +210,89 @@ class GameWorld(object):
                     proj_anim_time_list = [50, 13]
                     proj_width = 32
                     proj_height = 32
-                particle_emitter = self.create_attack(position, damage1, stun1,
+                elif ai_ID == "pink_boss":
+                    proj_image = "pink_proj.png"
+                    proj_anim_list = [2, 2]
+                    proj_anim_time_list = [50, 13]
+                    proj_width = 32
+                    proj_height = 32
+                particle_emitter1 = self.create_attack(position, damage1, stun1,
                                                       cooldown1, proj1, proj_image,
                                                       proj_anim_list, proj_anim_time_list,
                                                       proj_width, proj_height,
                                                       proj_life1, proj_speed1, [0,0],
                                                       spread1)
-                particle_emitter.piercing = att1_pierce
-                attack_list.append(particle_emitter)
+                particle_emitter1.piercing = att1_pierce
+                attack_list.append(particle_emitter1)
+                #Attack 2
+                damage2 = None
+                if "att_2_damage" in tile_properties:
+                    damage2 = int(tile_properties["att_2_damage"])
+                if "att_2_stun" in tile_properties:
+                    stun2 = int(tile_properties["att_2_stun"])
+                if "att_2_cooldown" in tile_properties:
+                    cooldown2 = int(tile_properties["att_2_cooldown"])
+                if "att_2_projectile_amount" in tile_properties:
+                    proj2 = int(tile_properties["att_2_projectile_amount"])
+                if "att_2_projectile_lifetime" in tile_properties:
+                    proj_life2 = int(tile_properties["att_2_projectile_lifetime"])
+                if "att_2_spread_angle" in tile_properties:
+                    spread2 = int(tile_properties["att_2_spread_angle"])
+                if "att_2_projectile_speed" in tile_properties:
+                    proj_speed2 = int(tile_properties["att_2_projectile_speed"])
+                if "att_2_pierce" in tile_properties:
+                    att2_pierce = tile_properties["att_2_pierce"] == "1"
+                #Create projectile image
+                if ai_ID == "pink_boss":
+                    proj_image = "pink_proj.png"
+                    proj_anim_list = [2, 2]
+                    proj_anim_time_list = [50, 13]
+                    proj_width = 32
+                    proj_height = 32
+                if damage2: #Attack exists
+                    particle_emitter2 = self.create_attack(position, damage2, stun2,
+                                                          cooldown2, proj2, proj_image,
+                                                          proj_anim_list, proj_anim_time_list,
+                                                          proj_width, proj_height,
+                                                          proj_life2, proj_speed2, [0,0],
+                                                          spread2)
+                    particle_emitter2.piercing = att2_pierce
+                    attack_list.append(particle_emitter2)
+                #Attack 3
+                damage3 = None
+                if "att_3_damage" in tile_properties:
+                    damage3 = int(tile_properties["att_3_damage"])
+                if "att_3_stun" in tile_properties:
+                    stun3 = int(tile_properties["att_3_stun"])
+                if "att_3_cooldown" in tile_properties:
+                    cooldown3 = int(tile_properties["att_3_cooldown"])
+                if "att_3_projectile_amount" in tile_properties:
+                    proj3 = int(tile_properties["att_3_projectile_amount"])
+                if "att_3_projectile_lifetime" in tile_properties:
+                    proj_life3 = int(tile_properties["att_3_projectile_lifetime"])
+                if "att_3_spread_angle" in tile_properties:
+                    spread3 = int(tile_properties["att_3_spread_angle"])
+                if "att_3_projectile_speed" in tile_properties:
+                    proj_speed3 = int(tile_properties["att_3_projectile_speed"])
+                if "att_3_pierce" in tile_properties:
+                    att3_pierce = tile_properties["att_3_pierce"] == "1"
+                #Create projectile image
+                if ai_ID == "pink_boss":
+                    proj_image = "pink_proj.png"
+                    proj_anim_list = [2, 2]
+                    proj_anim_time_list = [50, 13]
+                    proj_width = 32
+                    proj_height = 32
+                if damage3: #Attack exists
+                    particle_emitter3 = self.create_attack(position, damage3, stun3,
+                                                          cooldown3, proj3, proj_image,
+                                                          proj_anim_list, proj_anim_time_list,
+                                                          proj_width, proj_height,
+                                                          proj_life3, proj_speed3, [0,0],
+                                                          spread3)
+                    particle_emitter3.piercing = att3_pierce
+                    attack_list.append(particle_emitter3)
+                
                 self.create_enemy(position, hp, max_x_vel, max_y_vel,
                                   attack_list, ai_ID)
 
@@ -430,6 +505,24 @@ class GameWorld(object):
             enemy_ID = self.create_entity(c)
             
             enemy_AI = ai.AI_2(self, enemy_ID, self.event_manager)
+            self.add_component_to_entity(enemy_ID, enemy_AI)
+            self.add_component_to_entity(enemy_ID, attack_list)
+        elif ai_ID == "pink_boss":
+            #Enemy's hitbox, it is 50 pixel width and 96 pixel height
+            coll = components.Collider(position[0], position[1], 50, 96)
+            vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
+            #Create enemy's animations
+            temp = pygame.image.load(os.path.join('data', 'enemy_pink_boss.png')).convert_alpha()
+            anim_list = [4, 8, 6, 8, 2, 4, 6, 6]
+            anim_time_list = [240, 60, 44, 58, 10, 44, 44, 44]
+            anim = components.Appearance(temp, 243, 128, anim_list, anim_time_list)
+            anim.rect.center = coll.center
+            direction = components.Direction([1, 0])
+            hp = components.Health(max_hp)
+            c = (coll, direction, vel, anim, hp)
+            enemy_ID = self.create_entity(c)
+            
+            enemy_AI = ai.AI_Boss_2(self, enemy_ID, self.event_manager)
             self.add_component_to_entity(enemy_ID, enemy_AI)
             self.add_component_to_entity(enemy_ID, attack_list)
         self.deactivate_entity(enemy_ID)

@@ -42,7 +42,7 @@ class AnimationSystem(object):
             if entity_ID in self.world.appearance:
                 if not self.world.appearance[entity_ID].play_animation_till_end and not self.stun_animation_running(entity_ID):
                     if isinstance(event, events.EntityAttacks):
-                        self.play_attack_animation(entity_ID)
+                        self.play_attack_animation(entity_ID, event.attack_Nr)
                     if isinstance(event, events.EntityJump):
                         if not self.jump_animation_running(entity_ID):
                             self.play_jump_animation(entity_ID)
@@ -181,13 +181,20 @@ class AnimationSystem(object):
             self.world.appearance[entity_ID].play_once = False
             self.world.appearance[entity_ID].play_animation = True
     
-    def play_attack_animation(self, entity_ID):
-        #Attack animation is 2
-        if len(self.world.appearance[entity_ID].frames) > 2:
+    def play_attack_animation(self, entity_ID, attack_Nr):
+        #First Attack animation is 2
+        if len(self.world.appearance[entity_ID].frames) > 2 and attack_Nr == 0:
             self.world.appearance[entity_ID].play_animation = True
             self.world.appearance[entity_ID].play_animation_till_end = False
             self.world.appearance[entity_ID].play_animation_till_end = True
             self.world.appearance[entity_ID].current_animation = 2
+            self.world.appearance[entity_ID].current_frame_x = 0
+        #For other attack animations
+        elif len(self.world.appearance[entity_ID].frames) > (5+attack_Nr) and attack_Nr > 0:
+            self.world.appearance[entity_ID].play_animation = True
+            self.world.appearance[entity_ID].play_animation_till_end = False
+            self.world.appearance[entity_ID].play_animation_till_end = True
+            self.world.appearance[entity_ID].current_animation = 5+attack_Nr
             self.world.appearance[entity_ID].current_frame_x = 0
         
     def death_animation_running(self, entity_ID):

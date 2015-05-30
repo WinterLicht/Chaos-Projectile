@@ -78,6 +78,39 @@
     <property name="type" value="enemy"/>
    </properties>
   </tile>
+  <tile id="16">
+   <properties>
+    <property name="ai" value="pink_boss"/>
+    <property name="att_1_cooldown" value="0"/>
+    <property name="att_1_damage" value="10"/>
+    <property name="att_1_pierce" value="1"/>
+    <property name="att_1_projectile_amount" value="1"/>
+    <property name="att_1_projectile_lifetime" value="10"/>
+    <property name="att_1_projectile_speed" value="3"/>
+    <property name="att_1_spread_angle" value="0"/>
+    <property name="att_1_stun" value="10"/>
+    <property name="att_2_cooldown" value="50"/>
+    <property name="att_2_damage" value="20"/>
+    <property name="att_2_pierce" value="1"/>
+    <property name="att_2_projectile_amount" value="1"/>
+    <property name="att_2_projectile_lifetime" value="25"/>
+    <property name="att_2_projectile_speed" value="7"/>
+    <property name="att_2_spread_angle" value="0"/>
+    <property name="att_2_stun" value="17"/>
+    <property name="att_3_cooldown" value="90"/>
+    <property name="att_3_damage" value="2"/>
+    <property name="att_3_pierce" value="1"/>
+    <property name="att_3_projectile_amount" value="7"/>
+    <property name="att_3_projectile_lifetime" value="15"/>
+    <property name="att_3_projectile_speed" value="6"/>
+    <property name="att_3_spread_angle" value="30"/>
+    <property name="att_3_stun" value="10"/>
+    <property name="max_hp" value="100"/>
+    <property name="max_x_vel" value="5"/>
+    <property name="max_y_vel" value="0"/>
+    <property name="type" value="enemy"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="137" name="tileset_green_01" tilewidth="64" tileheight="64">
   <image source="tileset_green_01.png" width="640" height="640"/>
@@ -188,7 +221,7 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdonZ8wGIHIxCLMuAPT2Y0fUxo8kyMCMwCxO+x2MEDpbmhNDIb3XxCgI8Ruz9oCehhx08G2qcrkB308Ae6HehpBj1ddQHxPDyYCS1dsTIwJPBR4EYWItSA4pwSO4jRS6od6O4G6cWWR5HztDgQSzDgz+OsSBhdLYgPy6vI6ngZUPMzAOmlEXM=
+   eJzVk70OgCAMhA+UCXXz5/F8/0VXNyHRWGtViDB4yQWJ1A8OawF0mW2RV/VPGbPAUM4tnvMsWJ1m77U6XDpPAqPaRruN9Jl//02Nks+RUzEMmk/M2RakvfPyhpEyq+aBkaqfB1yzNMAosUMlZcPl7/wLI6Q2lsH37Wul/4z2dI8jwzsbYr7Wz/depetqnPt5BTacDUg=
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
@@ -203,7 +236,7 @@
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJxjYBg+IBWI02hsRzYQ59DYjlEw+EEmEGfR2I58IC6gsR30AOlAnEFjO3KBOI/Gdgw1AAAr2gT/
+   eJxjYBg+IBWI08jQlwnEWUSqzQbiHDLsyAfiAjL0jYLBCUqBuIzGdlQDcQ2N7RgKIB2IM2hsRy4Q59HYDnoDABJ+BuE=
   </data>
  </layer>
 </map>
