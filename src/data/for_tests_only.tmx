@@ -100,10 +100,10 @@
     <property name="att_3_cooldown" value="90"/>
     <property name="att_3_damage" value="2"/>
     <property name="att_3_pierce" value="1"/>
-    <property name="att_3_projectile_amount" value="7"/>
+    <property name="att_3_projectile_amount" value="8"/>
     <property name="att_3_projectile_lifetime" value="15"/>
     <property name="att_3_projectile_speed" value="6"/>
-    <property name="att_3_spread_angle" value="30"/>
+    <property name="att_3_spread_angle" value="45"/>
     <property name="att_3_stun" value="10"/>
     <property name="max_hp" value="100"/>
     <property name="max_x_vel" value="5"/>
@@ -221,7 +221,7 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzVk70OgCAMhA+UCXXz5/F8/0VXNyHRWGtViDB4yQWJ1A8OawF0mW2RV/VPGbPAUM4tnvMsWJ1m77U6XDpPAqPaRruN9Jl//02Nks+RUzEMmk/M2RakvfPyhpEyq+aBkaqfB1yzNMAosUMlZcPl7/wLI6Q2lsH37Wul/4z2dI8jwzsbYr7Wz/depetqnPt5BTacDUg=
+   eJzVk0sOgCAMRAfEFcrOz/E8mVfUrTshwYhYCERY2GRSSGgeHagEMFaWRN3of8rYCQbTGhD3cyXEGS2htRGMzmZps7tuMvtQjO6jZuQwOG7vcno7UPbNRYBR0isVYZSa5xlvL1tgodipQXnjh3nzL4yU2lyGf29TS/0zd6Yn3B6G1Dryz5r9NavuuR7PeT4B9cYQIA==
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
@@ -236,7 +236,7 @@
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJxjYBg+IBWI08jQlwnEWUSqzQbiHDLsyAfiAjL0jYLBCUqBuIzGdlQDcQ2N7RgKIB2IM2hsRy4Q59HYDnoDABJ+BuE=
+   eJxjYBg+IBWI02hsRzYQ59DYjlEw+EEpEJfR2I5qIK6hsR1DAaQDcQaN7cgF4jwa20FvAAA2WgUv
   </data>
  </layer>
 </map>

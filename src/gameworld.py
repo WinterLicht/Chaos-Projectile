@@ -107,12 +107,14 @@ class GameWorld(object):
         stun = 10
         cooldown = 50
         position = [0,0]
-        
+        '''
         temp_eff = pygame.image.load(os.path.join('data', 'curse_green_effect.png'))
         eff_sprite = components.Appearance(temp_eff.convert_alpha(), 114, 128, [8], [47])
         eff_sprite.play_animation_till_end = True
         eff_sprite.play_once = True
         effect_ID = self.create_entity((eff_sprite, ))
+        '''
+        effect_ID = self.create_attack_effect('curse_green_effect.png', 114, 128, 8, 47)
         curse_AI = ai.Level1_curse(self, 0, self.event_manager)
         curse_ID = self.create_entity((curse_AI, ))
         curse_AI.entity_ID = curse_ID
@@ -137,29 +139,23 @@ class GameWorld(object):
         stun = 27
         cooldown = 0
         position = [0,0]
-        #Effect for this curse is set in ai.py
-        '''
-        temp_eff2 = pygame.image.load(os.path.join('data', 'curse_pink_effect.png'))
-        eff_sprite2 = components.Appearance(temp_eff2.convert_alpha(), 170, 170, [8], [40])
-        eff_sprite2.play_animation_till_end = True
-        eff_sprite2.play_once = True
-        effect_ID2 = self.create_entity((eff_sprite2, ))
-        '''
+        # Other effect for this curse is set in ai.py
+        effect_ID2 = self.create_attack_effect('tentakel.png', 60, 100, 9, 60)
         curse_AI2 = ai.Level2_curse(self, 0, self.event_manager)
         curse_ID2 = self.create_entity((curse_AI2, ))
         curse_AI2.entity_ID = curse_ID2
         #Create projectile image
-        proj_image = "tentakel.png"
-        proj_anim_list = [5, 3]
+        proj_image = "pink_proj.png"
+        proj_anim_list = [2, 2]
         proj_anim_time_list = [47, 10]
-        proj_width = 100
-        proj_height = 100
-        speed = 1
+        proj_width = 32
+        proj_height = 32
+        speed = 2
         proj_life = 33 
         particle_emitter = components.Attack(self, damage, stun, cooldown, position,
                                              1, proj_image, proj_anim_list, proj_anim_time_list,
                                              proj_width, proj_height, proj_life,
-                                             speed, [0, 0], 15)#, effect_ID2)
+                                             speed, [0, 0], 15, effect_ID2)
         particle_emitter.piercing = True
         attack_list = list()
         attack_list.append(particle_emitter)
@@ -277,19 +273,22 @@ class GameWorld(object):
                 if "att_3_pierce" in tile_properties:
                     att3_pierce = tile_properties["att_3_pierce"] == "1"
                 #Create projectile image
+                effect_ID = None
                 if ai_ID == "pink_boss":
                     proj_image = "pink_proj.png"
                     proj_anim_list = [2, 2]
                     proj_anim_time_list = [50, 13]
                     proj_width = 32
                     proj_height = 32
+                    effect_ID = self.create_attack_effect('tentakel2.png',
+                                                      200, 200, 8, 49)
                 if damage3: #Attack exists
                     particle_emitter3 = self.create_attack(position, damage3, stun3,
                                                           cooldown3, proj3, proj_image,
                                                           proj_anim_list, proj_anim_time_list,
                                                           proj_width, proj_height,
                                                           proj_life3, proj_speed3, [0,0],
-                                                          spread3)
+                                                          spread3, effect_ID)
                     particle_emitter3.piercing = att3_pierce
                     attack_list.append(particle_emitter3)
                 
