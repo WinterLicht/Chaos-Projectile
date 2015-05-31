@@ -281,7 +281,7 @@ class GameWorld(object):
                     proj_width = 32
                     proj_height = 32
                     effect_ID = self.create_attack_effect('tentakel2.png',
-                                                      200, 200, 8, 49)
+                                                      200, 200, 8, 52)
                 if damage3: #Attack exists
                     particle_emitter3 = self.create_attack(position, damage3, stun3,
                                                           cooldown3, proj3, proj_image,
@@ -343,10 +343,16 @@ class GameWorld(object):
             elif tile_properties["type"] == "heal_potion":
                 #Add fields
                 recovery = int(tile_properties["recovery"])
+                size = tile_properties["size"]
                 tags = list()
                 tags.append("heal_potion")
                 collider = components.Collider(x*64, y*64, 64, 64, tags)
-                temp = pygame.image.load(os.path.join('data', 'heal_pot.png'))
+                image_name = 'heal_potion_s.png'
+                if size == 'l':
+                    image_name = 'heal_potion_l.png'
+                elif size == 'm':
+                    image_name = 'heal_potion_m.png'
+                temp = pygame.image.load(os.path.join('data', image_name))
                 heal_sprite = components.Appearance(temp.convert_alpha())
                 heal_sprite.rect.center = collider.center
                 heal_pot = collectible.HealPotion(self, self.event_manager, recovery)
@@ -508,13 +514,13 @@ class GameWorld(object):
             self.add_component_to_entity(enemy_ID, attack_list)
         elif ai_ID == "pink_boss":
             #Enemy's hitbox, it is 50 pixel width and 96 pixel height
-            coll = components.Collider(position[0], position[1], 50, 96)
+            coll = components.Collider(position[0], position[1], 86, 170)
             vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
             #Create enemy's animations
             temp = pygame.image.load(os.path.join('data', 'enemy_pink_boss.png')).convert_alpha()
-            anim_list = [4, 8, 6, 8, 2, 4, 6, 6]
+            anim_list = [4, 8, 5, 8, 2, 4, 5, 5]
             anim_time_list = [240, 60, 44, 58, 10, 44, 44, 44]
-            anim = components.Appearance(temp, 243, 128, anim_list, anim_time_list)
+            anim = components.Appearance(temp, 250, 200, anim_list, anim_time_list)
             anim.rect.center = coll.center
             direction = components.Direction([1, 0])
             hp = components.Health(max_hp)

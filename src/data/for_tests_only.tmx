@@ -214,14 +214,38 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="337" name="collectibles" tilewidth="64" tileheight="64">
+  <image source="collectibles.png" width="256" height="256"/>
+  <tile id="0">
+   <properties>
+    <property name="recovery" value="10"/>
+    <property name="size" value="s"/>
+    <property name="type" value="heal_potion"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="recovery" value="45"/>
+    <property name="size" value="m"/>
+    <property name="type" value="heal_potion"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="recovery" value="75"/>
+    <property name="size" value="l"/>
+    <property name="type" value="heal_potion"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="bg" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxTZGBgUBzFo5hOWBOItYBYm4Z2GAOxCRCb0tD9ClBsTyP3yxMwX5PGYQjCtjTy3yimDwYAfKwxUg==
+   eJxTZGBgUBzFIw7zMlIfj9oxuO0gFdsCsT0Od8LYlNoximmHAQ9pKI4=
   </data>
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzVk0sOgCAMRAfEFcrOz/E8mVfUrTshwYhYCERY2GRSSGgeHagEMFaWRN3of8rYCQbTGhD3cyXEGS2htRGMzmZps7tuMvtQjO6jZuQwOG7vcno7UPbNRYBR0isVYZSa5xlvL1tgodipQXnjh3nzL4yU2lyGf29TS/0zd6Yn3B6G1Dryz5r9NavuuR7PeT4B9cYQIA==
+   eJzjZmBgEKMx5magLeAdonZ8wGIHIxCLMuAPz3lYMBMjdswCxO+x2PEDiN8C8XcojcxGVk8M4GPE7g9aAlLseMeACA9S/PaTgbpxjh7fMDuoGVa/8NiBnIZwpRdiMAuWsGRlYEjgo8DdLESoAcU5JXYQo5dUO9DdDdILCl9mNHHkPC0OxBIM+PM4KxJGVwvig9IlI5o6XiRxEAYAp+Yasw==
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
@@ -236,7 +260,7 @@
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJxjYBg+IBWI02hsRzYQ59DYjlEw+EEpEJfR2I5qIK6hsR1DAaQDcQaN7cgF4jwa20FvAAA2WgUv
+   eJxjYBh4EMiIYAdB2cGM2NXiA6lAnEYVF+EG2UCcQ2M7RgFloBSIy2hsRzUQ19DYjkYgbqKxHUMBpANxBo3tyAXiPBrbQW8AAF/zBys=
   </data>
  </layer>
 </map>
