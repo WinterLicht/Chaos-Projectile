@@ -557,7 +557,7 @@ class AI_Boss_2(AI):
                 self.check_near_projectiles(200)
             #Change aim direction
             direction = [players_position[0] - self_position[0],
-                         players_position[1] - self_position[1]]
+                         players_position[1] - (self_position[1]+32)]
             direction = calculate_octant(direction)
             if direction[0] == 0 and direction[1] == 0:
                 #Direction (0,0) is not valid

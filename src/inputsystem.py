@@ -26,6 +26,13 @@ class InputSystem(object):
         self.world = world
         self.event_manager = event_manager
         self.event_manager.register_listener(self)
+        
+        # Keys UP, DOWN, LEFT, RIGHT control aim and attacks direction. This is for custom controller with makey makey board.
+        # To store state of arrow keys
+        self.key_up = False
+        self.key_down = False
+        self.key_left = False
+        self.key_right = False
 
     def notify(self, event):
         """Notify, when event occurs. 
@@ -33,6 +40,8 @@ class InputSystem(object):
         :param event: occured event
         :type event: events.Event
         """
+        if isinstance(event, events.TickEvent):
+            self.handle_arrow_keys()
         if isinstance(event, events.KeyPressed):
             self.handle_key_pressed(event.key)
         if isinstance(event, events.KeyReleased):
@@ -100,6 +109,40 @@ class InputSystem(object):
         #Determine rotation for the orb according in which octant axis is
         self.move_orb(x_axis, y_axis)
 
+    def handle_arrow_keys(self):
+        """Helper Function for aiming with arrow keys"""
+        x_axis = 0
+        y_axis = 0
+        '''
+        if self.key_up and not self.key_down and not self.key_right and not self.key_left:
+            #aim up
+            y_axis = -1
+        elif not self.key_up and self.key_down and not self.key_right and not self.key_left:
+            #aim down
+            y_axis = 1
+        elif not self.key_up and not self.key_down and not self.key_right and self.key_left:
+            #aim left
+            x_axis = -1
+        elif not self.key_up and not self.key_down and self.key_right and not self.key_left:
+            #aim right
+            x_axis = 1
+        elif not self.key_up and not self.key_down and self.key_right and not self.key_left:
+            #aim right
+            x_axis = 1
+        '''
+        if self.key_down:
+            y_axis = 1
+        if self.key_up:
+            y_axis = -1
+        if self.key_left:
+            x_axis = -1
+        if self.key_right:
+            x_axis = 1
+        #Determine rotation for the orb according which keys are pressed   
+        self.move_orb(x_axis, y_axis)
+        if not (x_axis == 0 and y_axis == 0):
+           self.handle_attack_request()
+
     def handle_key_pressed(self, key):
         """Keys A, D and W controll players movement.
 
@@ -119,27 +162,14 @@ class InputSystem(object):
             ev = events.EntityJumpRequest(self.world.player)
             self.event_manager.post(ev)
 
-        """Keys UP, DOWN, LEFT, RIGHT controll aim and attacks direction. This is for custom controller with makey makey board.
-        :param key: key pressed
-        :type key: pygame constant
-        """
-        #only 4 directions so far. also the character should attack simultaniously if one of the arrow keys is pressed.
-        x_axis = 0
-        y_axis = 0
-        if key == pygame.K_UP:
-            #aim up
-            y_axis = -1
-        elif key == pygame.K_DOWN:
-            #aim down
-            y_axis = 1
-        if key == pygame.K_LEFT:
-            #aim left
-            x_axis = -1
-        elif key == pygame.K_RIGHT:
-            #aim right
-            x_axis = 1
-        #Determine rotation for the orb according which keys are pressed   
-        self.move_orb(x_axis, y_axis)
+        elif key == pygame.K_UP and not self.key_down:
+            self.key_up = True
+        elif key == pygame.K_DOWN and not self.key_up:
+            self.key_down = True
+        elif key == pygame.K_LEFT and not self.key_right:
+            self.key_left = True
+        elif key == pygame.K_RIGHT and not self.key_left:
+            self.key_right = True
 
     def handle_key_released(self, key):
         """Player stops movement, when key is released.
@@ -150,13 +180,17 @@ class InputSystem(object):
         if key == pygame.K_a:
             ev = events.EntityStopMovingLeftRequest(self.world.player)
             self.event_manager.post(ev)
-        if key == pygame.K_d:
+        elif key == pygame.K_d:
             ev = events.EntityStopMovingRightRequest(self.world.player)
             self.event_manager.post(ev)
-        #if key == pygame.K_w:
-            #ev = events.EntityStopJumpRequest(self.world.player)
-            #self.event_manager.post(ev)
-            #self.world.state[self.world.player].jumping = False
+        elif key == pygame.K_UP:
+            self.key_up = False
+        elif key == pygame.K_DOWN:
+            self.key_down = False
+        elif key == pygame.K_LEFT:
+            self.key_left = False
+        elif key == pygame.K_RIGHT:
+            self.key_right = False
 
     def handle_attack_request(self):
         #Execute players attacks number 0
