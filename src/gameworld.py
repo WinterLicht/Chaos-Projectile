@@ -518,7 +518,7 @@ class GameWorld(object):
             vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
             #Create enemy's animations
             temp = pygame.image.load(os.path.join('data', 'enemy_pink_boss.png')).convert_alpha()
-            anim_list = [4, 8, 5, 8, 2, 4, 5, 5]
+            anim_list = [4, 2, 5, 8, 2, 4, 5, 5]
             anim_time_list = [240, 60, 44, 58, 10, 44, 44, 44]
             anim = components.Appearance(temp, 250, 200, anim_list, anim_time_list)
             anim.rect.center = coll.center
