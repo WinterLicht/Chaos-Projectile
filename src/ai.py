@@ -195,7 +195,7 @@ class AI_1(AI):
         :type world: gameWorld.GameWorld
         """
         AI.__init__(self, world, entity_ID, event_manager)
-        self.aggresion_range = 200
+        self.aggresion_range = 500
         #Set idle function for the AI
         self.current_action = self.idle
 
@@ -442,13 +442,19 @@ class AI_Boss_2(AI):
         player_att = self.world.attacks[self.world.player]
         for player_proj in player_att[0].particles:
             if (self.point_in_radius(radius, player_proj.position)):
-                #self.current_action = self.idle
-                if self.walking_left():
-                    direction = (-1, 0)
-                else:
+                self_position = self.world.collider[self.entity_ID].center
+                players_position = self.world.collider[self.world.player].center
+                direction = [players_position[0] - self_position[0],
+                         players_position[1] - (self_position[1]+32)]
+                direction = calculate_octant(direction)
+                if direction[0] == 0 and direction[1] == 0:
+                    #Direction (0,0) is not valid
                     direction = (1, 0)
                 self.stop_movement()
-                self.attack(0, None, direction)
+                offset = 128
+                self_position = self.world.collider[self.entity_ID].center
+                att_position = (self_position[0] + offset*direction[0], self_position[1] + offset*direction[1])
+                self.attack(0, att_position, direction)
                 player_proj.life = 0
 
     def cruise(self, event):

@@ -174,6 +174,7 @@ class GameWorld(object):
                 #Attack related:
                 #Create enemy attacks
                 attack_list = list()
+                effect_ID = None
                 #Attack 1:
                 if "att_1_damage" in tile_properties:
                     damage1 = int(tile_properties["att_1_damage"])
@@ -212,12 +213,14 @@ class GameWorld(object):
                     proj_anim_time_list = [50, 13]
                     proj_width = 32
                     proj_height = 32
+                    effect_ID = self.create_attack_effect('pink_boss_block_effect.png',
+                                                      250, 250, 8, 30)
                 particle_emitter1 = self.create_attack(position, damage1, stun1,
                                                       cooldown1, proj1, proj_image,
                                                       proj_anim_list, proj_anim_time_list,
                                                       proj_width, proj_height,
                                                       proj_life1, proj_speed1, [0,0],
-                                                      spread1)
+                                                      spread1, effect_ID)
                 particle_emitter1.piercing = att1_pierce
                 attack_list.append(particle_emitter1)
                 #Attack 2
@@ -518,7 +521,7 @@ class GameWorld(object):
             vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
             #Create enemy's animations
             temp = pygame.image.load(os.path.join('data', 'enemy_pink_boss.png')).convert_alpha()
-            anim_list = [4, 2, 5, 8, 2, 4, 5, 5]
+            anim_list = [4, 8, 5, 8, 2, 4, 5, 5]
             anim_time_list = [240, 60, 44, 58, 10, 44, 44, 44]
             anim = components.Appearance(temp, 250, 200, anim_list, anim_time_list)
             anim.rect.center = coll.center
