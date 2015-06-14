@@ -160,13 +160,14 @@ class CombatSystem():
             #Show effect
             effect_ID = self.world.attacks[entity_ID][attack_Nr].effect_ID
             if not effect_ID == None:
+                eff_position = position
                 if entity_ID == self.world.player:
                     #Calculate position and angle of effect
                     player = self.world.players[entity_ID]
                     #Get the orb position of the player
                     eff_position = self.world.appearance[player.orb_ID].rect.center
                     rot_angle = self.world.appearance[player.orb_ID].angle  
-                else:
+                elif self.world.mask[entity_ID] > 2:
                     x = direction[0]
                     y = direction[1]
                     rot_angle = 0
@@ -184,8 +185,8 @@ class CombatSystem():
                         rot_angle = 270
                     elif x > 0 and y > 0:
                         rot_angle = 315
-                    eff_position = position
-                    #rot_angle = 0
+                else:
+                    rot_angle = 0
                 #Update position and rotation of the attack effect
                 self.world.appearance[effect_ID].rect.center = eff_position
                 self.world.appearance[effect_ID].angle = rot_angle
