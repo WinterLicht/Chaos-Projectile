@@ -372,10 +372,11 @@ class GameWorld(object):
             elif tile_properties["type"] == "portal":
                 x_pos = int(tile_properties["x"])
                 y_pos = int(tile_properties["y"])
-                x_pos, y_pos = x_pos*64+32, y_pos*64+32
-                collider = components.Collider(x*64, y*64, 64, 64)
-                temp = pygame.image.load(os.path.join('data', 'portal.png'))
-                portal_sprite = components.Appearance(temp.convert_alpha())
+                # Calculate right position
+                x_pos, y_pos = x_pos*64, y_pos*64
+                collider = components.Collider(x*64+96, y*64+86, 64, 64)
+                temp = pygame.image.load(os.path.join('data', 'portal_stars.png'))
+                portal_sprite = components.Appearance(temp.convert_alpha(), 96, 160, [8], [80])
                 portal_sprite.rect.center = collider.center
                 portal = collectible.Portal(self, self.event_manager, x_pos, y_pos)
                 colle_ID = self.create_entity((portal_sprite, portal, collider))
