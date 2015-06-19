@@ -68,13 +68,60 @@ class GameWorld(object):
         for layer_index in range(len(self.level.tmx_data.layers)):
             #BUG? pyTMX reads from top to down, then from left to right
             #So: y in range(layer_width) and x in range (layer_heigt)
+            player_position = None
+            player_hp = None
+            player_max_x_vel = None
+            player_max_y_vel = None
+            player_attack_list = None
             for y in range(layer_width):
                 for x in range(layer_height):
                     ####
                     tile_properties = self.level.tmx_data.get_tile_properties(x, y, layer_index)
                     if self.level.tmx_data.layers[layer_index].name == "characters":
                         if tile_properties:
-                            self.create_game_object(x, y, tile_properties)                                
+                            self.create_game_object(x, y, tile_properties)
+                            if tile_properties["type"] == "player":
+                                player_position = (x*64+32, y*64+32)
+                                if "max_hp" in tile_properties:
+                                    player_hp = int(tile_properties["max_hp"])
+                                if "max_x_vel" in tile_properties:
+                                    player_max_x_vel = int(tile_properties["max_x_vel"])
+                                if "max_y_vel" in tile_properties:
+                                    player_max_y_vel = int(tile_properties["max_y_vel"])
+                                #Attack related:
+                                if "att_1_damage" in tile_properties:
+                                    damage1 = int(tile_properties["att_1_damage"])
+                                if "att_1_stun" in tile_properties:
+                                    stun1 = int(tile_properties["att_1_stun"])
+                                if "att_1_cooldown" in tile_properties:
+                                    cooldown1 = int(tile_properties["att_1_cooldown"])
+                                if "att_1_projectile_amount" in tile_properties:
+                                    proj1 = int(tile_properties["att_1_projectile_amount"])
+                                if "att_1_projectile_lifetime" in tile_properties:
+                                    proj_life1 = int(tile_properties["att_1_projectile_lifetime"])
+                                if "att_1_spread_angle" in tile_properties:
+                                    spread1 = int(tile_properties["att_1_spread_angle"])
+                                if "att_1_projectile_speed" in tile_properties:
+                                    proj_speed1 = int(tile_properties["att_1_projectile_speed"])
+                                if "att_1_pierce" in tile_properties:
+                                    att1_pierce = tile_properties["att_1_pierce"] == "1"
+                                #Create players attacks
+                                player_attack_list = list()
+                                #Attack 1:
+                                effect_ID = self.create_attack_effect('char_attack1_effect.png',
+                                                                      250, 250, 8, 30)
+                                #Create projectile image
+                                proj_image = "simple_projectile_light_circle.png"
+                                proj_anim_list = [2, 4]
+                                proj_anim_time_list = [20, 13]
+                                particle_emitter = self.create_attack(player_position, damage1, stun1,
+                                                                      cooldown1, proj1, proj_image,
+                                                                      proj_anim_list, proj_anim_time_list,
+                                                                      25, 25,
+                                                                      proj_life1, proj_speed1, [0,0],
+                                                                      spread1, effect_ID)
+                                particle_emitter.piercing = att1_pierce
+                                player_attack_list.append(particle_emitter)
                     #Create walls
                     if self.level.tmx_data.layers[layer_index].name == "walls":
                         tile = self.level.tmx_data.get_tile_image(x, y, layer_index)
@@ -94,7 +141,10 @@ class GameWorld(object):
                                     if tile_properties["curse"] == "pink":
                                         tags.append("pink")
                             coll = components.Collider(x*64, y*64, 64, 64, tags)
-                            walls.append(coll)
+                            walls.append(coll)                                
+        # Add player afterwards so he is on top of game objects 
+        self.create_player(player_position, player_hp, player_max_x_vel, player_max_y_vel,
+                               player_attack_list)
         self.create_curse()
         #---
         #Quad Tree
@@ -297,52 +347,6 @@ class GameWorld(object):
                 
                 self.create_enemy(position, hp, max_x_vel, max_y_vel,
                                   attack_list, ai_ID)
-
-            elif tile_properties["type"] == "player":
-                position = (x*64+32, y*64+32)
-                if "max_hp" in tile_properties:
-                    hp = int(tile_properties["max_hp"])
-                if "max_x_vel" in tile_properties:
-                    max_x_vel = int(tile_properties["max_x_vel"])
-                if "max_y_vel" in tile_properties:
-                    max_y_vel = int(tile_properties["max_y_vel"])
-                #Attack related:
-                if "att_1_damage" in tile_properties:
-                    damage1 = int(tile_properties["att_1_damage"])
-                if "att_1_stun" in tile_properties:
-                    stun1 = int(tile_properties["att_1_stun"])
-                if "att_1_cooldown" in tile_properties:
-                    cooldown1 = int(tile_properties["att_1_cooldown"])
-                if "att_1_projectile_amount" in tile_properties:
-                    proj1 = int(tile_properties["att_1_projectile_amount"])
-                if "att_1_projectile_lifetime" in tile_properties:
-                    proj_life1 = int(tile_properties["att_1_projectile_lifetime"])
-                if "att_1_spread_angle" in tile_properties:
-                    spread1 = int(tile_properties["att_1_spread_angle"])
-                if "att_1_projectile_speed" in tile_properties:
-                    proj_speed1 = int(tile_properties["att_1_projectile_speed"])
-                if "att_1_pierce" in tile_properties:
-                    att1_pierce = tile_properties["att_1_pierce"] == "1"
-                #Create players attacks
-                attack_list = list()
-                #Attack 1:
-                effect_ID = self.create_attack_effect('char_attack1_effect.png',
-                                                      250, 250, 8, 30)
-                #Create projectile image
-                proj_image = "simple_projectile_light_circle.png"
-                proj_anim_list = [2, 4]
-                proj_anim_time_list = [20, 13]
-                particle_emitter = self.create_attack(position, damage1, stun1,
-                                                      cooldown1, proj1, proj_image,
-                                                      proj_anim_list, proj_anim_time_list,
-                                                      25, 25,
-                                                      proj_life1, proj_speed1, [0,0],
-                                                      spread1, effect_ID)
-                particle_emitter.piercing = att1_pierce
-                attack_list.append(particle_emitter)
-                self.create_player(position, hp, max_x_vel, max_y_vel,
-                                   attack_list)
-
             elif tile_properties["type"] == "heal_potion":
                 #Add fields
                 recovery = int(tile_properties["recovery"])
@@ -356,7 +360,7 @@ class GameWorld(object):
                 elif size == 'm':
                     image_name = 'heal_potion_m.png'
                 temp = pygame.image.load(os.path.join('data', image_name))
-                heal_sprite = components.Appearance(temp.convert_alpha())
+                heal_sprite = components.Appearance(temp.convert_alpha(), 32, 32, [9], [74])
                 heal_sprite.rect.center = collider.center
                 heal_pot = collectible.HealPotion(self, self.event_manager, recovery)
                 colle_ID = self.create_entity((heal_sprite, heal_pot, collider))
@@ -374,9 +378,9 @@ class GameWorld(object):
                 y_pos = int(tile_properties["y"])
                 # Calculate right position
                 x_pos, y_pos = x_pos*64, y_pos*64
-                collider = components.Collider(x*64+96, y*64+86, 64, 64)
-                temp = pygame.image.load(os.path.join('data', 'portal_stars.png'))
-                portal_sprite = components.Appearance(temp.convert_alpha(), 96, 160, [8], [80])
+                collider = components.Collider(x*64+96, y*64+74, 64, 64)
+                temp = pygame.image.load(os.path.join('data', 'portal.png'))
+                portal_sprite = components.Appearance(temp.convert_alpha(), 256, 197, [8], [80])
                 portal_sprite.rect.center = collider.center
                 portal = collectible.Portal(self, self.event_manager, x_pos, y_pos)
                 colle_ID = self.create_entity((portal_sprite, portal, collider))
@@ -629,6 +633,11 @@ class GameWorld(object):
         self.inactive_entities = list()
         #BUG? pyTMX reads from top to down, then fom left to right
         #So: y in range(layer_width) ans x in range (layer_heigt)
+        player_position = None
+        player_hp = None
+        player_max_x_vel = None
+        player_max_y_vel = None
+        player_attack_list = None
         for y in range(layer_width):
             for x in range(layer_height):
                 #####
@@ -636,5 +645,50 @@ class GameWorld(object):
                 if self.level.tmx_data.layers[layer_index].name == "characters":
                     if tile_properties:
                         self.create_game_object(x, y, tile_properties)
+                        if tile_properties["type"] == "player":
+                            player_position = (x*64+32, y*64+32)
+                            if "max_hp" in tile_properties:
+                                player_hp = int(tile_properties["max_hp"])
+                            if "max_x_vel" in tile_properties:
+                                player_max_x_vel = int(tile_properties["max_x_vel"])
+                            if "max_y_vel" in tile_properties:
+                                player_max_y_vel = int(tile_properties["max_y_vel"])
+                            #Attack related:
+                            if "att_1_damage" in tile_properties:
+                                damage1 = int(tile_properties["att_1_damage"])
+                            if "att_1_stun" in tile_properties:
+                                stun1 = int(tile_properties["att_1_stun"])
+                            if "att_1_cooldown" in tile_properties:
+                                cooldown1 = int(tile_properties["att_1_cooldown"])
+                            if "att_1_projectile_amount" in tile_properties:
+                                proj1 = int(tile_properties["att_1_projectile_amount"])
+                            if "att_1_projectile_lifetime" in tile_properties:
+                                proj_life1 = int(tile_properties["att_1_projectile_lifetime"])
+                            if "att_1_spread_angle" in tile_properties:
+                                spread1 = int(tile_properties["att_1_spread_angle"])
+                            if "att_1_projectile_speed" in tile_properties:
+                                proj_speed1 = int(tile_properties["att_1_projectile_speed"])
+                            if "att_1_pierce" in tile_properties:
+                                att1_pierce = tile_properties["att_1_pierce"] == "1"
+                            #Create players attacks
+                            player_attack_list = list()
+                            #Attack 1:
+                            effect_ID = self.create_attack_effect('char_attack1_effect.png',
+                                                                  250, 250, 8, 30)
+                            #Create projectile image
+                            proj_image = "simple_projectile_light_circle.png"
+                            proj_anim_list = [2, 4]
+                            proj_anim_time_list = [20, 13]
+                            particle_emitter = self.create_attack(player_position, damage1, stun1,
+                                                                  cooldown1, proj1, proj_image,
+                                                                  proj_anim_list, proj_anim_time_list,
+                                                                  25, 25,
+                                                                  proj_life1, proj_speed1, [0,0],
+                                                                  spread1, effect_ID)
+                            particle_emitter.piercing = att1_pierce
+                            player_attack_list.append(particle_emitter)
+        # Add player afterwards so he is on top of game objects 
+        self.create_player(player_position, player_hp, player_max_x_vel, player_max_y_vel,
+                               player_attack_list)
         self.create_curse()
         
