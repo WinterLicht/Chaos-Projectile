@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="25" height="15" tilewidth="64" tileheight="64">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="64" tileheight="64" nextobjectid="1">
  <tileset firstgid="1" name="tileset_neutral_01" tilewidth="64" tileheight="64">
   <properties>
    <property name="type" value="deadly"/>
@@ -240,27 +240,27 @@
  </tileset>
  <layer name="bg" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxTZGBgUBzFIw7zMlIfj9oxuO0gFdsCsT0Od8LYlNoximmHAQ9pKI4=
+   eJxTZGBgUBzhmJcRN6aHHdSyB5d5+MSojYmxYyUDfkwrO5DFh7Id5IYVLoxuJkzMFomPLS1RYgc2O/GFBTF2jGJUDACYXz+9
   </data>
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdonZ8wGIHIxCLMuAPz3lYMBMjdswCxO+x2PEDiN8C8XcojcxGVk8M4GPE7g9aAlLseMeACA9S/PaTgbpxjh7fMDuoGVa/8NiBnIZwpRdiMAuWsGRlYEjgo8DdLESoAcU5JXYQo5dUO9DdDdILCl9mNHHkPC0OxBIM+PM4KxJGVwvig9IlI5o6XiRxEAYAp+Yasw==
+   eJzjZmBgEKMx5magLeAdonZ8wWIHIxCLMmAPR2YizPwExGyMCMwBxJ+x2MHDAPEPNkyMPX+A+DcaRreDmkCIEYLJtWMhEC8C4n4S9JAa5zOBeDIUYwOs0DjBFh/UsuMvA+74wJeW+hgg4QPCiwnYgRz3yHbwEesJLICFCDWU2kGMXlLtQHc3SC+28EXO0+JALMGAv8xkRcLoakF8ULpkRFPHiyQOwgAUkR4C
   </data>
  </layer>
- <layer name="decoration behind" width="25" height="15">
+ <layer name="decoration behind" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2AUDHbgMdAOGAU4gTsQRw+0I7AAAANPAOs=
   </data>
  </layer>
- <layer name="decoration front" width="25" height="15">
+ <layer name="decoration front" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
    eJxjYBgFIxUEMTAcAOEYKB0IZVPbjhgoDqahHdFI5gZC+dS0IxhqHsxcdyqbTyszRwF1QTQd7ACmZwYPCvSzQmkAVG0XtQ==
   </data>
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJxjYBh4EMiIYAdB2cGM2NXiA6lAnEYVF+EG2UCcQ2M7RgFloBSIy2hsRzUQ19DYjkYgbqKxHUMBpANxBo3tyAXiPBrbQW8AAF/zBys=
+   eJxjYBh4EMiIYAdB2cGM2NXiA6lAnEYVF+EG2UCcQ2M7RsEoGAUIkA7EGTS2IxeI82hsB70BAMn3BEY=
   </data>
  </layer>
 </map>
