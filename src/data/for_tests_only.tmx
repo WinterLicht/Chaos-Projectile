@@ -238,6 +238,25 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="353" name="portals" tilewidth="64" tileheight="64">
+  <image source="portals.png" width="1024" height="436"/>
+  <tile id="0">
+   <properties>
+    <property name="setting" value="neutral"/>
+    <property name="type" value="portal"/>
+    <property name="x" value="1"/>
+    <property name="y" value="2"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="setting" value="pink"/>
+    <property name="type" value="portal"/>
+    <property name="x" value="1"/>
+    <property name="y" value="2"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="bg" width="25" height="15">
   <data encoding="base64" compression="zlib">
    eJxTZGBgUBzhmJcRN6aHHdSyB5d5+MSojYmxYyUDfkwrO5DFh7Id5IYVLoxuJkzMFomPLS1RYgc2O/GFBTF2jGJUDACYXz+9
@@ -245,7 +264,7 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdonZ8wWIHIxCLMmAPR2YizPwExGyMCMwBxJ+x2MHDAPEPNkyMPX+A+DcaRreDmkCIEYLJtWMhEC8C4n4S9JAa5zOBeDIUYwOs0DjBFh/UsuMvA+74wJeW+hgg4QPCiwnYgRz3yHbwEesJLICFCDWU2kGMXlLtQHc3SC+28EXO0+JALMGAv8xkRcLoakF8ULpkRFPHiyQOwgAUkR4C
+   eJzjZmBgEKMx5magLeAdonZ8wWIHIxCLMmAPR2YizPwExGyMEPwRyOYA0p+x2MHDAPEPNkyMPX8YIOaD8G8oRreDmkCIEYLJtWMhEC8C4n4S9JAa5zOBeDIUYwOs0HjBFh+k2NELxdjAXwbc8YEvLfUxQMIHhBcz4PfHHxx28BHrCSyAhQg1lNpBjF5S7UB3N0gvtvBFztPiQCzBgL/MZEXC6GpBfFC6ZERTx4skDsIAWp8ezA==
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15" visible="0">
@@ -260,7 +279,7 @@
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJxjYBh4EMiIYAdB2cGM2NXiA6lAnEYVF+EG2UCcQ2M7RsEoGAUIkA7EGTS2IxeI82hsB70BAMn3BEY=
+   eJzt0zsOgkAUheFhieAKeJMoJgIqraJCi8hjufwFCdNAAUxsOMmX3KG4Z4pBiP9H18bZGOaD9M1l9uAj0MRkXHgL73Bl7w13pDMdR5wWdrzZ+0GOYqZjTWr2NmjRKerYs2cqJm/Ogg1no/fnI5DOF/ZGiJFs1BHiLJ0f7H0iw0vRf1Sy94sKPwUdPclcE/Y=
   </data>
  </layer>
 </map>

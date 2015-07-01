@@ -379,7 +379,10 @@ class GameWorld(object):
                 # Calculate right position
                 x_pos, y_pos = x_pos*64, y_pos*64
                 collider = components.Collider(x*64+96, y*64+74, 64, 64)
-                temp = pygame.image.load(os.path.join('data', 'portal.png'))
+                if tile_properties["setting"] == "pink":
+                    temp = pygame.image.load(os.path.join('data', 'portal_pink.png'))
+                else:
+                    temp = pygame.image.load(os.path.join('data', 'portal.png'))
                 portal_sprite = components.Appearance(temp.convert_alpha(), 256, 197, [8], [80])
                 portal_sprite.rect.center = collider.center
                 portal = collectible.Portal(self, self.event_manager, x_pos, y_pos)
