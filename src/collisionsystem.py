@@ -90,7 +90,8 @@ class CollisionSystem(object):
 
     def calculate_collision_y(self, collider_ID):
         #Consider gravity
-        self.world.velocity[collider_ID].y += self.gravity[1]
+        if not "no_gravity" in self.world.collider[collider_ID].tags:
+            self.world.velocity[collider_ID].y += self.gravity[1]
         #Move collider in y direction.
         self.world.collider[collider_ID].y += self.world.velocity[collider_ID].y
         #Filter overlapping hit boxes with collider
@@ -107,14 +108,15 @@ class CollisionSystem(object):
                 ev = events.EntityGrounded(collider_ID)
             elif self.world.velocity[collider_ID].y < 0:
                 self.world.collider[collider_ID].top = element.bottom
-                ev = events.EntityJump(collider_ID)
+                if not "no_gravity" in self.world.collider[collider_ID].tags:
+                    ev = events.EntityJump(collider_ID)
             #Reset velocity in y direction, so gravity will not be added
             #every new frame
             self.world.velocity[collider_ID].y = 0
             #Post Event
             ev_collision = events.CollisionOccured(collider_ID, element)
             self.event_manager.post(ev_collision)
-        if not hit_items:
+        if not hit_items and not "no_gravity" in self.world.collider[collider_ID].tags:
             ev = events.EntityJump(collider_ID)
         if ev: 
             self.event_manager.post(ev)

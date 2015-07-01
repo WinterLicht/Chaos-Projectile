@@ -214,6 +214,7 @@ class GameWorld(object):
     def create_game_object(self, x, y, tile_properties):
         if "type" in tile_properties:
             if tile_properties["type"] == "enemy":
+                tags = list()
                 position = (x*64+32, y*64+32)
                 if "max_hp" in tile_properties:
                     hp = int(tile_properties["max_hp"])
@@ -221,6 +222,9 @@ class GameWorld(object):
                     max_x_vel = int(tile_properties["max_x_vel"])
                 if "max_y_vel" in tile_properties:
                     max_y_vel = int(tile_properties["max_y_vel"])
+                if "no_gravity" in tile_properties:
+                    if int(tile_properties["no_gravity"]) == 1:
+                        tags.append("no_gravity")
                 #Attack related:
                 #Create enemy attacks
                 attack_list = list()
@@ -257,6 +261,14 @@ class GameWorld(object):
                     proj_anim_time_list = [50, 13]
                     proj_width = 32
                     proj_height = 32
+                elif ai_ID == "pink_2":
+                    proj_image = "pink_proj.png"
+                    proj_anim_list = [2, 2]
+                    proj_anim_time_list = [50, 13]
+                    proj_width = 32
+                    proj_height = 32
+                    effect_ID = self.create_attack_effect('enemy_pink_2_effect.png',
+                                                      200, 200, 6, 60)
                 elif ai_ID == "pink_boss":
                     proj_image = "pink_proj.png"
                     proj_anim_list = [2, 2]
@@ -346,7 +358,7 @@ class GameWorld(object):
                     attack_list.append(particle_emitter3)
                 
                 self.create_enemy(position, hp, max_x_vel, max_y_vel,
-                                  attack_list, ai_ID)
+                                  attack_list, ai_ID, tags)
             elif tile_properties["type"] == "heal_potion":
                 #Add fields
                 recovery = int(tile_properties["recovery"])
@@ -480,7 +492,7 @@ class GameWorld(object):
         self.players[self.player].orb_ID = orb_ID
         self.add_component_to_entity(self.player, attack_list)
 
-    def create_enemy(self, position, max_hp, max_x_vel, max_y_vel, attack_list, ai_ID):
+    def create_enemy(self, position, max_hp, max_x_vel, max_y_vel, attack_list, ai_ID, tags):
         """Create an enemy.
         
         :param position: position where enemy is created
@@ -488,7 +500,7 @@ class GameWorld(object):
         """
         if ai_ID == "green_1":
             #Enemy's hitbox, it is 50 pixel width and 96 pixel height
-            coll = components.Collider(position[0], position[1], 50, 96)
+            coll = components.Collider(position[0], position[1], 50, 96, tags)
             vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
             #Create enemy's animations
             temp = pygame.image.load(os.path.join('data', 'enemy_green_1.png')).convert_alpha()
@@ -507,7 +519,7 @@ class GameWorld(object):
 
         elif ai_ID == "pink_1":
             #Enemy's hitbox, it is 50 pixel width and 96 pixel height
-            coll = components.Collider(position[0], position[1], 50, 96)
+            coll = components.Collider(position[0], position[1], 50, 96, tags)
             vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
             #Create enemy's animations
             temp = pygame.image.load(os.path.join('data', 'enemy_pink_1.png')).convert_alpha()
@@ -523,9 +535,27 @@ class GameWorld(object):
             enemy_AI = ai.AI_2(self, enemy_ID, self.event_manager)
             self.add_component_to_entity(enemy_ID, enemy_AI)
             self.add_component_to_entity(enemy_ID, attack_list)
+        elif ai_ID == "pink_2":
+            #Enemy's hitbox, it is 50 pixel width and 96 pixel height
+            coll = components.Collider(position[0], position[1], 70, 70, tags)
+            vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
+            #Create enemy's animations
+            temp = pygame.image.load(os.path.join('data', 'enemy_pink_2.png')).convert_alpha()
+            anim_list = [5, 6, 5, 2, 2, 2]
+            anim_time_list = [60, 60, 44, 10, 10, 10]
+            anim = components.Appearance(temp, 75, 75, anim_list, anim_time_list)
+            anim.rect.center = coll.center
+            direction = components.Direction([1, 0])
+            hp = components.Health(max_hp)
+            c = (coll, direction, vel, anim, hp)
+            enemy_ID = self.create_entity(c)
+            
+            enemy_AI = ai.AI_3(self, enemy_ID, self.event_manager)
+            self.add_component_to_entity(enemy_ID, enemy_AI)
+            self.add_component_to_entity(enemy_ID, attack_list)
         elif ai_ID == "pink_boss":
             #Enemy's hitbox, it is 50 pixel width and 96 pixel height
-            coll = components.Collider(position[0], position[1], 86, 170)
+            coll = components.Collider(position[0], position[1], 86, 170, tags)
             vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
             #Create enemy's animations
             temp = pygame.image.load(os.path.join('data', 'enemy_pink_boss.png')).convert_alpha()

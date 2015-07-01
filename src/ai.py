@@ -410,6 +410,69 @@ class AI_2(AI):
                 self.counter = 30
                 self.current_action = self.idle
 
+class AI_3(AI):
+    """Handles simple AI.
+    
+    Enemy is searching for the player and attacks, if player is on the sight.
+
+    :Attributes:
+        - *event_manager* (:class:`events.EventManager`): event manager
+        - *world* (:class:`gameWorld.GameWorld`): game world contains entities
+        - *current_action* (function): current update function for AI
+        - *entity_ID* (int): this AI belongs to this entity
+    """
+
+    def __init__(self, world, entity_ID, event_manager):
+        """
+        :param world: game world contains entities
+        :type world: gameWorld.GameWorld
+        """
+        AI.__init__(self, world, entity_ID, event_manager)
+        self.aggresion_range = 300
+        #Set idle function for the AI
+        self.current_action = self.idle
+
+    def idle(self, event):
+        """Idle, lasts ... frames long.
+
+        :param event: occured event
+        :type event: events.Event
+        """
+        if isinstance(event, events.TickEvent):
+            #Do not attack
+            self.stop_movement()
+            #Check if enemy sees the player and if player is in range
+            players_position = self.world.collider[self.world.player].center
+            if self.sees_player(players_position) and self.point_in_radius(self.aggresion_range, players_position):
+                self.current_action = self.hunt
+
+    def hunt(self, event):
+        """Attacks the player.
+
+        :param event: occured event
+        :type event: events.Event
+        """
+        if isinstance(event, events.TickEvent):
+            #Stop movement first
+            self.stop_movement()
+            #Get needed positions
+            players_position = self.world.collider[self.world.player].center
+            direction = (1, 0)
+            self.world.direction[self.entity_ID] = direction
+            # Flip appearance according to attack direction
+            if direction[0] < 0 and not self.world.appearance[self.entity_ID].flip:
+                self.world.appearance[self.entity_ID].flip = True
+            elif direction[0] > 0 and self.world.appearance[self.entity_ID].flip:
+                self.world.appearance[self.entity_ID].flip = False
+            #Do attack
+            self.attack(0, None, direction)
+            #Check if state should be changed
+            #Enemy doesn't sees player or player is not in range
+            if not self.sees_player(self.world.collider[self.world.player].center) or not self.point_in_radius(self.aggresion_range, players_position):
+                #Set duration of idle state
+                self.counter = 30
+                self.current_action = self.idle
+
 class AI_Boss_2(AI):
     """Handles simple AI.
     
