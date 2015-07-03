@@ -255,6 +255,12 @@ class GameWorld(object):
                     proj_anim_time_list = [28, 13]
                     proj_width = 40
                     proj_height = 40
+                elif ai_ID == "green_2":
+                    proj_image = "projectile_fly_green.png"
+                    proj_anim_list = [2, 2]
+                    proj_anim_time_list = [28, 13]
+                    proj_width = 40
+                    proj_height = 40
                 elif ai_ID == "pink_1":
                     proj_image = "pink_proj.png"
                     proj_anim_list = [2, 2]
@@ -393,6 +399,8 @@ class GameWorld(object):
                 collider = components.Collider(x*64+96, y*64+74, 64, 64)
                 if tile_properties["setting"] == "pink":
                     temp = pygame.image.load(os.path.join('data', 'portal_pink.png'))
+                elif tile_properties["setting"] == "green":
+                    temp = pygame.image.load(os.path.join('data', 'portal_green.png'))
                 else:
                     temp = pygame.image.load(os.path.join('data', 'portal.png'))
                 portal_sprite = components.Appearance(temp.convert_alpha(), 256, 197, [8], [80])
@@ -516,7 +524,23 @@ class GameWorld(object):
             enemy_AI = ai.AI_1(self, enemy_ID, self.event_manager)
             self.add_component_to_entity(enemy_ID, enemy_AI)
             self.add_component_to_entity(enemy_ID, attack_list)
-
+        elif ai_ID == "green_2":
+            #Enemy's hitbox, it is 50 pixel width and 96 pixel height
+            coll = components.Collider(position[0], position[1], 100, 100, tags)
+            vel = components.Velocity(0, 0, max_x_vel, max_y_vel)
+            #Create enemy's animations
+            temp = pygame.image.load(os.path.join('data', 'enemy_green_2.png')).convert_alpha()
+            anim_list = [5, 6, 4, 2, 2, 2]
+            anim_time_list = [74, 60, 60, 10, 10, 10]
+            anim = components.Appearance(temp, 128, 128, anim_list, anim_time_list)
+            anim.rect.center = coll.center
+            direction = components.Direction([1, 0])
+            hp = components.Health(max_hp)
+            c = (coll, direction, vel, anim, hp)
+            enemy_ID = self.create_entity(c)
+            enemy_AI = ai.AI_3(self, enemy_ID, self.event_manager)
+            self.add_component_to_entity(enemy_ID, enemy_AI)
+            self.add_component_to_entity(enemy_ID, attack_list)
         elif ai_ID == "pink_1":
             #Enemy's hitbox, it is 50 pixel width and 96 pixel height
             coll = components.Collider(position[0], position[1], 50, 96, tags)

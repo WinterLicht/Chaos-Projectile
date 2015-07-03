@@ -118,6 +118,8 @@ class CollisionSystem(object):
             self.event_manager.post(ev_collision)
         if not hit_items and not "no_gravity" in self.world.collider[collider_ID].tags:
             ev = events.EntityJump(collider_ID)
+        if "no_gravity" in self.world.collider[collider_ID].tags:
+                ev = events.EntityGrounded(collider_ID)
         if ev: 
             self.event_manager.post(ev)
         #Set new position and cast to int before, because position is in

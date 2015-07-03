@@ -78,6 +78,24 @@
     <property name="type" value="enemy"/>
    </properties>
   </tile>
+  <tile id="12">
+   <properties>
+    <property name="ai" value="green_2"/>
+    <property name="att_1_cooldown" value="60"/>
+    <property name="att_1_damage" value="10"/>
+    <property name="att_1_pierce" value="1"/>
+    <property name="att_1_projectile_amount" value="8"/>
+    <property name="att_1_projectile_lifetime" value="20"/>
+    <property name="att_1_projectile_speed" value="5"/>
+    <property name="att_1_spread_angle" value="45"/>
+    <property name="att_1_stun" value="20"/>
+    <property name="max_hp" value="50"/>
+    <property name="max_x_vel" value="0"/>
+    <property name="max_y_vel" value="0"/>
+    <property name="no_gravity" value="1"/>
+    <property name="type" value="enemy"/>
+   </properties>
+  </tile>
   <tile id="14">
    <properties>
     <property name="ai" value="pink_2"/>
@@ -302,7 +320,7 @@
    <properties>
     <property name="setting" value="neutral"/>
     <property name="type" value="portal"/>
-    <property name="x" value="1"/>
+    <property name="x" value="2"/>
     <property name="y" value="2"/>
    </properties>
   </tile>
@@ -310,14 +328,22 @@
    <properties>
     <property name="setting" value="pink"/>
     <property name="type" value="portal"/>
-    <property name="x" value="1"/>
+    <property name="x" value="2"/>
+    <property name="y" value="2"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="setting" value="green"/>
+    <property name="type" value="portal"/>
+    <property name="x" value="2"/>
     <property name="y" value="2"/>
    </properties>
   </tile>
  </tileset>
  <layer name="bg" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxTZGBgUBzhmJcRN6aHHdSyB5d5+MRwuYWQe4nxBy41KxnwY1rZgSw+lO0gN6xwYXQzYWK2SHxsaYkSO7DZiS8siLFjFKNiAOA4P9A=
+   eJxTZGBgUBzhmJcRN6aHHdSyB5d5+MRwuYWQe4nxBzb5jUDxTUC8GYhX4sCU2rEbKL4ciF8C8QkgvoRkLjl2vIViZPmjUPMvIWFq2wHCl7DYQW5YwexATzfoZsLEbJH42NISKWkXV1yvxGMHLfLhSMIA+KRI4w==
   </data>
  </layer>
  <layer name="walls" width="25" height="15">
@@ -327,17 +353,17 @@
  </layer>
  <layer name="decoration behind" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUDHbgMdAOGAU4gTsQRw+0I7AAAANPAOs=
+   eJxjYBgFo2AUDHZwYaAdMApwAncgjh5oR2ABAC7+AXM=
   </data>
  </layer>
- <layer name="decoration front" width="25" height="15" visible="0">
+ <layer name="decoration front" width="25" height="15">
   <data encoding="base64" compression="zlib">
    eJxjYBgFIxUEMTAcAOEYKB0IZVPbjhgoDqahHdFI5gZC+dS0IxhqHsxcdyqbTyszRwF1QTQd7ACmZwYPCvSzQmkAVG0XtQ==
   </data>
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzl0zsOgkAUheFhicAKQF4JaqIgCh0gauvb5foXJk4jBXKh4CZfcofinCkGpcYf0/ju1me3tW8+e4AQkaF+jo+g4x025GbYYtfSEWPesaMh94AjTi0d/8yd3AeeeAl1TG0SpMIdOQrhjiHG4c25mMHr6f2FiLTzitw1EqQ9dSyw1M4luRVq7IX+ozO5F1xxE+h4A2+zFdA=
+   eJzF0scOgkAUhWF4RPUJLBQFTShK0Y29buz1Yf1NSGQhRHHQm3xhBpJzJoAk/X8K8nNdjNal2D2FtQoNuiwljgI14xna5HbgwU/pMGBm7BiTO8EUs5SOd6dORgMGzChvz/WAI04COgIyQnTRE5D3aubkLrDEKqeOM7kXXHH7sMOBm/DMgv3l2R4TIEx45sEX0PGLKfNuK6iiJuhbatBje4tcGw5cQR1NtGL7PrkDDDHK6Z9ck7vBFrscOu44Fh/a
   </data>
  </layer>
 </map>

@@ -161,7 +161,6 @@ class HatMoved(Event):
         self.x = x
         self.y = y
 
-
 class UpdateImagePosition(Event):
     """Occurs when entity has moved and image position has to be updated.
     
