@@ -346,24 +346,33 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="449" name="tileset_special_01" tilewidth="64" tileheight="64">
+  <image source="tileset_special_01.png" width="1024" height="1024"/>
+ </tileset>
+ <tileset firstgid="705" name="tileset_green_02" tilewidth="64" tileheight="64">
+  <image source="tileset_green_02.png" width="640" height="640"/>
+ </tileset>
+ <tileset firstgid="805" name="tileset_pink_02" tilewidth="64" tileheight="64">
+  <image source="tileset_pink_02.png" width="640" height="640"/>
+ </tileset>
  <layer name="bg" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxTZGBgUBzhmJcRN6aHHdSyB5d5+MRwuYWQe4nxBzb5jUDxTUC8GYhX4sCU2rEbKL4ciF8C8QkgvoRkLjl2vIViZPmjUPMvIWFq2wHCl7DYQW5YwexATzfoZsLEbJH42NISKWkXV1yvxGMHLfLhSMIA+KRI4w==
+   eJxTZGBgUKQDdiCAB9IOXkbcmB52oNtDDTuwiSOL6TAizONlRKUdGAi7lxh/gOxAxxuB4puAeDMQr8SBKbVjN1B8ORC/BOITUAwzl1p2HEUznxZ2gNScwGIHuWH1ForR0w26mTAxWyQ+trSEK49gw7jieiUeO/Dlw1FMGAMAASNMaQ==
   </data>
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJzjZmBgEKMx5magLeAdonZ8wWIHIxCLMmAPR2YizPwExGyMEPwRyOYA0p+x2MHDAPEPNkyMPX8YIOaD8G8oRreDmkCIEYLJtWMhEC8C4n4S9JAa5zOBeDIUYwOs0HjBFh+k2NELxdjAXwbc8YEvLfUxQMIHhBcz4PfHHxx28BHrCSyAhQg1lNpBjF5S7UB3N0gvtvBFztPiQCzBgL/MZEXC6GpBfFC6ZERTx4skDsIAWp8ezA==
+   eJzjZmBgEKMx5magLeAdonZ8wWIHIxCzAgk2LPgzEWZ+YkCo/whkc6Dpg9nxhwHiH2yYmQh7QPo/QvFvKEa24y0RZpAChBghmFw7FgLxIiDuJ0EPqXbMBOJOIJ6MQ54VSzySY0cvFGMDfxlwxwdynkSP4z4GSPiA8GKoH3D54w8OO/iI9QQWwEKEGkrtIEYvqXaguxukF1v4ijIgwl4ciCUY8JeZrEgYXS2ID8qnjGjqeJHEQRgA1lsk2g==
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUDHZwYaAdMApwAncgjh5oR2ABAC7+AXM=
+   eJxjYKAfMGRiYDADYnVGBgYjJoQYjE0NoMYIMd8QSssxUs9sGDCAmg/DGjSwg5ZAkYTwPgTEh6GYVuAMEJ+FYlKAFjNhNdjSF9BPC0ixAxQGu4DYBId9F5ggakDgGNSuXSTYAQKgMDgCZYPsQbfrAlTNKBh8wB2IowfaEVgAAHbuE4A=
   </data>
  </layer>
  <layer name="decoration front" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFIxUEMTAcAOEYKB0IZVPbjhgoDqahHdFI5gZC+dS0IxhqHsxcdyqbTyszRwF1QTQd7ACmZwYPCvSzQmkAVG0XtQ==
+   eJxjYBgFIxUEMTAcAGEYOxCIY6B8atoRA8XBNLQjGsncQCifmnYEQ82DmetOZfNpZeZIAGfpaEc0HewApmcGDwrMYYXSAMNMGQA=
   </data>
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
