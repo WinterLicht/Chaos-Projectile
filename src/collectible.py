@@ -41,8 +41,13 @@ class SkillUp(Collectible):
     
     def handle_collision_event(self, collider_ID):
         if collider_ID == self.world.player:
-            attack = self.world.attacks[collider_ID][0]
-            attack.amount += 1
+            tags = self.world.collider[self.entity_ID].tags
+            if "add_projectile" in tags:
+                attack = self.world.attacks[collider_ID][0]
+                attack.amount += 1
+            elif "pierce" in tags:
+                attack = self.world.attacks[collider_ID][0]
+                attack.piercing = True
             #Destroy collectible
             self.remove_item()
 

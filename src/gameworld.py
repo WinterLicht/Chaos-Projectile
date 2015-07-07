@@ -384,8 +384,16 @@ class GameWorld(object):
                 colle_ID = self.create_entity((heal_sprite, heal_pot, collider))
                 heal_pot.entity_ID = colle_ID
             elif tile_properties["type"] == "skill_up":
-                collider = components.Collider(x*64, y*64, 64, 64)
-                temp = pygame.image.load(os.path.join('data', 'skill_additional_projectile.png'))
+                tags = list()
+                tag = None
+                if "tag" in tile_properties:
+                    tag = tile_properties["tag"]
+                    tags.append(tag)
+                collider = components.Collider(x*64, y*64, 64, 64, tags)
+                if tag == "add_projectile":
+                    temp = pygame.image.load(os.path.join('data', 'skill_additional_projectile.png'))
+                elif tag == "pierce":
+                    temp = pygame.image.load(os.path.join('data', 'skill_piercing_projectile.png'))
                 skillup_sprite = components.Appearance(temp.convert_alpha(), 32, 32, [9], [74])
                 skillup_sprite.rect.center = collider.center
                 skillup_pot = collectible.SkillUp(self, self.event_manager)

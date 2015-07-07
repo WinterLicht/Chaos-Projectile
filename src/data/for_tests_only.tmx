@@ -32,7 +32,7 @@
    <properties>
     <property name="att_1_cooldown" value="30"/>
     <property name="att_1_damage" value="10"/>
-    <property name="att_1_pierce" value="1"/>
+    <property name="att_1_pierce" value="0"/>
     <property name="att_1_projectile_amount" value="1"/>
     <property name="att_1_projectile_lifetime" value="60"/>
     <property name="att_1_projectile_speed" value="7"/>
@@ -315,6 +315,13 @@
   </tile>
   <tile id="3">
    <properties>
+    <property name="tag" value="add_projectile"/>
+    <property name="type" value="skill_up"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="tag" value="pierce"/>
     <property name="type" value="skill_up"/>
    </properties>
   </tile>
@@ -377,7 +384,7 @@
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzF0ukKgkAUhmG9xJYbaFErLSgtzfrTvv5pXy+2NxASaaxorAMPnnGG74iqKP+vlPro00GfCd3T6HUYKKmKsDToQZ+NnIuuo9VkvwUXXsxZE1Z8lLBG5I4xwfTF87xTZTIqMGEFeTuuexxwlDCjTYaPDroS8p7VjNw5FlgmNONE7hkXXD+cYcMR7NXR+PLZ7tWGL9hz4UmY8YvK8W7zKKAo6VsaKIXWdXIbsOFImlFFLbTukdvHAMOE/skVuWtssE1gxg2HmSCE
+   eJzF0tcOgjAYhmG4RNcFOHCBJoDK0BP3PHHPi/U1IZEYixqL/skTWlq+vwEU5f+VUO/jZDBOhe5pjIsooawqwtJQDMaZh33piOdu1WS9BQduxF4dRnSUsIbkjjDG5MV53qkKGVXoMIK8Ldcd9jhI6OGR4aONjoS8ZzUld4Y5FjH1OJJ7whmXD3vYaAjWTFhfnu1WHnzBmgNXQo9fVJZ3m0MeBUnfsoRyaG6Sa8FGQ1KPGuqheZfcHvoYxPRPLsldYY1NDD2ujJ0ghQ==
   </data>
  </layer>
 </map>
