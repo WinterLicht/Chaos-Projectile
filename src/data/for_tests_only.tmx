@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="64" tileheight="64">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="64" tileheight="64" nextobjectid="1">
  <tileset firstgid="1" name="characters" tilewidth="64" tileheight="64">
   <image source="characters.png" width="384" height="384"/>
   <tile id="0">
@@ -369,12 +369,12 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJyzZ2Bg8KIxtmegLXAconZkMGLaYQrElUDxKiw4nRGbKaggDUl9KhDXoOmD2VHACPEPNmxOhNsLoOaDcD4UI9uRSIRbSQFtjBBMrh0bgXgTEM8nwU5S7VgJxDOBeDEO+Uos8UiOHXOhGBsoxBMfyHkSPY7nMUDCB4Q3Q/2Ayx8FOOxwIt4bGMCCCDWU2kGMXlLtQHc3SC+28PVkQIS9NxD7MOAvMy2RMLpaEB+UT03R1DkiiYMwAPqrMa0=
+   eJyzZ2Bg8KIxtmegLXDEYYclFA9WOzIYMe0wBeJKoHgVFpzOiM0UVJCGpD4ViGvQ9MHsKGCE+AcbNifC7QVQ80E4H4qR7Ugkwq2kgDZGCCbXjo1AvAmI55NgJ6l2rATimUC8GId8JZZ4JMeOuVCMDRTiiQ/kPIkex/MYIOEDwpuhfsDljwIcdjgR7w0MYEGEGkrtIEYvqXaguxukF1v4ejIgwt4biH0Y8JeZlkgYXS2ID8qnpmjqHJHEQRgAQKYykQ==
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYKAf+MnEwPAPiGczMjD8YkKIwdjUALMYIeYvhdKTGKlnNgwsgZoPw3NoYActwUsSwvsSEF+GYlqBO0B8F4pJAaeICHds6QvopwWk2AEKg1NAfAWHfTxQNSDABFVzigQ7QAAUBlegbJA96HY9gKoZBYMPVANx/0A7AgsAAJ46IaA=
+   eJxjYKAf+MnEwPCPCVPsFxN29aOANuAlCeF9CYgvQzGtwB0gvgvFpIBTjITVYEtfQD8tIMUOUBicAuIrOOzjgaoBASaomlMk2AECoDC4AmWD7EG36wFUzSgYfKAaiPsH2hFYAADo/hnI
   </data>
  </layer>
  <layer name="decoration front" width="25" height="15">
@@ -384,7 +384,7 @@
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzF0lcKwkAUheEYBQtYwLIDS+ztxV5f7PXFXve/Bn9BIYiJihO98DGZXHLukESS/l9B1XXotoZV9xKyJCWRQlrWzjHh3lYeepEXZ6jwYBU11HVmWGF7kaVVA3KHGGGsM+PdypCRRQ75W96GdYsd9gJmNMhoooW2gLxnNSF3ihnmBs04kHvECecPZ7jh0eg54frybNfyI6DR88InYMYvSuHdRhFDXNC3NMOi2hfILaKEsqAZdjhU+w65XfTQN+ifXJC7xAprA2ZcAPc3DxQ=
+   eJy908UKw0AUheFUoAIVqLxB3WVT101dN3V9/2foX0gghCa1aQ98TJK5uXc2I0n/T8wsSXEkkERItReW14jqW4qaNDLImvX7mqBsl3goo4Iqok/OVKOmjgaaBjNssMvPPer6GGBo8I+SETVjTDB9of5ZcvTIo4Ci3G/HuscBRwEzWvRoo4OugH6PMqPvHAssfzTjRN8zLri+OcMDr86eC+4vz3ZPAEGdPR/8Amb8I9q7LSIWWFXv2rstIg44Ve/v3u1PsqLvGhtsfzDjBiBlEcE=
   </data>
  </layer>
 </map>
