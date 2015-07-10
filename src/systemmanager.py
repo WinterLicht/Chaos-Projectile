@@ -10,6 +10,7 @@ import inputsystem
 import animationsystem
 import combatsystem
 import statesystem
+import soundsystem
 
 
 class SystemManager(object):
@@ -32,4 +33,5 @@ class SystemManager(object):
         self.systems.append(statesystem.StateSystem(event_manager, gameWorld))
         self.systems.append(rendersystem.RenderSystem(event_manager, gameWorld))
         self.systems.append(combatsystem.CombatSystem(event_manager, gameWorld))
+        #self.systems.append(soundsystem.SoundSystem(event_manager, gameWorld))
         

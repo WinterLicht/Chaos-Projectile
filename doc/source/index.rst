@@ -1,5 +1,5 @@
 ============================================
-Welcome to Chaos Projectile's documentation!
+Chaos Projectile's documentation (Currently incomplete/erroneous)!
 ============================================
 
 .. note::

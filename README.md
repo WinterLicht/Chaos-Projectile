@@ -17,12 +17,16 @@ character attributes get changed or actions unlocked. The setting is inspired
 after ancient Egypt. Visual elements of the Art Nouveau era are present, as well
 as influences from the Cthulhu cult by Lovecraft.
 
+![screenshot](doc/source/screenshot2.png)
+
 Used Libraries
 --------
 
 - Pygame:  http://www.pygame.org/news.html
 - PyTMX:  https://github.com/bitcraft/pytmx
 - pyscroll:  https://github.com/bitcraft/pyscroll
+
+![screenshot](doc/source/screenshot3.png)
 
 Developers
 --------
