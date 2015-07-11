@@ -6,9 +6,11 @@
 
 import os
 import pygame
-import events
+
 import pyscroll
 
+import events
+import ai
 
 class SoundSystem(object):
     """Render system.
@@ -30,12 +32,46 @@ class SoundSystem(object):
         self.event_manager = event_manager
         self.event_manager.register_listener(self)
         #Load all sounds
-        filename = self.get_sound_file('Shot 3.wav')
-        shot_sound = pygame.mixer.Sound(filename)
+        #Player Sounds
+        filename = self.get_sound_file('Shot1.ogg')
+        self.shot_1_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Shot2.ogg')
+        self.shot_2_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Shot 3.ogg')
+        self.shot_3_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Hit Female 1.ogg')
+        self.hit_female_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Jump.ogg')
+        self.jump_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Landing.ogg')
+        self.landing_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Aim Short.ogg')
+        self.aim_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Footsteps_loop.ogg')
+        self.footsteps_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Collect Item.ogg')
+        self.collect_item_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Portal.ogg')
+        self.portal_enter_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Appear and Fly 1.ogg')
+        self.fly_appear_1_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Appear and Fly 2.ogg')
+        self.fly_appear_2_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Appear and Fly 3.ogg')
+        self.fly_appear_3_sound = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('Disappear.ogg')
+        self.fly_disappear_sound = pygame.mixer.Sound(filename)
         '''
         play(5) will cause the music to played once, then repeated five times, for a total of six
         If the loops is -1 then the music will repeat indefinitely.
         '''
+        #Helper
+        self.helper_player_jump = True
+        self.helper_player_walk = False
+        self.player_footsteps_playing = False
+        #Green Curse sounds
+        filename = self.get_sound_file('Die.ogg')
+        self.player_dies_sound = pygame.mixer.Sound(filename)
 
     def notify(self, event):
         """Notify, when event occurs and stop CPUSpinner when it's quit event. 
@@ -43,11 +79,74 @@ class SoundSystem(object):
         :param event: occurred event
         :type event: events.Event
         """
-        if isinstance(event, events.EntityAttacks):
-            entity_ID = events.EntityAttacks
+        if isinstance(event, events.TickEvent):
+            pass
+        elif isinstance(event, events.EntityAttacks):
+            entity_ID = event.entity_ID
+            
             if entity_ID == self.world.player:
-                shot_sound.play()
-
+                self.footsteps_sound.stop()
+                random_nr = ai.random_(3)
+                if random_nr == 0:
+                    self.shot_1_sound.play()
+                elif random_nr == 1:
+                    self.shot_2_sound.play()
+                else:
+                    self.shot_3_sound.play()
+            elif entity_ID in self.world.ai:
+                ai_ = self.world.ai[entity_ID]
+                if isinstance(ai_, ai.Level1_curse):
+                    random_nr = ai.random_(3)
+                    if random_nr == 0:
+                        self.fly_appear_1_sound.play()
+                    elif random_nr == 1:
+                        self.fly_appear_2_sound.play()
+                    else:
+                        self.fly_appear_3_sound.play()
+        elif isinstance(event, events.EntityStunned):
+            entity_ID = event.entity_ID
+            if entity_ID == self.world.player:
+                self.footsteps_sound.stop()
+                self.hit_female_sound.play()
+        elif isinstance(event, events.EntityJump):
+            entity_ID = event.entity_ID
+            if entity_ID == self.world.player and self.helper_player_jump:
+                self.footsteps_sound.stop()
+                self.player_footsteps_playing = False
+                self.jump_sound.play()
+                self.helper_player_jump = False
+        elif isinstance(event, events.EntityGrounded):
+            entity_ID = event.entity_ID
+            if entity_ID == self.world.player and not self.helper_player_jump:
+                #self.footsteps_sound.stop()
+                #self.player_footsteps_playing = True
+                self.landing_sound.play()
+                self.helper_player_jump = True
+        elif isinstance(event, events.PlayerAims):
+            self.aim_sound.play()
+        elif isinstance(event, events.EntityMovesRight) or isinstance(event, events.EntityMovesLeft): 
+            player_vel_x = self.world.velocity[self.world.player].x
+            if player_vel_x == 0:
+                self.footsteps_sound.stop()
+                self.player_footsteps_playing = False
+            else:
+                if not self.player_footsteps_playing and self.helper_player_jump:
+                    self.footsteps_sound.play(-1)
+                    self.player_footsteps_playing = True
+        elif isinstance(event, events.EntityStopMovingRight) or isinstance(event, events.EntityStopMovingLeft):
+            entity_ID = event.entity_ID
+            if entity_ID == self.world.player:
+                self.footsteps_sound.stop()
+                self.player_footsteps_playing = False
+        elif isinstance(event, events.PortalEntered):
+            self.portal_enter_sound.play()
+        elif isinstance(event, events.CollectedItem):
+            self.collect_item_sound.play()
+        elif isinstance(event, events.EntityDies):
+            entity_ID = event.entity_ID
+            if entity_ID == self.world.player:
+                self.player_dies_sound.play()
+        
     def get_sound_file(self, filename):
         """Simple helper function to merge the file name and the directory name.
         

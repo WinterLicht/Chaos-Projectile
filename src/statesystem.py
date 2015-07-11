@@ -6,6 +6,7 @@
 from math import sqrt
 
 import events
+import collectible
 
 
 class StateSystem():
@@ -83,6 +84,12 @@ class StateSystem():
                     if self.world.active_entity(entity_ID):
                         collect = self.world.collectibles[entity_ID]
                         collect.handle_collision_event(event.collider_ID)
+                        if isinstance(collect, collectible.Portal):
+                            ev_portal_enter = events.PortalEntered(entity_ID)
+                            self.event_manager.post(ev_portal_enter)
+                        else:
+                            ev_collected = events.CollectedItem(entity_ID)
+                            self.event_manager.post(ev_collected)
             if hasattr(event.collidee, 'tags'):
                 tags = event.collidee.tags
                 if tags and event.collider_ID == self.world.player:

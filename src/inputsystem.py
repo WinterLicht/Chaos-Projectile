@@ -266,14 +266,18 @@ class InputSystem(object):
             #Axis moved, so update orb position
             player_ID = self.world.player
             orb_ID = self.world.players[self.world.player].orb_ID
+            old_direction = self.world.direction[player_ID] 
             self.world.direction[player_ID] = [x, y]
-            #Move orb
-            self.world.appearance[orb_ID].rect.center = (x*64 + self.world.collider[self.world.player].center[0] ,
-                                                        y*64 + self.world.collider[self.world.player].center[1])
-            #Save rotation for orbs sprite
-            self.world.appearance[orb_ID].angle = angle
-            #Rotate hp-ui
-            hp_ID = self.world.players[self.world.player].hp_ID
-            self.world.appearance[hp_ID].rect.center = self.world.appearance[orb_ID].rect.center
-            #self.world.appearance[hp_ID].angle = angle
+            if not (old_direction[0] == x and old_direction[1] == y): 
+                #Move orb
+                self.world.appearance[orb_ID].rect.center = (x*64 + self.world.collider[self.world.player].center[0] ,
+                                                            y*64 + self.world.collider[self.world.player].center[1])
+                #Save rotation for orbs sprite
+                self.world.appearance[orb_ID].angle = angle
+                #Rotate hp-ui
+                hp_ID = self.world.players[self.world.player].hp_ID
+                self.world.appearance[hp_ID].rect.center = self.world.appearance[orb_ID].rect.center
+                #self.world.appearance[hp_ID].angle = angle
+                ev = events.PlayerAims(self.world.player)
+                self.event_manager.post(ev)
             

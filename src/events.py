@@ -79,7 +79,6 @@ class KeyPressed(Event):
         self.name = "Key Down Event"
         self.key = key
 
-
 class KeyReleased(Event):
     """This event stores the released key.
     
@@ -94,7 +93,6 @@ class KeyReleased(Event):
         """
         self.name = "Key Released Event"
         self.key = key
-
 
 class MouseMoved(Event):
     """Mouse moved event stores new position of mouse pointer on the screen.
@@ -140,7 +138,6 @@ class AxisMoved(Event):
         self.x_axis = x_axis_pos
         self.y_axis = y_axis_pos
 
-
 class HatMoved(Event):
     """This event stores position of a game pad hat.
     Position of the hat are two values which can be 0, 1 or -1. A value of -1 means left/down and a value of 1 means right/up.
@@ -160,6 +157,7 @@ class HatMoved(Event):
         self.name = "Controller Hat Moved Event"
         self.x = x
         self.y = y
+
 
 class UpdateImagePosition(Event):
     """Occurs when entity has moved and image position has to be updated.
@@ -183,6 +181,21 @@ class UpdateImagePosition(Event):
 class UpdatePlayersHpUI(Event):
     def __init__(self, player_ID):
         self.name = "Update HP UI"
+        self.player_ID = player_ID
+
+class CollectedItem(Event):
+    def __init__(self, entity_ID):
+        self.name = "Player collected item"
+        self.entity_ID = entity_ID
+
+class PortalEntered(Event):
+    def __init__(self, entity_ID):
+        self.name = "Player entered portal"
+        self.entity_ID = entity_ID
+
+class PlayerAims(Event):
+    def __init__(self, player_ID):
+        self.name = "Player Aims"
         self.player_ID = player_ID
 
 class CollisionOccured(Event):
@@ -248,7 +261,7 @@ class EntityGrounded(Event):
 class EntityAttacks(Event):
     
     def __init__(self, entity_ID, attack_Nr):
-        self.name = "Entity Jump Event"
+        self.name = "Entity Attacks Event"
         self.entity_ID = entity_ID
         self.attack_Nr = attack_Nr
 
@@ -262,7 +275,7 @@ class EntityStunned(Event):
 class EntityDies(Event):
     
     def __init__(self, entity_ID):
-        self.name = "Entity Jump Event"
+        self.name = "Entity Dies Event"
         self.entity_ID = entity_ID
 
 class RemoveEntityFromTheGame(Event):
