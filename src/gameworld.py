@@ -625,7 +625,6 @@ class GameWorld(object):
             hp = components.Health(max_hp)
             c = (coll, direction, vel, anim, hp)
             enemy_ID = self.create_entity(c)
-            
             enemy_AI = ai.AI_Boss_2(self, enemy_ID, self.event_manager)
             self.add_component_to_entity(enemy_ID, enemy_AI)
             self.add_component_to_entity(enemy_ID, attack_list)
@@ -692,6 +691,8 @@ class GameWorld(object):
         #Clear mask, this entity has no components more
         self.mask[entity_ID] = 0
         #Clear dictionaries
+        if entity_ID in self.inactive_entities:
+            self.inactive_entities.remove(entity_ID)
         if entity_ID in self.collider:
             del self.collider[entity_ID]
         if entity_ID in self.velocity:

@@ -55,6 +55,10 @@ class StateSystem():
             if self.point_in_radius(radius_to_player, players_position, entity_position):
                 if entity_ID in self.world.inactive_entities:
                     self.world.inactive_entities.remove(entity_ID)
+                    if entity_ID in self.world.ai:
+                        #Needed for Sound
+                        ev = events.EnemyNear(entity_ID)
+                        self.event_manager.post(ev)
             else:
                 self.world.deactivate_entity(entity_ID)
 
@@ -70,6 +74,10 @@ class StateSystem():
             if self.timer < 1:
                 for entity_ID, ai in self.world.ai.iteritems():
                     self.check_to_deactivate(entity_ID)
+                #Needed for sound
+                if len(self.world.inactive_entities) == len(self.world.ai) - 2:
+                    ev = events.NoEnemysNear()
+                    self.event_manager.post(ev)
                 self.timer = 150
             
         #Update first enemy AI
@@ -129,3 +137,4 @@ class StateSystem():
             if isinstance(event, events.ActivateEntity):
                 if entity_ID in self.world.inactive_entities:
                     self.world.inactive_entities.remove(entity_ID)
+                        

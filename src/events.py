@@ -158,6 +158,36 @@ class HatMoved(Event):
         self.x = x
         self.y = y
 
+class EnemyNear(Event):
+    """
+    :Attributes:
+    """
+    
+    def __init__(self, entity_ID):
+        """
+        """
+        self.name = "Enemy is near"
+        self.entity_ID = entity_ID
+        
+class NoEnemysNear(Event):
+    """
+    :Attributes:
+    """
+    
+    def __init__(self):
+        """
+        """
+        self.name = "No Enemys Near"
+
+class NoBossNear(Event):
+    """
+    :Attributes:
+    """
+    
+    def __init__(self):
+        """
+        """
+        self.name = "No Boss near"
 
 class UpdateImagePosition(Event):
     """Occurs when entity has moved and image position has to be updated.

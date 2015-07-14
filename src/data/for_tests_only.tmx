@@ -386,7 +386,7 @@
  </layer>
  <layer name="walls" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eJyzZ2Bg8KIxtmegLXAconZkMGLaYQrElUDxKiw4nRGbKaggDUl9KhDXoOmD2VHACPEPNmxOhNsLoOaDcD4UI9uRSIRbSQFtjBBMrh0bgXgTEM8nwU5S7VgJxDPxyFdiiUdy7MAHCvHEB6F8ugmKNxOwowCHHU7EewMDWBChhlI7iNFLqh3o7gbpBYUleh7yZECEszcQ+zAQX36iqwXxQfkUlI8tkbAjkjgIAwCyBC9a
+   eJyzZ2Bg8KIxtmegLXAconZkMGLaYQrEngzYw9GcCDPTgGZWQXEqENcAcTqSPTA7Chgh/sGGibGnAGo+COdDMbIdiYw4tZIF2hghmFw7YGFKjN/ItQOkfiYe+UpovKDHB6l24AOFeOKD2PzqTcCOAhx2OBHvDbLAULYDOU+DwteHgfj4QFcL4oPyKSgfWyJhRyRxEAYAQTEpTg==
   </data>
  </layer>
  <layer name="decoration behind" width="25" height="15">
@@ -401,7 +401,7 @@
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzF0rcOwjAUhWETkChvAAss9F4Wel3odaHX938G/iESHkgCkg1X+pQ4Uc6xkgjx/4lK5zHzGJeuZQ0hcsijYFjnuGB1O+GwhyYPttBGx6bDC59DltVMyZ1hjoVNx6dTJKOEMipm3pHjCWdcFHR0yeihj4GCvHezJHeFNTaaOq7k3nDH48uOIEJadvWaMCKaO34xSd5tCmlkFH1LNzzSukpuDXU0FHX4EZDWQ3JHGGOi6Z/ckrvDHgcNHU/xsA7R
+   eJzF0jcLwkAYxvHTRRcFC+iim72XxV4Xe13s9ft/Bv9DwBtMonCHL/xILiHPcyQR4v8Tk87jxjEhXcs5hcijgKLTPMcBs9tJmz20eLCNDroWHS64bbLMZkbuHAssLTq+nRIZZVRQNfJOHM+44Kqgo0dGHwMMFeR9mhW5a2yw1dRxI/eOB54/dnjg1bKr9wQQ1NyhY3zwS+sU7zaNDLKKvmUIYWldI7eOBpqKOiKISusRuWNMMNX0T+7I3eOAo4aOFwJLDxQ=
   </data>
  </layer>
 </map>

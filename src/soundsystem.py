@@ -32,6 +32,15 @@ class SoundSystem(object):
         self.event_manager = event_manager
         self.event_manager.register_listener(self)
         #Load all sounds
+        filename = self.get_sound_file('BG_loop1.ogg')
+        self.bg_no_enemy = pygame.mixer.Sound(filename)
+        self.bg_no_enemy.play(-1)
+        filename = self.get_sound_file('BG_loop2.ogg')
+        self.bg_enemy_near = pygame.mixer.Sound(filename)
+        filename = self.get_sound_file('BG_loop3.ogg')
+        self.bg_boss = pygame.mixer.Sound(filename)
+        self.bg_enemy_near_running = False
+        self.bg_boss_running = False
         #Player Sounds
         filename = self.get_sound_file('Shot1.ogg')
         self.shot_1_sound = pygame.mixer.Sound(filename)
@@ -61,10 +70,6 @@ class SoundSystem(object):
         self.fly_appear_3_sound = pygame.mixer.Sound(filename)
         filename = self.get_sound_file('Disappear.ogg')
         self.fly_disappear_sound = pygame.mixer.Sound(filename)
-        '''
-        play(5) will cause the music to played once, then repeated five times, for a total of six
-        If the loops is -1 then the music will repeat indefinitely.
-        '''
         #Helper
         self.helper_player_jump = True
         self.helper_player_walk = False
@@ -79,11 +84,37 @@ class SoundSystem(object):
         :param event: occurred event
         :type event: events.Event
         """
+        fade_out_time = 1200
         if isinstance(event, events.TickEvent):
             pass
+        elif isinstance(event, events.EnemyNear):
+            if isinstance(self.world.ai[event.entity_ID], ai.AI_Boss_2):
+                if not self.bg_boss_running:
+                    self.bg_no_enemy.fadeout(fade_out_time)
+                    self.bg_boss.play(-1)
+                    self.bg_boss_running = True
+                    if self.bg_enemy_near_running:
+                        self.bg_enemy_near.fadeout(fade_out_time)
+                        self.bg_enemy_near_running = False
+            else:
+                if not self.bg_enemy_near_running:
+                    self.bg_no_enemy.fadeout(fade_out_time)
+                    self.bg_enemy_near.play(-1)
+                    self.bg_enemy_near_running = True
+                    if self.bg_boss_running:
+                        self.bg_boss.fadeout(fade_out_time)
+                        self.bg_boss_running = False
+        elif isinstance(event, events.NoEnemysNear):
+            if self.bg_enemy_near_running:
+                self.bg_enemy_near.fadeout(fade_out_time)
+                self.bg_no_enemy.play(-1)
+                self.bg_enemy_near_running = False
+            if self.bg_boss_running:
+                self.bg_boss.fadeout(fade_out_time)
+                self.bg_no_enemy.play(-1)
+                self.bg_boss_running = False    
         elif isinstance(event, events.EntityAttacks):
             entity_ID = event.entity_ID
-            
             if entity_ID == self.world.player:
                 self.footsteps_sound.stop()
                 random_nr = ai.random_(3)
@@ -118,8 +149,6 @@ class SoundSystem(object):
         elif isinstance(event, events.EntityGrounded):
             entity_ID = event.entity_ID
             if entity_ID == self.world.player and not self.helper_player_jump:
-                #self.footsteps_sound.stop()
-                #self.player_footsteps_playing = True
                 self.landing_sound.play()
                 self.helper_player_jump = True
         elif isinstance(event, events.PlayerAims):
