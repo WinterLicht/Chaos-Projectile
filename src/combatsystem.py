@@ -37,11 +37,13 @@ class CombatSystem():
         """
         if isinstance(event, events.TickEvent):
             self.update()
-        if isinstance(event, events.EntityAttackRequest):
+        elif isinstance(event, events.EntityAttackRequest):
             if self.world.active_entity(event.entity_ID):
                 self.execute_attack(event.entity_ID, event.attack_Nr, event.spawn_attack_pos, event.attack_dir)
-        if isinstance(event, events.RemoveEntityFromTheGame):
+        elif isinstance(event, events.RemoveEntityFromTheGame):
             self.world.to_remove.append(event.entity_ID)
+        elif isinstance(event, events.ResetWorld):
+            self.reset_the_world = True
 
     def update(self):
         """Update all particle emitters, remove dead objects and execute attacks."""

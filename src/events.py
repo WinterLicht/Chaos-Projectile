@@ -158,6 +158,16 @@ class HatMoved(Event):
         self.x = x
         self.y = y
 
+class ResetWorld(Event):
+    """
+    :Attributes:
+    """
+    
+    def __init__(self):
+        """
+        """
+        self.name = "Reset the world"
+
 class EnemyNear(Event):
     """
     :Attributes:

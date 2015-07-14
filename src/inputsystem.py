@@ -153,13 +153,16 @@ class InputSystem(object):
             #Walk left
             ev = events.EntityMovesLeftRequest(self.world.player)
             self.event_manager.post(ev)
-        if key == pygame.K_d:
+        elif key == pygame.K_d:
             #Walk right
             ev = events.EntityMovesRightRequest(self.world.player)
             self.event_manager.post(ev)
-        if key == pygame.K_w:
+        elif key == pygame.K_w:
             #Jump
             ev = events.EntityJumpRequest(self.world.player)
+            self.event_manager.post(ev)
+        elif key == pygame.K_f:
+            ev = events.ResetWorld()
             self.event_manager.post(ev)
 
         elif key == pygame.K_UP and not self.key_down:
