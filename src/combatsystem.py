@@ -105,6 +105,13 @@ class CombatSystem():
                                             stun_ev = events.EntityStunned(collider_ID, attack.stun)
                                             self.event_manager.post(stun_ev)
                                         else:
+                                            #Remove all projectiles of enemy
+                                            for attack in self.world.attacks[collider_ID]:
+                                                for projectile in attack.particles:
+                                                    projectile.life = -1
+                                                    ev_die = events.EntityDies(projectile.entity_ID)
+                                                    self.event_manager.post(ev_die)
+                                            #Enemy dies
                                             ev_die = events.EntityDies(collider_ID)
                                             self.event_manager.post(ev_die)
                                 if not collider_ID == attacks_ID: 

@@ -23,7 +23,7 @@
     <property name="ai" value="green_1"/>
     <property name="att_1_cooldown" value="60"/>
     <property name="att_1_damage" value="10"/>
-    <property name="att_1_pierce" value="0"/>
+    <property name="att_1_pierce" value="1"/>
     <property name="att_1_projectile_amount" value="3"/>
     <property name="att_1_projectile_lifetime" value="60"/>
     <property name="att_1_projectile_speed" value="4"/>
@@ -401,7 +401,7 @@
  </layer>
  <layer name="characters" width="25" height="15" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzF0jcLwkAYxvHTRRcFC+iim72XxV4Xe13s9ft/Bv9DwBtMonCHL/xILiHPcyQR4v8Tk87jxjEhXcs5hcijgKLTPMcBs9tJmz20eLCNDroWHS64bbLMZkbuHAssLTq+nRIZZVRQNfJOHM+44Kqgo0dGHwMMFeR9mhW5a2yw1dRxI/eOB54/dnjg1bKr9wQQ1NyhY3zwS+sU7zaNDLKKvmUIYWldI7eOBpqKOiKISusRuWNMMNX0T+7I3eOAo4aOFwJLDxQ=
+   eJzF07cOwjAUhWETkCgSSBQJFtjodaWz0lnpvP9T8A8Md7Ez2Fdc6VPiRD4ng2PM/6cp7lu/a1s8G0bGjDDGJLLnJGB73Yn5hiUbV1hj4+hIIxOTZZsjuSeccXF0+MyT3Bfe+AToSCLlH+OcLHLKHT6TR0G5o4yKcofGFFES6y5nroc+BoHOeBU1sZ6SO8Mci0AddTTEekvuDnsclP7VK7k33PFQ6PgCCR8KZg==
   </data>
  </layer>
 </map>
