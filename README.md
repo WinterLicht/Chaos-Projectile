@@ -31,5 +31,7 @@ Used Libraries
 Developers
 --------
 
-- Code and graphic assets by Anna Dorokhova
-- Leveldesign and balancing by Maik Helfrich
+- Code by Anna Dorokhova is licensed under [GNU GPLv3](http://www.gnu.org/licenses/gpl-3.0.html)
+-  2D game art assets by Anna Dorokhova are licensed under [CC-BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+- Leveldesign and balancing by Maik Helfrich (license for level-files clarification coming soon)
+- Sound-files (working on it...)

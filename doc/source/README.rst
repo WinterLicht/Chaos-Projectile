@@ -44,7 +44,7 @@ Hier muss Uebersicht ueber die Architektur hin!
     +-------------------+----------------------------------------------+
     | Setting           | Ancient Egypt + Cthulhu-Myth + Art Nouveau   |
     +-------------------+----------------------------------------------+
-    | Art Style         | Pixel Art                                    |
+    | Art Style         | Hand-drawn digital                           |
     +-------------------+----------------------------------------------+
     | Platform          | PC                                           |
     +-------------------+----------------------------------------------+
@@ -62,10 +62,14 @@ Hier muss Uebersicht ueber die Architektur hin!
 License
 =======
 
-This source code is licensed under the GNU General Public License v.3
+.. |CC-BY-NC-SA 4.0| replace:: *CC-BY-NC-SA 4.0*
+.. _CC-BY-NC-SA 4.0: http://creativecommons.org/licenses/by-nc-sa/4.0/
+
+The source code is licensed under the GNU General Public License v.3
 (See gpl-3.0.txt).
-Copyright of all assets, like artworks, sounds etc. belong to their
-creators. See :ref:`chaosprojectile_credits`.
+All 2D game art assets by Anna Dorokhova under the |CC-BY-NC-SA 4.0|_
+
+(Licensing for .tmx-levels and sound files coming soon!)
 
 .. # vim: syntax=rst expandtab tabstop=4 shiftwidth=4 shiftround
 
