@@ -53,6 +53,7 @@ class GameWorld(object):
         self.attacks = {}
         self.player = None
         self.ai = {}
+        self.inactive_enemy_count = 0
         self.tags = {}
         self.hp = {}
         self.collectibles = {}
@@ -686,6 +687,8 @@ class GameWorld(object):
     def deactivate_entity(self, entity_ID):
         if not entity_ID in self.inactive_entities:
             self.inactive_entities.append(entity_ID)
+            if entity_ID in self.ai:
+                self.inactive_enemy_count += 1
 
     def destroy_entity(self, entity_ID):
         #Clear mask, this entity has no components more
@@ -693,6 +696,8 @@ class GameWorld(object):
         #Clear dictionaries
         if entity_ID in self.inactive_entities:
             self.inactive_entities.remove(entity_ID)
+            if entity_ID in self.ai:
+                self.inactive_enemy_count -= 1
         if entity_ID in self.collider:
             del self.collider[entity_ID]
         if entity_ID in self.velocity:
@@ -714,6 +719,7 @@ class GameWorld(object):
             del self.collectibles[entity_ID]
 
     def reset_the_world(self):
+        self.inactive_enemy_count = 0
         for entity_ID in range(len(self.mask)):
             #No point to reset indestructible walls.
             #Walls are in qudtree
