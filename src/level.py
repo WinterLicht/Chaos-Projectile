@@ -17,7 +17,7 @@ class Level(object):
     """
 
     def __init__(self):
-        filename = self.get_map('Level_presentation.tmx')
+        filename = self.get_map('level_exibhition.tmx')
         #load data from pyTMX
         self.tmx_data = pytmx.load_pygame(filename, pixelalpha=True)
         #create new data source for pyScroll
