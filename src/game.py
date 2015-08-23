@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 .. mo5dule:: game
     :platform: Unix, Windows
