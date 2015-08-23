@@ -26,6 +26,13 @@ Used Libraries
 - PyTMX:  https://github.com/bitcraft/pytmx
 - pyscroll:  https://github.com/bitcraft/pyscroll
 
+Run the game
+--------
+- apt-get install python-pygame python-pip 
+- pip install pytmx pyscroll
+
+run src/game.py 
+
 ![screenshot](doc/source/screenshot3.png)
 
 Developers
