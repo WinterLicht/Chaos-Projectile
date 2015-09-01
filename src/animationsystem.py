@@ -147,6 +147,8 @@ class AnimationSystem(object):
     def update_players_hp_ui(self, player_ID):
         players_health = self.world.hp[self.world.players[player_ID].hp_ID]
         hp_image_index = players_health.points // (players_health.max // (len(players_health.hp_sprites) - 1))
+        if(hp_image_index < 0):
+            hp_image_index = 0
         players_health.current_image = players_health.hp_sprites[hp_image_index]
         self.world.appearance[self.world.players[player_ID].hp_ID] = players_health.current_image
 
