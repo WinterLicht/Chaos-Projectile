@@ -28,10 +28,13 @@ Used Libraries
 
 Run the game
 --------
+After pulling the repository, you can run the game using the following commands:
 - apt-get install python-pygame python-pip 
 - pip install pytmx pyscroll
+- cd src
+- python game.py
 
-run src/game.py 
+As the game was mainly developed on Debian-like systems, those commands assume Python and apt-get to be available. If you run the game on non-Debian Operating Systems, you won't be able to run the first command. Thus, you will need to install [PyGame](https://pygame.org/download.shtml) (used engine) and [pip](https://pypi.python.org/pypi/pip/) (installer for the pytmx and pyscroll) from other sources.
 
 ![screenshot](doc/source/screenshot3.png)
 
