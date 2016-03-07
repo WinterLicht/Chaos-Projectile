@@ -30,7 +30,7 @@ Run the game
 --------
 After pulling the repository, you can run the game using the following commands:
 - apt-get install python-pygame python-pip 
-- pip install pytmx pyscroll
+- pip install pytmx 'pyscroll<2.16.2' --force-reinstall
 - cd src
 - python game.py
 
