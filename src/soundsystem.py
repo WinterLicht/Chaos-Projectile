@@ -7,8 +7,6 @@
 import os
 import pygame
 
-import pyscroll
-
 import events
 import ai
 
