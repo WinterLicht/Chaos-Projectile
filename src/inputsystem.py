@@ -140,11 +140,9 @@ class InputSystem(object):
             x_axis = 1
         #Determine rotation for the orb according which keys are pressed   
         self.move_orb(x_axis, y_axis)
-        if not (x_axis == 0 and y_axis == 0):
-           self.handle_attack_request()
 
     def handle_key_pressed(self, key):
-        """Keys A, D and W controll players movement.
+        """Keys A, D and W controll players movement, F resets the game.
 
         :param key: key pressed
         :type key: pygame constant
@@ -161,7 +159,8 @@ class InputSystem(object):
             #Jump
             ev = events.EntityJumpRequest(self.world.player)
             self.event_manager.post(ev)
-        elif key == pygame.K_f:
+        elif key == pygame.K_k:
+            #Reset
             ev = events.ResetWorld()
             self.event_manager.post(ev)
 
