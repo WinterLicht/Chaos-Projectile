@@ -38,8 +38,9 @@ class CollisionSystem(object):
         :param event: occured event
         :type event: events.Event 
         """
-        if isinstance(event, events.TickEvent):
-            self.compute()
+        if not self.world.game_paused:
+            if isinstance(event, events.TickEvent):
+                self.compute()
 
     def compute(self):
         """Moves object, checks collision, sends events for collision handling and updates image position of moved objects."""

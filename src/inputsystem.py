@@ -6,6 +6,8 @@
 
 import pygame
 import events
+from controller import Actions
+
 
 
 class InputSystem(object):
@@ -40,8 +42,17 @@ class InputSystem(object):
         :param event: occured event
         :type event: events.Event
         """
-        if isinstance(event, events.TickEvent):
+        if isinstance(event, events.TogglePauseEvent):
+            if self.world.game_paused:
+                self.world.game_paused = False
+            else:
+                self.world.game_paused = True
+        elif isinstance(event, events.SentInputAction):
+            self.handle_input(event)
+
+        elif isinstance(event, events.TickEvent):
             self.handle_arrow_keys()
+        '''
         if isinstance(event, events.KeyPressed):
             self.handle_key_pressed(event.key)
         if isinstance(event, events.KeyReleased):
@@ -54,6 +65,126 @@ class InputSystem(object):
             self.handle_joystick(event.x_axis, event.y_axis)
         if isinstance(event, events.MouseButtonDown):
             self.handle_attack_request()
+        '''
+
+    def handle_input(self, event):
+        #Movement
+        if (event.action == Actions.MOVE_LEFT and event.input.type == pygame.KEYDOWN):
+            ev = events.EntityMovesLeftRequest(self.world.player)
+            self.event_manager.post(ev)
+        elif (event.input.type == pygame.KEYDOWN and event.action == Actions.MOVE_RIGHT):
+            ev = events.EntityMovesRightRequest(self.world.player)
+            self.event_manager.post(ev)
+        elif (event.action == Actions.MOVE_LEFT and event.input.type == pygame.KEYUP):
+            ev = events.EntityStopMovingLeftRequest(self.world.player)
+            self.event_manager.post(ev)
+        elif (event.input.type == pygame.KEYUP and event.action == Actions.MOVE_RIGHT):
+            ev = events.EntityStopMovingRightRequest(self.world.player)
+            self.event_manager.post(ev)
+        elif (event.input.type == pygame.KEYDOWN and event.action == Actions.JUMP):
+            ev = events.EntityJumpRequest(self.world.player)
+            self.event_manager.post(ev)
+        #Keys + aiming
+        elif ((event.input.type == pygame.KEYDOWN or event.input.type == pygame.KEYUP)
+               and self.is_aim_action(event.action)):
+            self.handle_keys_aiming(event)
+        #Joystick button + movement
+        elif (event.input.is_a_joystickbutton() and event.action == Actions.MOVE_LEFT):
+            if (event.input.type == pygame.JOYBUTTONDOWN):
+                ev = events.EntityMovesLeftRequest(self.world.player)
+                self.event_manager.post(ev)
+            elif (event.input.type == pygame.JOYBUTTONUP):
+                ev = events.EntityStopMovingLeftRequest(self.world.player)
+                self.event_manager.post(ev)
+        elif (event.input.is_a_joystickbutton() and event.action == Actions.MOVE_RIGHT):
+            if (event.input.type == pygame.JOYBUTTONDOWN):
+                ev = events.EntityMovesRightRequest(self.world.player)
+                self.event_manager.post(ev)
+            elif (event.input.type == pygame.JOYBUTTONUP):
+                ev = events.EntityStopMovingRightRequest(self.world.player)
+                self.event_manager.post(ev)
+        elif (event.input.is_a_joystickbutton() and event.action == Actions.JUMP):
+            if (event.input.type == pygame.JOYBUTTONDOWN):
+                ev = events.EntityJumpRequest(self.world.player)
+                self.event_manager.post(ev)
+        #Joystick button + aiming
+        elif ((event.input.type == pygame.JOYBUTTONDOWN or event.input.type == pygame.JOYBUTTONUP)
+               and self.is_aim_action(event.action)):
+            self.handle_keys_aiming(event)
+        #joystick axis + aiming
+        elif (event.input.type == pygame.JOYAXISMOTION and self.is_aim_action(event.action)):
+            self.handle_axis_aiming(event)
+        elif (event.input.type == pygame.JOYAXISMOTION and event.action == Actions.MOVE_LEFT):
+            offset = 0.5
+            value = event.input.value
+            if abs(value) > offset:
+                ev = events.EntityMovesLeftRequest(self.world.player)
+            else:
+                ev = events.EntityStopMovingLeftRequest(self.world.player)
+            self.event_manager.post(ev)
+        elif (event.input.type == pygame.JOYAXISMOTION and event.action == Actions.MOVE_RIGHT):
+            offset = 0.5
+            value = event.input.value
+            if abs(value) > offset:
+                ev = events.EntityMovesRightRequest(self.world.player)
+            else:
+                ev = events.EntityStopMovingRightRequest(self.world.player)
+            self.event_manager.post(ev)
+        elif (event.input.type == pygame.JOYAXISMOTION and event.action == Actions.JUMP):
+            offset = 0.5
+            value = event.input.value
+            if abs(value) > offset:
+                ev = events.EntityJumpRequest(self.world.player)
+                self.event_manager.post(ev)
+            
+    def is_aim_action(self, event_action):
+        return (event_action == Actions.AIM_X or
+                event_action == Actions.AIM_Y or
+                event_action == Actions.AIM_MINUS_X or
+                event_action == Actions.AIM_MINUS_Y)
+
+    def handle_keys_aiming(self, event):
+        if event.input.type == pygame.KEYDOWN or event.input.type == pygame.JOYBUTTONDOWN:
+            if event.action == Actions.AIM_Y and not self.key_down:
+                self.key_up = True
+            elif event.action == Actions.AIM_MINUS_Y and not self.key_up:
+                self.key_down = True
+            elif event.action == Actions.AIM_MINUS_X and not self.key_right:
+                self.key_left = True
+            elif event.action == Actions.AIM_X and not self.key_left:
+                self.key_right = True
+        elif event.input.type == pygame.KEYUP or event.input.type == pygame.JOYBUTTONUP:
+            if event.action == Actions.AIM_Y:
+                self.key_up = False
+            elif event.action == Actions.AIM_MINUS_Y:
+                self.key_down = False
+            elif event.action == Actions.AIM_MINUS_X:
+                self.key_left = False
+            elif event.action == Actions.AIM_X:
+                self.key_right = False
+
+    def handle_axis_aiming(self, event):
+        offset = 0.5
+        value = event.input.value
+        if abs(value) > offset:
+            if event.action == Actions.AIM_Y and not self.key_down:
+                self.key_up = True
+            elif event.action == Actions.AIM_MINUS_Y and not self.key_up:
+                self.key_down = True
+            elif event.action == Actions.AIM_MINUS_X and not self.key_right:
+                self.key_left = True
+            elif event.action == Actions.AIM_X and not self.key_left:
+                self.key_right = True
+        if abs(value) <= offset:
+            if event.action == Actions.AIM_Y:
+                self.key_up = False
+            elif event.action == Actions.AIM_MINUS_Y:
+                self.key_down = False
+            elif event.action == Actions.AIM_MINUS_X:
+                self.key_left = False
+            elif event.action == Actions.AIM_X:
+                self.key_right = False
+        
 
     def handle_hat_moved(self, x, y):
         """Hat controlls player movement.
@@ -140,6 +271,8 @@ class InputSystem(object):
             x_axis = 1
         #Determine rotation for the orb according which keys are pressed   
         self.move_orb(x_axis, y_axis)
+        if abs(x_axis) > 0.6 or abs(y_axis) > 0.6:
+            self.handle_attack_request()
 
     def handle_key_pressed(self, key):
         """Keys A, D and W controll players movement, F resets the game.

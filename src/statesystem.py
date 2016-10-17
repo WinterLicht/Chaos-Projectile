@@ -69,17 +69,17 @@ class StateSystem():
         :param event: occured event
         :type event: events.Event
         """
-        #
-        if isinstance(event, events.TickEvent):
-            self.timer = self.timer - 1
-            if self.timer < 1:
-                for entity_ID, ai in self.world.ai.iteritems():
-                    self.check_to_deactivate(entity_ID)
-                #Needed for sound
-                if self.world.inactive_enemy_count == len(self.world.ai) - 2:
-                    ev = events.NoEnemysNear()
-                    self.event_manager.post(ev)
-                self.timer = 150
+        if not self.world.game_paused:
+            if isinstance(event, events.TickEvent):
+                self.timer = self.timer - 1
+                if self.timer < 1:
+                    for entity_ID, ai in self.world.ai.iteritems():
+                        self.check_to_deactivate(entity_ID)
+                    #Needed for sound
+                    if self.world.inactive_enemy_count == len(self.world.ai) - 2:
+                        ev = events.NoEnemysNear()
+                        self.event_manager.post(ev)
+                    self.timer = 150
             
         #Update first enemy AI
         for entity_ID, ai in self.world.ai.iteritems():

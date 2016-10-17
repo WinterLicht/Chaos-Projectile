@@ -53,10 +53,11 @@ class RenderSystem(object):
         :param event: occurred event
         :type event: events.Event
         """
-        if isinstance(event, events.TickEvent):
-            self.draw(event.dt)
-        if isinstance(event, events.ResizeWindowEvent):
-            self.resize(event.width, event.height)
+        if not self.world.game_paused:
+            if isinstance(event, events.TickEvent):
+                self.draw(event.dt)
+            if isinstance(event, events.ResizeWindowEvent):
+                self.resize(event.width, event.height)
 
     def update(self):
         """Updates group, so new entities can be added and dead removed.

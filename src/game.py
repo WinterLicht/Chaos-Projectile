@@ -11,7 +11,6 @@ import gameworld
 import systemmanager
 import controller
 
-
 class CPUSpinner:
     """Handles CPU Ticks. Every 1/60 second a Tick Event will be sent.
 
@@ -63,14 +62,15 @@ if __name__ == "__main__":
 
     #Create event manager
     evManager = events.EventManager()
-    
+
     #Create game world
     game = gameworld.GameWorld(screen, evManager)
     systemMngr = systemmanager.SystemManager(evManager, game)
-    
+
+
     #Create input controller
-    input_control = controller.InputController(evManager)
-    
+    input_control = controller.InputController(screen, evManager)
+
     #CPU Tick Event
     spinner = CPUSpinner(evManager)
     spinner.run()

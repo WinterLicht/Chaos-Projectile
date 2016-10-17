@@ -31,52 +31,53 @@ class AnimationSystem(object):
         :param event: occured event
         :type event: events.Event
         """
-        if isinstance(event, events.TickEvent):
-            self.run_animations(event.dt)
-        if isinstance(event, events.UpdatePlayersHpUI):
-            self.update_players_hp_ui(event.player_ID)
-        if hasattr(event, 'entity_ID'):
-            entity_ID = event.entity_ID
-            if isinstance(event, events.UpdateImagePosition):
-                self.update_image_position(entity_ID, event.new_position)
-            if entity_ID in self.world.appearance:
-                if not self.world.appearance[entity_ID].play_animation_till_end and not self.stun_animation_running(entity_ID):
-                    if isinstance(event, events.EntityAttacks):
-                        self.play_attack_animation(entity_ID, event.attack_Nr)
-                    elif isinstance(event, events.EntityJump):
-                        if not self.jump_animation_running(entity_ID):
-                            self.play_jump_animation(entity_ID)
-                    elif isinstance(event, events.EntityMovesLeft):
-                        self.world.appearance[entity_ID].flip = True
-                        if not self.walk_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
-                            self.play_walk_animation(entity_ID)
-                    elif isinstance(event, events.EntityMovesRight):
-                        self.world.appearance[entity_ID].flip = False
-                        if not self.walk_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
-                            self.play_walk_animation(entity_ID)
-                    elif isinstance(event, events.EntityStopMovingLeft):
-                        if not self.idle_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
-                            self.play_idle_animation(entity_ID)
-                    elif isinstance(event, events.EntityStopMovingRight):
-                        if not self.idle_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
-                            self.play_idle_animation(entity_ID)
-                    elif isinstance(event, events.EntityGrounded):
-                        if self.jump_animation_running(entity_ID) or "no_gravity" in self.world.collider[entity_ID].tags:
-                            if not self.idle_animation_running(entity_ID):
+        if not self.world.game_paused:
+            if isinstance(event, events.TickEvent):
+                self.run_animations(event.dt)
+            if isinstance(event, events.UpdatePlayersHpUI):
+                self.update_players_hp_ui(event.player_ID)
+            if hasattr(event, 'entity_ID'):
+                entity_ID = event.entity_ID
+                if isinstance(event, events.UpdateImagePosition):
+                    self.update_image_position(entity_ID, event.new_position)
+                if entity_ID in self.world.appearance:
+                    if not self.world.appearance[entity_ID].play_animation_till_end and not self.stun_animation_running(entity_ID):
+                        if isinstance(event, events.EntityAttacks):
+                            self.play_attack_animation(entity_ID, event.attack_Nr)
+                        elif isinstance(event, events.EntityJump):
+                            if not self.jump_animation_running(entity_ID):
+                                self.play_jump_animation(entity_ID)
+                        elif isinstance(event, events.EntityMovesLeft):
+                            self.world.appearance[entity_ID].flip = True
+                            if not self.walk_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
+                                self.play_walk_animation(entity_ID)
+                        elif isinstance(event, events.EntityMovesRight):
+                            self.world.appearance[entity_ID].flip = False
+                            if not self.walk_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
+                                self.play_walk_animation(entity_ID)
+                        elif isinstance(event, events.EntityStopMovingLeft):
+                            if not self.idle_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
                                 self.play_idle_animation(entity_ID)
-                if isinstance(event, events.ActivateEntity):
-                    self.play_idle_animation(entity_ID)
-                '''
-                if isinstance(event, events.PlayIdleAnimation):
-                    self.world.appearance[entity_ID].current_animation = 0
-                    if self.world.appearance[entity_ID].frames[0] < self.world.appearance[entity_ID].current_frame_x:
-                        self.world.appearance[entity_ID].current_frame_x = 0
-                '''
-                if isinstance(event, events.EntityStunned):
-                    self.play_stun_animation(entity_ID, event.duration)
-                if isinstance(event, events.EntityDies):
-                    if not self.death_animation_running(entity_ID):
-                        self.play_death_animation(entity_ID)
+                        elif isinstance(event, events.EntityStopMovingRight):
+                            if not self.idle_animation_running(entity_ID) and not self.jump_animation_running(entity_ID):
+                                self.play_idle_animation(entity_ID)
+                        elif isinstance(event, events.EntityGrounded):
+                            if self.jump_animation_running(entity_ID) or "no_gravity" in self.world.collider[entity_ID].tags:
+                                if not self.idle_animation_running(entity_ID):
+                                    self.play_idle_animation(entity_ID)
+                    if isinstance(event, events.ActivateEntity):
+                        self.play_idle_animation(entity_ID)
+                    '''
+                    if isinstance(event, events.PlayIdleAnimation):
+                        self.world.appearance[entity_ID].current_animation = 0
+                        if self.world.appearance[entity_ID].frames[0] < self.world.appearance[entity_ID].current_frame_x:
+                            self.world.appearance[entity_ID].current_frame_x = 0
+                    '''
+                    if isinstance(event, events.EntityStunned):
+                        self.play_stun_animation(entity_ID, event.duration)
+                    if isinstance(event, events.EntityDies):
+                        if not self.death_animation_running(entity_ID):
+                            self.play_death_animation(entity_ID)
 
     def run_animations(self, dt):
         """Computes which animation frame should be displayed.

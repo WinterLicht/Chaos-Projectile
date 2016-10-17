@@ -62,6 +62,18 @@ class QuitEvent(Event):
     def __init__(self):
         self.name = "Program Quit Event"
 
+class TogglePauseEvent(Event):
+    def __init__(self):
+        self.name = "pause game or unpause game"
+
+class SentInputAction(Event):
+    """for input
+    """
+    
+    def __init__(self, action, inpt):
+        self.name = "sent input for this action"
+        self.action = action
+        self.input = inpt
 
 class KeyPressed(Event):
     """This event stores the pressed key.

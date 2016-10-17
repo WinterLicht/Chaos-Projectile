@@ -18,6 +18,7 @@ class GameWorld(object):
     """ Container of all entities in game.
 
     :Attribute:
+        - *game_paused*: when True all systems ignore events
         - *screen* (pygame.Surface): reference to the game screen
         - *level* (level.Level): current level
         :Components:
@@ -39,6 +40,7 @@ class GameWorld(object):
         :param event_managere: event manager
         :type event_manager: events.EventManager
         """
+        self.game_paused = True
         self.level = level.Level()
         self.screen = screen
         self.event_manager = event_manager

@@ -34,4 +34,3 @@ class SystemManager(object):
         self.systems.append(rendersystem.RenderSystem(event_manager, gameWorld))
         self.systems.append(combatsystem.CombatSystem(event_manager, gameWorld))
         #self.systems.append(soundsystem.SoundSystem(event_manager, gameWorld))
-        
