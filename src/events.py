@@ -66,6 +66,10 @@ class TogglePauseEvent(Event):
     def __init__(self):
         self.name = "pause game or unpause game"
 
+class ToggleContinuousAttack(Event):
+    def __init__(self):
+        self.name = "cantinuous attack"
+
 class SentInputAction(Event):
     """for input
     """
@@ -74,37 +78,6 @@ class SentInputAction(Event):
         self.name = "sent input for this action"
         self.action = action
         self.input = inpt
-
-class KeyPressed(Event):
-    """This event stores the pressed key.
-    Is send when event of type pygame.KEYDOWN is occurs.
-    
-    :Attributes:
-        - *key* (): pressed key
-    """ 
-    
-    def __init__(self, key):
-        """
-        :param key: pressed key
-        :type key: pygame enum
-        """
-        self.name = "Key Down Event"
-        self.key = key
-
-class KeyReleased(Event):
-    """This event stores the released key.
-    
-    :Attributes:
-        - *key* (): released key
-    """
-    
-    def __init__(self, key):
-        """
-        :param key: released key
-        :type key: pygame enum
-        """
-        self.name = "Key Released Event"
-        self.key = key
 
 class MouseMoved(Event):
     """Mouse moved event stores new position of mouse pointer on the screen.
@@ -129,46 +102,6 @@ class MouseButtonDown(Event):
     
     def __init__(self):
         self.name = "Mouse Button Down Event"
-
-class AxisMoved(Event):
-    """This event stores position of a game pad axis.
-    Values of the axis position can be between -1 and 1 with 0 value, when it's centered. Bottom right corner is (1,1).
-    
-    :Attributes:
-        - *x_axis_pos* (float): x value of axis position
-        - *y_axis_pos* (float): y value of axis position
-    """
-    
-    def __init__(self, x_axis_pos, y_axis_pos):
-        """
-        :param x_axis_pos: x value of axis position
-        :type x_axis_pos: float
-        :param y_axis_pos: y value of axis position
-        :type y_axis_pos: float
-        """
-        self.name = "Controller Axis Moved Event"
-        self.x_axis = x_axis_pos
-        self.y_axis = y_axis_pos
-
-class HatMoved(Event):
-    """This event stores position of a game pad hat.
-    Position of the hat are two values which can be 0, 1 or -1. A value of -1 means left/down and a value of 1 means right/up.
-    
-    :Attributes:
-        - *x* (int): x value of hat position
-        - *y* (int): y value of hat position
-    """
-    
-    def __init__(self, x, y):
-        """
-        :param x: x value of hat position
-        :type x: int
-        :param y: y value of hat position
-        :type y: int
-        """
-        self.name = "Controller Hat Moved Event"
-        self.x = x
-        self.y = y
 
 class ResetWorld(Event):
     """
