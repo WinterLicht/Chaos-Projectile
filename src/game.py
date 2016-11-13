@@ -56,7 +56,7 @@ if __name__ == "__main__":
     pygame.init()
     pygame.font.init()
     pygame.display.set_caption('Chaos Projectile')
-    pygame.mouse.set_visible(False)
+    pygame.mouse.set_visible(True)
     screen = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
     #screen = pygame.display.set_mode((800, 600), pygame.NOFRAME | pygame.FULLSCREEN | pygame.HWSURFACE)
 

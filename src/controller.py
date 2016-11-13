@@ -8,9 +8,44 @@
 
 import pygame
 import events
+import controlSettingScreen
 
 BLACK    = (   0,   0,   0)
 WHITE    = ( 255, 255, 255)
+
+def equal_input_source(input1, input2):
+    #Keyboard key:
+    #KEYDOWN == KEYUP, same key_index --> same key toggled
+    if input_is_a_key(input1) and input_is_a_key(input2):
+        return (input1.key == input2.key)
+    #Joystick button:
+    #Similar to keyboard button, but one must check if the
+    #toggled button is on the same joystick
+    if input_is_a_joystickbutton(input1) and input_is_a_joystickbutton(input2):
+        return (input1.button == input2.button and
+                input1.joy == input2.joy)
+    #Joystick axis (or axis direction):
+    #distinguish between axis which is slanted left vs right
+    #(or top vs. bottom)
+    #Example: when self and other_input are both slanted left,
+    #have similar axis index and joystick index, then the same
+    #axis was moved
+    if input_is_a_joystickaxis(input1) and input_is_a_joystickaxis(input2):
+        offset = 0.04 #Filter to small values
+        return (((input1.value > offset and input2.value > offset) or
+                (input1.value < offset and input2.value < offset)) and
+                input1.axis == input2.axis and
+                input1.joy == input2.joy)
+    #Joystickhat
+    if input_is_a_joystickhat(input1) and input_is_a_joystickhat(input2):
+        x_value1, y_value1 = input1.value
+        x_value2, y_value2 = input2.value
+        return (x_value1 == x_value2 and
+                y_value1 == y_value2 and
+                input1.hat == input2.hat and
+                input1.joy == input2.joy)
+    else:
+        return False
 
 def input_is_a_key(inpt):
     return (inpt.type == pygame.KEYDOWN or inpt.type == pygame.KEYUP)
@@ -103,6 +138,7 @@ class InputController:
         self.use_hat_to_aim = -1
         self.use_hat_to_move = -1
         self.controls_ready = False
+        self.control_setting_screen = controlSettingScreen.ControlSettingScreen(screen, event_manager)
         #Register game pads that are connected
         #Always needed to get a joystick work
         pygame.joystick.init()
@@ -162,6 +198,27 @@ class InputController:
 
                 #If custom keys are not initialized
                 else:
+                    self.control_setting_screen.draw()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        self.control_setting_screen.hit_ui_element(event.pos)
+                    else:
+                        action = self.control_setting_screen.currently_selected
+                        if (not self.key_used(event) and -1<action and action<8):
+                            self.save_key(event, action)
+                        if (controlSettingScreen.SelectedUI.READY == self.control_setting_screen.currently_selected):
+                            self.event_manager.post(events.TogglePauseEvent())
+                            self.controls_ready = True
+                            if self.use_mouse_to_aim_and_fire:
+                                self.remove_aim_controls()
+                            elif self.use_hat_to_aim > -1:
+                                self.remove_aim_controls()
+                                self.event_manager.post(events.ToggleContinuousAttack())
+                            else:
+                                self.event_manager.post(events.ToggleContinuousAttack())
+                            if self.use_hat_to_move > -1:
+                                self.remove_movement_controls()
+                            self.control_setting_screen = None
+                    '''
                     #Toggle mouse input
                     #when the corresponding ui point is selected
                     if event.type == pygame.MOUSEBUTTONDOWN and self.current_ui_point == 0:
@@ -199,47 +256,30 @@ class InputController:
                     self.draw()
                     if (not self.key_used(event)):
                         self.save_key(event)
-
-    def equal_input_source(self, input1, input2):
-        #Keyboard key:
-        #KEYDOWN == KEYUP, same key_index --> same key toggled
-        if input_is_a_key(input1) and input_is_a_key(input2):
-            return (input1.key == input2.key)
-        #Joystick button:
-        #Similar to keyboard button, but one must check if the
-        #toggled button is on the same joystick
-        if input_is_a_joystickbutton(input1) and input_is_a_joystickbutton(input2):
-            return (input1.button == input2.button and
-                    input1.joy == input2.joy)
-        #Joystick axis (or axis direction):
-        #distinguish between axis which is slanted left vs right
-        #(or top vs. bottom)
-        #Example: when self and other_input are both slanted left,
-        #have similar axis index and joystick index, then the same
-        #axis was moved
-        if input_is_a_joystickaxis(input1) and input_is_a_joystickaxis(input2):
-            offset = 0.04 #Filter to small values
-            return (((input1.value > offset and input2.value > offset) or
-                    (input1.value < offset and input2.value < offset)) and
-                    input1.axis == input2.axis and
-                    input1.joy == input2.joy)
-        #Joystickhat
-        if input_is_a_joystickhat(input1) and input_is_a_joystickhat(input2):
-            x_value1, y_value1 = input1.value
-            x_value2, y_value2 = input2.value
-            return (x_value1 == x_value2 and
-                    y_value1 == y_value2 and
-                    input1.hat == input2.hat and
-                    input1.joy == input2.joy)
-        else:
-            return False
+                '''
 
     def determine_action(self, inpt):
         for action, control in self.actions_map.iteritems():
-            if self.equal_input_source(control, inpt):
+            if equal_input_source(control, inpt):
                 return action
         return None
 
+    def save_key(self, event, action):
+        if (event.type == pygame.JOYBUTTONDOWN or
+            event.type == pygame.JOYAXISMOTION or
+            event.type == pygame.KEYDOWN):
+            if event.type == pygame.KEYDOWN:
+                if not(event.key == pygame.K_BACKSPACE or
+                       event.key == pygame.K_ESCAPE or
+                       event.key == pygame.K_RETURN):
+                    self.actions_map[action] = event
+            elif event.type == pygame.JOYAXISMOTION:
+                if abs(event.value) > 0.5:
+                    self.actions_map[action] = event
+            else:
+                self.actions_map[action] = event
+
+    '''
     def save_key(self, event):
         """Save input to an action.
         """
@@ -260,12 +300,13 @@ class InputController:
                 else:
                     self.actions_map[self.action_to_map] = event
                     self.inc_init_counter()
+    '''
 
     def key_used(self, control):
         """Is control already mapped to action.
         """
         for value in self.actions_map.itervalues():
-            if self.equal_input_source(control, value):
+            if equal_input_source(control, value):
                 return True
         return False
 
