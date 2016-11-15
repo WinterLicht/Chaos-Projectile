@@ -1,50 +1,26 @@
-#Protected keys: enter, escape
-#
+"""
+.. module:: controlSettingScreen
+    :platform: Unix, Windows
+    :synopsis: Graphical representation of the setting screen.
+"""
 
 import pygame
 import events
 
 BLACK    = (   0,   0,   0)
 WHITE    = ( 255, 255, 255)
+LILAC = (166, 161, 195)
+RED = (250, 101, 101)
 
-# This is a simple class that will help us print to the screen
-class TextPrint:
-    def __init__(self):
-        self.reset()
-        self.font = pygame.font.Font(None, 30)
-
-    def print_(self, screen, textString):
-        textBitmap = self.font.render(textString, True, BLACK)
-        screen.blit(textBitmap, [self.x, self.y])
-        width, height = self.font.size(textString);
-        self.x += width
-        return width
-
-    def println_(self, screen, textString):
-        self.print_(screen, textString)
-        width, height = self.font.size(textString);
-        self.x -= width
-        self.line_break()
-        return width
-
-    def carriage_return(self, width):
-        self.x -= width
-
-    def line_break(self):
-        self.y += self.line_height
-
-    def reset(self):
-        self.x = 10
-        self.y = 10
-        self.line_height = 30
-        
-    def indent(self):
-        self.x += 10
-
-    def unindent(self):
-        self.x -= 10
+def move_to(rect, (x, y)):
+    """Move the rectangle rect to the point (x,y) so, 
+    that rectangles center is centered an (x,y)"""
+    rect.move_ip(-rect.x, -rect.y)
+    rect.move_ip(x-rect.width/2, y-rect.height/2)
 
 class SelectedUI:
+    """UI elements. Actions should be equivalent number as controller.Actions
+    """
     READY = 0
     MOVE_LEFT = 1
     MOVE_RIGHT = 2
@@ -59,10 +35,32 @@ class SelectedUI:
     USE_DEFAULT_CONTROLS = 11
 
 class ControlSettingScreen():
+    """Contains UI elements.
+
+    :Attributes:
+        - *screen* (pygame.Surface): where this will be drawn
+        - *font* (pygame.font.Font): default font (here FreeSans 16)
+        - *font_small* (pygame.font.Font): smaller version of the font
+        - *textList* : Array with assigned inputs as Strings
+        - *icon_list* (pygame.sprite.Group): stores UI sprites
+        - *background_image* (pygame.Surface): actually has disabled UI elements drawn on it
+    """
     def __init__(self, screen):
         self.screen = screen
-        self.textPrint = TextPrint()
-
+        self.font = pygame.font.Font("data/FreeSans.ttf", 16)
+        self.font_small = pygame.font.Font("data/FreeSans.ttf", 13)
+        self.textList = ["Start game with this settings", #Text on Done button
+                         "-", #move left input
+                         "-", #move right input
+                         "-", #jump input
+                         "-", #aim x input
+                         "-", #aim -x input
+                         "-", #aim y input
+                         "-", #aim -y input
+                         "No", #aim with mouse
+                         "No", #move with hat
+                         "No", #aim with hat
+                         "No"] #use default control
         self.icon_list = pygame.sprite.Group()
         self.background_image = pygame.image.load("data/ui_settings.png").convert()
         #Selection icon
@@ -90,6 +88,7 @@ class ControlSettingScreen():
         self.moveHatIm.image = pygame.image.load("data/ui_move_hat.png").convert()
         self.moveHatIm.rect = self.moveHatIm.image.get_rect(center = (601, 109))
         self.icon_list.add(self.moveHatIm)
+        self.deactivate_hat_move_btn()
         #Use Aim in X direction icon
         self.aimXIm = pygame.sprite.Sprite()
         self.aimXIm.image = pygame.image.load("data/ui_aim_x.png").convert()
@@ -115,84 +114,89 @@ class ControlSettingScreen():
         self.aimMouseIm.image = pygame.image.load("data/ui_aim_mouse.png").convert()
         self.aimMouseIm.rect = self.aimMouseIm.image.get_rect(center = (601, 309))
         self.icon_list.add(self.aimMouseIm)
+        self.deactivate_mouse_aim_btn()
         #Use Hat to Aim icon
         self.aimHatIm = pygame.sprite.Sprite()
         self.aimHatIm.image = pygame.image.load("data/ui_aim_hat.png").convert()
         self.aimHatIm.rect = self.aimHatIm.image.get_rect(center = (601, 209))
         self.icon_list.add(self.aimHatIm)
+        self.deactivate_hat_aim_btn()
         #Default controls
         self.defaultIm = pygame.sprite.Sprite()
         self.defaultIm.image = pygame.image.load("data/ui_default.png").convert()
         self.defaultIm.rect = self.defaultIm.image.get_rect(center = (601, 409))
         self.icon_list.add(self.defaultIm)
+        self.toggle_default_btn()
         #Done icon
         self.doneIm = pygame.sprite.Sprite()
-        self.doneIm.image = pygame.image.load("data/orb.png").convert()
-        self.doneIm.rect = self.doneIm.image.get_rect(center = (570, 560))
+        self.doneIm.image = pygame.Surface([185, 62])#pygame.image.load("data/orb.png").convert()
+        self.doneIm.image.fill(RED)
+        self.doneIm.image.set_alpha(0)
+        self.doneIm.rect = self.doneIm.image.get_rect(center = (661, 530))
         self.icon_list.add(self.doneIm)
         self.currently_selected = SelectedUI.JUMP
 
-        self.disable_move_ctrls = False
-        self.disable_aim_ctrls = False
-
-        self.use_hat_to_aim = -1 #index of hat stored here
-        self.use_hat_to_move = -1# -1 means, that a hat is not used for this control
-        self.use_mouse_to_aim_and_fire = False
-
     def hit_ui_element(self, (x, y)):
+        """Returns enum of hit UI element or none if mouse hits no UI.
+    
+        :param (x, y): mouse position in pixel on screen
+        :rtype: SelectedUI
+        """
         if (self.jumpIm.image.get_alpha() > 0
             and self.jumpIm.rect.collidepoint(x,y)):
-            self.selectedIm.rect = self.jumpIm.rect.copy()
+            move_to(self.selectedIm.rect, self.jumpIm.rect.center)
             self.currently_selected = SelectedUI.JUMP
             return self.currently_selected
         elif (self.moveLeftIm.image.get_alpha() > 0
             and self.moveLeftIm.rect.collidepoint(x,y)):
-            self.selectedIm.rect = self.moveLeftIm.rect.copy()
+            move_to(self.selectedIm.rect, self.moveLeftIm.rect.center)
             self.currently_selected = SelectedUI.MOVE_LEFT
             return self.currently_selected
         elif (self.moveRightIm.image.get_alpha() > 0
             and self.moveRightIm.rect.collidepoint(x,y)):
-            self.selectedIm.rect = self.moveRightIm.rect.copy()
+            move_to(self.selectedIm.rect, self.moveRightIm.rect.center)
             self.currently_selected = SelectedUI.MOVE_RIGHT
             return self.currently_selected
         elif (self.aimXIm.image.get_alpha() > 0
             and self.aimXIm.rect.collidepoint(x,y)):
-            self.selectedIm.rect = self.aimXIm.rect.copy()
+            move_to(self.selectedIm.rect, self.aimXIm.rect.center)
             self.currently_selected = SelectedUI.AIM_X
             return self.currently_selected
         elif (self.aimMXIm.image.get_alpha() > 0
             and self.aimMXIm.rect.collidepoint(x,y)):
-            self.selectedIm.rect = self.aimMXIm.rect.copy()
+            move_to(self.selectedIm.rect, self.aimMXIm.rect.center)
             self.currently_selected = SelectedUI.AIM_MINUS_X
             return self.currently_selected
         elif (self.aimYIm.image.get_alpha() > 0
             and self.aimYIm.rect.collidepoint(x,y)):
-            self.selectedIm.rect = self.aimYIm.rect.copy()
+            move_to(self.selectedIm.rect, self.aimYIm.rect.center)
             self.currently_selected = SelectedUI.AIM_Y
             return self.currently_selected
         elif (self.aimMYIm.image.get_alpha() > 0
             and self.aimMYIm.rect.collidepoint(x,y)):
-            self.selectedIm.rect = self.aimMYIm.rect.copy()
+            move_to(self.selectedIm.rect, self.aimMYIm.rect.center)
             self.currently_selected = SelectedUI.AIM_MINUS_Y
             return self.currently_selected
         elif (self.aimMouseIm.rect.collidepoint(x,y)):
-            self.selectedIm.rect = self.aimMouseIm.rect.copy()
+            move_to(self.selectedIm.rect, self.aimMouseIm.rect.center)
             self.currently_selected = SelectedUI.AIM_WITH_MOUSE
             return self.currently_selected
         elif (self.aimHatIm.rect.collidepoint(x,y)):
-            self.selectedIm.rect = self.aimHatIm.rect.copy()
+            move_to(self.selectedIm.rect, self.aimHatIm.rect.center)
             self.currently_selected = SelectedUI.AIM_WITH_HAT
             return self.currently_selected
         elif (self.moveHatIm.rect.collidepoint(x,y)):
-            self.selectedIm.rect = self.moveHatIm.rect.copy()
+            move_to(self.selectedIm.rect, self.moveHatIm.rect.center)
             self.currently_selected = SelectedUI.MOVE_WITH_HAT
             return self.currently_selected
         elif (self.defaultIm.rect.collidepoint(x,y)):
-            self.selectedIm.rect = self.defaultIm.rect.copy()
+            move_to(self.selectedIm.rect, self.defaultIm.rect.center)
             self.currently_selected = SelectedUI.USE_DEFAULT_CONTROLS
+            self.toggle_aim_btns()
+            self.toggle_move_btns()
+            self.toggle_default_btn()
             return self.currently_selected
-        elif (self.doneIm.image.get_alpha() > 0
-            and self.doneIm.rect.collidepoint(x,y)):
+        elif (self.doneIm.rect.collidepoint(x,y)):
             self.selectedIm.rect = self.doneIm.rect.copy()
             self.currently_selected = SelectedUI.READY
             return self.currently_selected
@@ -201,112 +205,134 @@ class ControlSettingScreen():
         
 
     def draw(self):
-        """Used for custom controlls initialisation screen
-        
-        :param dt: CPU tick
-        :type dt: int
+        """Draw this screen
         """
-        self.screen.fill(( 255, 255, 255))
+        self.screen.fill(WHITE)
         self.screen.blit(self.background_image, [0, 0])
         self.icon_list.draw(self.screen)
+
+        self.print_ui_element_names()
+        self.print_input_layout()
+
         pygame.display.flip()
 
-        '''
-        self.screen.fill(WHITE)
-        self.textPrint.reset()
-        self.textPrint.println_(self.screen, "Control settings")
-        self.textPrint.line_break()
-        self.textPrint.println_(self.screen, "Press 'enter' to move point further or")
-        self.textPrint.println_(self.screen, "'backspace' to move back.")
-        self.textPrint.println_(self.screen, "Press 'enter' on 'Use this layout?' to start.")
-        self.textPrint.line_break()
-        
-        w = self.textPrint.print_(self.screen, "Use Mouse to fire and aim: ")
-        w += self.print_key_layout(0)
-        self.textPrint.carriage_return(w)
-        self.textPrint.line_break()
-        w = self.textPrint.print_(self.screen, "Use Hat to fire and aim: ")
-        w += self.print_key_layout(1)
-        self.textPrint.carriage_return(w)
-        self.textPrint.line_break()
-        w = self.textPrint.print_(self.screen, "Use Hat to move: ")
-        w += self.print_key_layout(2)
-        self.textPrint.carriage_return(w)
-        self.textPrint.line_break()
-        if (self.use_hat_to_move > -1):
-            self.textPrint.println_(self.screen, "Move Left: -")
-            self.textPrint.println_(self.screen, "Move Right: -")
-            self.textPrint.println_(self.screen, "Jump: -")
-        else:
-            w = self.textPrint.print_(self.screen, "Move Left: ")
-            w += self.print_key_layout(3)
-            self.textPrint.carriage_return(w)
-            self.textPrint.line_break()
-            w = self.textPrint.print_(self.screen, "Move Right: ")
-            w += self.print_key_layout(4)
-            self.textPrint.carriage_return(w)
-            self.textPrint.line_break()
-            w = self.textPrint.print_(self.screen, "Jump: ")
-            w += self.print_key_layout(5)
-            self.textPrint.carriage_return(w)
-            self.textPrint.line_break()
-        if (self.use_mouse_to_aim_and_fire or self.use_hat_to_aim > -1):
-            self.textPrint.println_(self.screen, "Aim in x direction: -")
-            self.textPrint.println_(self.screen, "Aim in -x direction: -")
-            self.textPrint.println_(self.screen, "Aim in y direction: -")
-            self.textPrint.println_(self.screen, "Aim in -y direction: -")
-        else:
-            w = self.textPrint.print_(self.screen, "Aim in x direction: ")
-            w += self.print_key_layout(6)
-            self.textPrint.carriage_return(w)
-            self.textPrint.line_break()
-            w = self.textPrint.print_(self.screen, "Aim in -x direction: ")
-            w += self.print_key_layout(7)
-            self.textPrint.carriage_return(w)
-            self.textPrint.line_break()
-            w = self.textPrint.print_(self.screen, "Aim in y direction: ")
-            w += self.print_key_layout(8)
-            self.textPrint.carriage_return(w)
-            self.textPrint.line_break()
-            w = self.textPrint.print_(self.screen, "Aim in -y direction: ")
-            w += self.print_key_layout(9)
-            self.textPrint.carriage_return(w)
-            self.textPrint.line_break()
-        w = self.textPrint.print_(self.screen, "Use this Layout?")
-        w += self.print_key_layout(10)
-        pygame.display.flip()
-        '''
-
-    def print_key_layout(self, action_index):
-        """Shows action to key mapping and which action to map as next.
+    def print_ui_element_names(self):
+        """Print all text of the UI, that is unchangeable.
         """
-        w = 0
-        if action_index == 0:
-            w += self.textPrint.print_(self.screen, "{} (press a mouse button to toggle)".format(self.use_mouse_to_aim_and_fire))
-        elif action_index == 1:
-            w += self.textPrint.print_(self.screen, "{} (press a hat to toggle)".format(self.use_hat_to_aim))
-        elif action_index == 2:
-            w += self.textPrint.print_(self.screen, "{} (press a hat to toggle)".format(self.use_hat_to_move))
-        if (action_index-2) in self.actions_map: #it is with offset
-            i_index = action_index-2
-            type = self.actions_map[i_index].type
-            if pygame.JOYBUTTONDOWN == type:
-                w += self.textPrint.print_(self.screen, "Button: {}, Joystick: {}".format(self.actions_map[i_index].button,
-                                            self.actions_map[i_index].joy))
-            elif pygame.JOYAXISMOTION == type:
-                w += self.textPrint.print_(self.screen, "Axis: {}, Joystick: {}".format(self.actions_map[i_index].axis,
-                                            self.actions_map[i_index].joy))
-            elif pygame.KEYDOWN == type:
-                w += self.textPrint.print_(self.screen, "Button: {}".format(pygame.key.name(self.actions_map[i_index].key)))
-        if self.current_ui_point == action_index: #Current point to set
-            if action_index == 10:
-                w += self.textPrint.print_(self.screen, "   press enter to start   <----")
-            else:
-                w += self.textPrint.print_(self.screen, "  <----")
-        return w
+        text = self.font.render("Control Settings", True, RED)
+        self.screen.blit(text, [55, 35])
+        text = self.font.render("* make sure all movement and", True, LILAC)
+        self.screen.blit(text, [40, 55])
+        text = self.font.render("aim directions are assigned", True, LILAC)
+        self.screen.blit(text, [40, 70])
+        text = self.font.render("* select first the action and hit", True, LILAC)
+        self.screen.blit(text, [40, 90])
+        text = self.font.render("desired input afterwards", True, LILAC)
+        self.screen.blit(text, [40, 105])
+        text = self.font.render("* ESC is to exit the game", True, LILAC)
+        self.screen.blit(text, [40, 125])
+        #
+        text = self.font.render("Default Control Settings", True, RED)
+        self.screen.blit(text, [55, 490])
+        text = self.font.render("Move with A, W, D keys", True, LILAC)
+        self.screen.blit(text, [40, 510])
+        text = self.font.render("Aim with mouse and attack on click", True, LILAC)
+        self.screen.blit(text, [40, 525])
+        #
+        text = self.font.render("Jump", True, LILAC)
+        self.screen.blit(text, [130, 185])
+        text = self.font.render("Move Left", True, LILAC)
+        self.screen.blit(text, [130, 285])
+        text = self.font.render("Move Right", True, LILAC)
+        self.screen.blit(text, [130, 385])
+        #
+        text = self.font.render("Aim X", True, LILAC)
+        self.screen.blit(text, [390, 85])
+        text = self.font.render("Aim -X", True, LILAC)
+        self.screen.blit(text, [390, 185])
+        text = self.font.render("Aim Y", True, LILAC)
+        self.screen.blit(text, [390, 285])
+        text = self.font.render("Aim -Y", True, LILAC)
+        self.screen.blit(text, [390, 385])
+        #
+        text = self.font.render("use Hat to Move", True, LILAC)
+        self.screen.blit(text, [650, 85])
+        text = self.font.render("use Hat to Aim", True, LILAC)
+        self.screen.blit(text, [650, 185])
+        text = self.font.render("use Mouse to Aim", True, LILAC)
+        self.screen.blit(text, [650, 285])
+        text = self.font.render("use Default settings", True, LILAC)
+        self.screen.blit(text, [650, 385])
+        #
+        text = self.font.render("use this settings & play", True, RED)
+        self.screen.blit(text, [580, 520])
+
+    def update_input_layout(self, actions_map,
+                            use_mouse_to_aim_and_fire, use_hat_to_aim,
+                            use_hat_to_move, use_default_controls):
+        """Update UI text with assigned input controls.
+        
+        :param actions_map: actions as controller.Actions mapped to pygame events.
+        :type vector: dictionary
+        :param use_mouse_to_aim_and_fire: boolean
+        :param use_hat_to_aim: index of used hat or -1 if none
+        :param use_hat_to_move: index of used hat or -1 if none
+        :param use_default_controls: boolean
+        """
+        for action, control in actions_map.iteritems():
+            if (control.type == pygame.KEYDOWN):
+                self.textList[action] = "Button: {}".format(pygame.key.name(control.key))
+            elif (control.type == pygame.JOYBUTTONDOWN):
+                self.textList[action] = "Button: {}, Stick: {}".format(control.button, control.joy)
+            elif (control.type == pygame.JOYAXISMOTION):
+                self.textList[action] = "Axis: {}, Stick: {}".format(control.axis, control.joy)
+        if use_mouse_to_aim_and_fire:
+            self.textList[SelectedUI.AIM_WITH_MOUSE] = "Yes"
+        else:
+            self.textList[SelectedUI.AIM_WITH_MOUSE] = "No"
+        if use_hat_to_aim > -1:
+            self.textList[SelectedUI.AIM_WITH_HAT] = "Yes"
+        else:
+            self.textList[SelectedUI.AIM_WITH_HAT] = "No"
+        if use_hat_to_move > -1:
+            self.textList[SelectedUI.MOVE_WITH_HAT] = "Yes"
+        else:
+            self.textList[SelectedUI.MOVE_WITH_HAT] = "No"
+        if use_default_controls:
+            self.textList[SelectedUI.USE_DEFAULT_CONTROLS] = "Yes"
+        else:
+            self.textList[SelectedUI.USE_DEFAULT_CONTROLS] = "No"
+
+    def print_input_layout(self):
+        """Print input layout.
+        """
+        text = self.font_small.render(self.textList[SelectedUI.JUMP], True, RED)
+        self.screen.blit(text, [137, 222])
+        text = self.font_small.render(self.textList[SelectedUI.MOVE_LEFT], True, RED)
+        self.screen.blit(text, [137, 322])
+        text = self.font_small.render(self.textList[SelectedUI.MOVE_RIGHT], True, RED)
+        self.screen.blit(text, [137, 422])
+        #
+        text = self.font_small.render(self.textList[SelectedUI.AIM_X], True, RED)
+        self.screen.blit(text, [397, 122])
+        text = self.font_small.render(self.textList[SelectedUI.AIM_MINUS_X], True, RED)
+        self.screen.blit(text, [397, 222])
+        text = self.font_small.render(self.textList[SelectedUI.AIM_Y], True, RED)
+        self.screen.blit(text, [397, 322])
+        text = self.font_small.render(self.textList[SelectedUI.AIM_MINUS_Y], True, RED)
+        self.screen.blit(text, [397, 422])
+        #
+        text = self.font_small.render(self.textList[SelectedUI.MOVE_WITH_HAT], True, RED)
+        self.screen.blit(text, [657, 122])
+        text = self.font_small.render(self.textList[SelectedUI.AIM_WITH_HAT], True, RED)
+        self.screen.blit(text, [657, 222])
+        text = self.font_small.render(self.textList[SelectedUI.AIM_WITH_MOUSE], True, RED)
+        self.screen.blit(text, [657, 322])
+        text = self.font_small.render(self.textList[SelectedUI.USE_DEFAULT_CONTROLS], True, RED)
+        self.screen.blit(text, [657, 422])
 
     def deactivate_move_btns(self):
-        """Disables UI elements for movement"""
+        """Disables/Hide UI elements for movement"""
         self.jumpIm.image.set_alpha(0)
         self.moveLeftIm.image.set_alpha(0)
         self.moveRightIm.image.set_alpha(0)
@@ -324,7 +350,7 @@ class ControlSettingScreen():
         self.moveRightIm.image.set_alpha(abs(self.moveRightIm.image.get_alpha()-255))
 
     def deactivate_aim_btns(self):
-        """Disables UI elements for aiming"""
+        """Disables/Hide UI elements for aiming"""
         self.aimMXIm.image.set_alpha(0)
         self.aimMYIm.image.set_alpha(0)
         self.aimXIm.image.set_alpha(0)
@@ -338,25 +364,41 @@ class ControlSettingScreen():
         self.aimYIm.image.set_alpha(255)
 
     def toggle_aim_btns(self):
+        """Toggle UI elements for aiming."""
         self.aimMXIm.image.set_alpha(abs(self.aimMXIm.image.get_alpha()-255))
         self.aimMYIm.image.set_alpha(abs(self.aimMYIm.image.get_alpha()-255))
         self.aimXIm.image.set_alpha(abs(self.aimXIm.image.get_alpha()-255))
         self.aimYIm.image.set_alpha(abs(self.aimYIm.image.get_alpha()-255))
 
     def deactivate_mouse_aim_btn(self):
+        """Deactivate/Hide UI element for aiming with mouse"""
         self.aimMouseIm.image.set_alpha(0)
 
     def activate_mouse_aim_btn(self):
+        """Enable UI element for aiming with mouse"""
         self.aimMouseIm.image.set_alpha(255)
 
+    def toggle_mouse_aim_btn(self):
+        """Toggle UI element for aiming with mouse"""
+        self.aimMouseIm.image.set_alpha(abs(self.aimMouseIm.image.get_alpha()-255))
+
     def deactivate_hat_aim_btn(self):
+        """Deactivate/Hide UI element for aiming with hat"""
         self.aimHatIm.image.set_alpha(0)
 
     def activate_hat_aim_btn(self):
+        """Enable UI element for aiming with hat"""
         self.aimHatIm.image.set_alpha(255)
 
     def deactivate_hat_move_btn(self):
+        """Deactivate/Hide UI element for movement with hat"""
         self.moveHatIm.image.set_alpha(0)
 
     def activate_hat_move_btn(self):
+        """Enable UI element for movement with hat"""
         self.moveHatIm.image.set_alpha(255)
+
+    def toggle_default_btn(self):
+        """Toggle UI element for default controls"""
+        self.defaultIm.image.set_alpha(abs(self.defaultIm.image.get_alpha()-255))
+
