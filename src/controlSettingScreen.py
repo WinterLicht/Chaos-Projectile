@@ -53,204 +53,152 @@ class SelectedUI:
     AIM_MINUS_X = 5
     AIM_Y = 6
     AIM_MINUS_Y = 7
+    AIM_WITH_MOUSE = 8
+    MOVE_WITH_HAT = 9
+    AIM_WITH_HAT = 10
+    USE_DEFAULT_CONTROLS = 11
 
 class ControlSettingScreen():
-    def __init__(self, screen, evManager):
+    def __init__(self, screen):
         self.screen = screen
         self.textPrint = TextPrint()
 
         self.icon_list = pygame.sprite.Group()
+        self.background_image = pygame.image.load("data/ui_settings.png").convert()
+        #Selection icon
         self.selectedIm = pygame.sprite.Sprite()
-        self.selectedIm.image = pygame.image.load("data/orb_inverted.png").convert()
-        self.selectedIm.rect = self.selectedIm.image.get_rect(center = (30, 30))
+        self.selectedIm.image = pygame.image.load("data/ui_selected.png").convert_alpha()
+        self.selectedIm.rect = self.selectedIm.image.get_rect(center = (81, 209))
         self.icon_list.add(self.selectedIm)
+        #Jump icon
         self.jumpIm = pygame.sprite.Sprite()
-        self.jumpIm.image = pygame.image.load("data/orb.png").convert()
-        self.jumpIm.rect = self.jumpIm.image.get_rect(center = (30, 30))
+        self.jumpIm.image = pygame.image.load("data/ui_jump.png").convert()
+        self.jumpIm.rect = self.jumpIm.image.get_rect(center = (81, 209))
         self.icon_list.add(self.jumpIm)
+        #Move Left icon
         self.moveLeftIm = pygame.sprite.Sprite()
-        self.moveLeftIm.image = pygame.image.load("data/orb.png").convert()
-        self.moveLeftIm.rect = self.moveLeftIm.image.get_rect(center = (30, 60))
+        self.moveLeftIm.image = pygame.image.load("data/ui_move_left.png").convert()
+        self.moveLeftIm.rect = self.moveLeftIm.image.get_rect(center = (81, 309))
         self.icon_list.add(self.moveLeftIm)
+        #Move Right icon
         self.moveRightIm = pygame.sprite.Sprite()
-        self.moveRightIm.image = pygame.image.load("data/orb.png").convert()
-        self.moveRightIm.rect = self.moveRightIm.image.get_rect(center = (30, 90))
+        self.moveRightIm.image = pygame.image.load("data/ui_move_right.png").convert()
+        self.moveRightIm.rect = self.moveRightIm.image.get_rect(center = (81, 409))
         self.icon_list.add(self.moveRightIm)
-        
+        #Use Hat to Move icon
+        self.moveHatIm = pygame.sprite.Sprite()
+        self.moveHatIm.image = pygame.image.load("data/ui_move_hat.png").convert()
+        self.moveHatIm.rect = self.moveHatIm.image.get_rect(center = (601, 109))
+        self.icon_list.add(self.moveHatIm)
+        #Use Aim in X direction icon
+        self.aimXIm = pygame.sprite.Sprite()
+        self.aimXIm.image = pygame.image.load("data/ui_aim_x.png").convert()
+        self.aimXIm.rect = self.aimXIm.image.get_rect(center = (341, 109))
+        self.icon_list.add(self.aimXIm)
+        #Use Aim in -X direction icon
+        self.aimMXIm = pygame.sprite.Sprite()
+        self.aimMXIm.image = pygame.image.load("data/ui_aim_m_x.png").convert()
+        self.aimMXIm.rect = self.aimMXIm.image.get_rect(center = (341, 209))
+        self.icon_list.add(self.aimMXIm)
+        #Use Aim in Y direction icon
+        self.aimYIm = pygame.sprite.Sprite()
+        self.aimYIm.image = pygame.image.load("data/ui_aim_y.png").convert()
+        self.aimYIm.rect = self.aimYIm.image.get_rect(center = (341, 309))
+        self.icon_list.add(self.aimYIm)
+        #Use Aim in -Y direction icon
+        self.aimMYIm = pygame.sprite.Sprite()
+        self.aimMYIm.image = pygame.image.load("data/ui_aim_m_y.png").convert()
+        self.aimMYIm.rect = self.aimMYIm.image.get_rect(center = (341, 409))
+        self.icon_list.add(self.aimMYIm)
+        #Use Mouse to Aim icon
+        self.aimMouseIm = pygame.sprite.Sprite()
+        self.aimMouseIm.image = pygame.image.load("data/ui_aim_mouse.png").convert()
+        self.aimMouseIm.rect = self.aimMouseIm.image.get_rect(center = (601, 309))
+        self.icon_list.add(self.aimMouseIm)
+        #Use Hat to Aim icon
+        self.aimHatIm = pygame.sprite.Sprite()
+        self.aimHatIm.image = pygame.image.load("data/ui_aim_hat.png").convert()
+        self.aimHatIm.rect = self.aimHatIm.image.get_rect(center = (601, 209))
+        self.icon_list.add(self.aimHatIm)
+        #Default controls
+        self.defaultIm = pygame.sprite.Sprite()
+        self.defaultIm.image = pygame.image.load("data/ui_default.png").convert()
+        self.defaultIm.rect = self.defaultIm.image.get_rect(center = (601, 409))
+        self.icon_list.add(self.defaultIm)
+        #Done icon
         self.doneIm = pygame.sprite.Sprite()
         self.doneIm.image = pygame.image.load("data/orb.png").convert()
-        self.doneIm.rect = self.doneIm.image.get_rect(center = (30, 120))
+        self.doneIm.rect = self.doneIm.image.get_rect(center = (570, 560))
         self.icon_list.add(self.doneIm)
         self.currently_selected = SelectedUI.JUMP
 
-        self.event_manager = evManager
-        self.event_manager.register_listener(self)
+        self.disable_move_ctrls = False
+        self.disable_aim_ctrls = False
 
-        self.actions_map = {}
         self.use_hat_to_aim = -1 #index of hat stored here
         self.use_hat_to_move = -1# -1 means, that a hat is not used for this control
         self.use_mouse_to_aim_and_fire = False
 
-        self.action_to_map = 0
-        self.current_ui_point = 0
-
     def hit_ui_element(self, (x, y)):
-        if self.jumpIm.rect.collidepoint(x,y):
+        if (self.jumpIm.image.get_alpha() > 0
+            and self.jumpIm.rect.collidepoint(x,y)):
             self.selectedIm.rect = self.jumpIm.rect.copy()
             self.currently_selected = SelectedUI.JUMP
-        elif self.moveLeftIm.rect.collidepoint(x,y):
+            return self.currently_selected
+        elif (self.moveLeftIm.image.get_alpha() > 0
+            and self.moveLeftIm.rect.collidepoint(x,y)):
             self.selectedIm.rect = self.moveLeftIm.rect.copy()
             self.currently_selected = SelectedUI.MOVE_LEFT
-        elif self.moveRightIm.rect.collidepoint(x,y):
+            return self.currently_selected
+        elif (self.moveRightIm.image.get_alpha() > 0
+            and self.moveRightIm.rect.collidepoint(x,y)):
             self.selectedIm.rect = self.moveRightIm.rect.copy()
             self.currently_selected = SelectedUI.MOVE_RIGHT
-        elif self.doneIm.rect.collidepoint(x,y):
+            return self.currently_selected
+        elif (self.aimXIm.image.get_alpha() > 0
+            and self.aimXIm.rect.collidepoint(x,y)):
+            self.selectedIm.rect = self.aimXIm.rect.copy()
+            self.currently_selected = SelectedUI.AIM_X
+            return self.currently_selected
+        elif (self.aimMXIm.image.get_alpha() > 0
+            and self.aimMXIm.rect.collidepoint(x,y)):
+            self.selectedIm.rect = self.aimMXIm.rect.copy()
+            self.currently_selected = SelectedUI.AIM_MINUS_X
+            return self.currently_selected
+        elif (self.aimYIm.image.get_alpha() > 0
+            and self.aimYIm.rect.collidepoint(x,y)):
+            self.selectedIm.rect = self.aimYIm.rect.copy()
+            self.currently_selected = SelectedUI.AIM_Y
+            return self.currently_selected
+        elif (self.aimMYIm.image.get_alpha() > 0
+            and self.aimMYIm.rect.collidepoint(x,y)):
+            self.selectedIm.rect = self.aimMYIm.rect.copy()
+            self.currently_selected = SelectedUI.AIM_MINUS_Y
+            return self.currently_selected
+        elif (self.aimMouseIm.rect.collidepoint(x,y)):
+            self.selectedIm.rect = self.aimMouseIm.rect.copy()
+            self.currently_selected = SelectedUI.AIM_WITH_MOUSE
+            return self.currently_selected
+        elif (self.aimHatIm.rect.collidepoint(x,y)):
+            self.selectedIm.rect = self.aimHatIm.rect.copy()
+            self.currently_selected = SelectedUI.AIM_WITH_HAT
+            return self.currently_selected
+        elif (self.moveHatIm.rect.collidepoint(x,y)):
+            self.selectedIm.rect = self.moveHatIm.rect.copy()
+            self.currently_selected = SelectedUI.MOVE_WITH_HAT
+            return self.currently_selected
+        elif (self.defaultIm.rect.collidepoint(x,y)):
+            self.selectedIm.rect = self.defaultIm.rect.copy()
+            self.currently_selected = SelectedUI.USE_DEFAULT_CONTROLS
+            return self.currently_selected
+        elif (self.doneIm.image.get_alpha() > 0
+            and self.doneIm.rect.collidepoint(x,y)):
             self.selectedIm.rect = self.doneIm.rect.copy()
             self.currently_selected = SelectedUI.READY
-
-    def notify(self, event):
-        if hasattr(event, "type"):
-            #Toggle mouse input
-            #when the corresponding ui point is selected
-            if event.type == pygame.MOUSEBUTTONDOWN and self.current_ui_point == 0:
-                self.use_mouse_to_aim_and_fire = (not self.use_mouse_to_aim_and_fire)
-                self.inc_init_counter()
-            if event.type == pygame.JOYHATMOTION:
-                if self.current_ui_point == 1 and not event.hat == self.use_hat_to_move:
-                    self.use_hat_to_aim = event.hat
-                    self.inc_init_counter()
-                elif self.current_ui_point == 2 and not event.hat == self.use_hat_to_aim:
-                    self.use_hat_to_move = event.hat
-                    self.inc_init_counter()
-            #BACKSPACE to go one ui point back
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_BACKSPACE:
-                    self.dec_input_counter()
-                elif event.key == pygame.K_RETURN:
-                    #Start game with this controlls
-                    if self.current_ui_point == 10: #K_RETURN is the enter key
-                        self.event_manager.post(events.TogglePauseEvent())
-                        if self.use_mouse_to_aim_and_fire:
-                            self.remove_aim_controls()
-                        elif self.use_hat_to_aim > -1:
-                            self.remove_aim_controls()
-                            self.event_manager.post(events.ToggleContinuousAttack())
-                        else:
-                            self.event_manager.post(events.ToggleContinuousAttack())
-                        if self.use_hat_to_move > -1:
-                            self.remove_movement_controls()
-                        ev = events.SetControlls(self.actions_map, self.use_hat_to_aim,
-                                                 self.use_hat_to_move, self.use_mouse_to_aim_and_fire)
-                        self.event_manager.post(ev)
-                    #Or go one ui point further
-                    else:
-                        self.inc_init_counter()
-            if (not self.key_used(event)):
-                self.save_key(event)
-
-        if isinstance(event, events.TickEvent):
-            self.draw()
-
-    def key_used(self, control):
-        """Is control already mapped to action.
-        """
-        for value in self.actions_map.itervalues():
-            if equal_input_source(control, value):
-                return True
-        return False
-
-    def save_key(self, event):
-        """Save input to an action.
-        """
-        if self.action_to_map > 0 and self.action_to_map < 8:
-            if (event.type == pygame.JOYBUTTONDOWN or
-                event.type == pygame.JOYAXISMOTION or
-                event.type == pygame.KEYDOWN):
-                if event.type == pygame.KEYDOWN:
-                    if not(event.key == pygame.K_BACKSPACE or
-                           event.key == pygame.K_ESCAPE or
-                           event.key == pygame.K_RETURN):
-                        self.actions_map[self.action_to_map] = event
-                        self.inc_init_counter()
-                elif event.type == pygame.JOYAXISMOTION:
-                    if abs(event.value) > 0.5:
-                        self.actions_map[self.action_to_map] = event
-                        self.inc_init_counter()
-                else:
-                    self.actions_map[self.action_to_map] = event
-                    self.inc_init_counter()
-
-    def remove_aim_controls(self):
-        '''Remove all aim controls from action_map.
-        '''
-        to_remove = list()
-        for action in self.actions_map.iterkeys():
-            if is_aim_action(action):
-                to_remove.append(action)
-        for r in to_remove:
-            del self.actions_map[r]
-
-    def remove_movement_controls(self):
-        '''Remove all movement controls from action_map.
-        '''
-        to_remove = list()
-        for action in self.actions_map.iterkeys():
-            if is_movement_action(action):
-                to_remove.append(action)
-        for r in to_remove:
-            del self.actions_map[r]
-
-    def inc_init_counter(self):
-        """Helper for actions counter.
-        """
-        amount_to_skip = 0
-        limit = 0
-        if self.use_mouse_to_aim_and_fire or self.use_hat_to_aim > -1:
-            amount_to_skip = 4
-            limit = 5
-        if self.use_hat_to_move > -1:
-            amount_to_skip = 3
-            limit = 2
-        if self.use_hat_to_move > -1 and (self.use_mouse_to_aim_and_fire or self.use_hat_to_aim > -1):
-            amount_to_skip = 7
-            limit = 2
-        if self.current_ui_point == limit:
-            self.current_ui_point += amount_to_skip
-        if self.current_ui_point > 10:
-            self.current_ui_point = 0
+            return self.currently_selected
         else:
-            self.current_ui_point += 1
-        #update action that is currently mapped
-        if (self.current_ui_point-2) < 8 and (self.current_ui_point-2) > 0:
-            self.action_to_map = (self.current_ui_point-2)
-        else:
-            self.action_to_map = 0
-
-    def dec_input_counter(self):
-        """Helper for actions counter.
-        """
-        amount_to_skip = 0
-        limit = 0
-        if self.use_mouse_to_aim_and_fire or self.use_hat_to_aim > -1:
-            amount_to_skip = 4
-            limit = 10
-        if self.use_hat_to_move > -1:
-            amount_to_skip = 3
-            limit = 6
-        if self.use_hat_to_move > -1 and (self.use_mouse_to_aim_and_fire or self.use_hat_to_aim > -1):
-            amount_to_skip = 7
-            limit = 10
-        if self.current_ui_point == limit:
-            self.current_ui_point -= amount_to_skip
-        if self.current_ui_point > 0:
-            self.current_ui_point -= 1
-        else:
-            self.current_ui_point = 10
-
-        if (self.current_ui_point-2) < 8 and (self.current_ui_point-2) > 0:
-            self.action_to_map = (self.current_ui_point-2)
-        else:
-            self.action_to_map = 0
+            return None
+        
 
     def draw(self):
         """Used for custom controlls initialisation screen
@@ -259,7 +207,7 @@ class ControlSettingScreen():
         :type dt: int
         """
         self.screen.fill(( 255, 255, 255))
-        # Copy image to screen:
+        self.screen.blit(self.background_image, [0, 0])
         self.icon_list.draw(self.screen)
         pygame.display.flip()
 
@@ -356,3 +304,59 @@ class ControlSettingScreen():
             else:
                 w += self.textPrint.print_(self.screen, "  <----")
         return w
+
+    def deactivate_move_btns(self):
+        """Disables UI elements for movement"""
+        self.jumpIm.image.set_alpha(0)
+        self.moveLeftIm.image.set_alpha(0)
+        self.moveRightIm.image.set_alpha(0)
+
+    def activate_move_btns(self):
+        """Enable UI elements for movement"""
+        self.jumpIm.image.set_alpha(255)
+        self.moveLeftIm.image.set_alpha(255)
+        self.moveRightIm.image.set_alpha(255)
+
+    def toggle_move_btns(self):
+        """Toggle UI elements for movement"""
+        self.jumpIm.image.set_alpha(abs(self.jumpIm.image.get_alpha()-255))
+        self.moveLeftIm.image.set_alpha(abs(self.moveLeftIm.image.get_alpha()-255))
+        self.moveRightIm.image.set_alpha(abs(self.moveRightIm.image.get_alpha()-255))
+
+    def deactivate_aim_btns(self):
+        """Disables UI elements for aiming"""
+        self.aimMXIm.image.set_alpha(0)
+        self.aimMYIm.image.set_alpha(0)
+        self.aimXIm.image.set_alpha(0)
+        self.aimYIm.image.set_alpha(0)
+
+    def activate_aim_btns(self):
+        """Enable UI elements for aiming"""
+        self.aimMXIm.image.set_alpha(255)
+        self.aimMYIm.image.set_alpha(255)
+        self.aimXIm.image.set_alpha(255)
+        self.aimYIm.image.set_alpha(255)
+
+    def toggle_aim_btns(self):
+        self.aimMXIm.image.set_alpha(abs(self.aimMXIm.image.get_alpha()-255))
+        self.aimMYIm.image.set_alpha(abs(self.aimMYIm.image.get_alpha()-255))
+        self.aimXIm.image.set_alpha(abs(self.aimXIm.image.get_alpha()-255))
+        self.aimYIm.image.set_alpha(abs(self.aimYIm.image.get_alpha()-255))
+
+    def deactivate_mouse_aim_btn(self):
+        self.aimMouseIm.image.set_alpha(0)
+
+    def activate_mouse_aim_btn(self):
+        self.aimMouseIm.image.set_alpha(255)
+
+    def deactivate_hat_aim_btn(self):
+        self.aimHatIm.image.set_alpha(0)
+
+    def activate_hat_aim_btn(self):
+        self.aimHatIm.image.set_alpha(255)
+
+    def deactivate_hat_move_btn(self):
+        self.moveHatIm.image.set_alpha(0)
+
+    def activate_hat_move_btn(self):
+        self.moveHatIm.image.set_alpha(255)
