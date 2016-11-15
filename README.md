@@ -22,8 +22,11 @@ Controlls
 
 ![controlls](doc/source/controlls.png)
 
-A-W-D are for movement. Mouse click for attack. Aim with the mouse. K resets the game.
-*Game pad controll is buggy!* (Currently testing with a XBox Controller)
+Default controlls are shown on image above.
+On game start a control settings screen is shown. It is possible to customize
+game actions and play the game with connected game pad. Make sure the game
+pad is connected and on before starting the game (otherwise pygame can't
+identify the game pad).
 
 Used Libraries
 --------
@@ -31,6 +34,7 @@ Used Libraries
 - Pygame:  http://www.pygame.org/news.html
 - PyTMX:  https://github.com/bitcraft/pytmx
 - pyscroll:  https://github.com/bitcraft/pyscroll
+- uses and contains FreeSans font
 
 Run the game
 --------
