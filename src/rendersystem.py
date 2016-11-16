@@ -34,7 +34,8 @@ class RenderSystem(object):
         #Create new renderer (camera)
         self.map_layer = pyscroll.BufferedRenderer(self.world.level.map_data,
                                                    (w, h),
-                                                   clamp_camera=False)
+                                                   clamp_camera=False, colorkey=None,
+                                                   alpha=True)
         #The sprite should to be on top of layer named "decoration behind"
         #Find layer number of the layer named "decoration behind"
         self.render_layer = 0
@@ -76,6 +77,8 @@ class RenderSystem(object):
         :param dt: CPU tick
         :type dt: int
         """
+        self.screen.fill((10, 6, 28)) #dark blue-lilac bg
+        #TODO here parallax layer
         self.update()
         self.group.update(dt)
         #Center the map/screen on the single player

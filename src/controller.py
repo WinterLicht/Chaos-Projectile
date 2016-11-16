@@ -175,18 +175,22 @@ class InputController:
                             elif (action == controlSettingScreen.SelectedUI.AIM_WITH_HAT and
                                  self.use_hat_to_aim > -1):
                                 self.use_hat_to_aim = -1
-                                self.control_setting_screen.activate_aim_btns()
                                 self.control_setting_screen.deactivate_hat_aim_btn()
+                                if not self.use_mouse_to_aim_and_fire:
+                                    self.control_setting_screen.activate_aim_btns()
                             #Mouse aim toggle
                             elif (action == controlSettingScreen.SelectedUI.AIM_WITH_MOUSE):
                                 if self.use_mouse_to_aim_and_fire:
                                     self.use_mouse_to_aim_and_fire = False
-                                    self.control_setting_screen.activate_aim_btns()
                                     self.control_setting_screen.deactivate_mouse_aim_btn()
+                                    if self.use_hat_to_aim < 0:
+                                        self.control_setting_screen.activate_aim_btns()
                                 else:
                                     self.use_mouse_to_aim_and_fire = True
                                     self.control_setting_screen.deactivate_aim_btns()
                                     self.control_setting_screen.activate_mouse_aim_btn()
+                                    self.control_setting_screen.deactivate_hat_aim_btn()
+                                    self.use_hat_to_aim = -1
                             #Default controls toggle
                             elif (action == controlSettingScreen.SelectedUI.USE_DEFAULT_CONTROLS):
                                 self.use_default_controls = (not self.use_default_controls)
@@ -198,6 +202,7 @@ class InputController:
                             self.use_hat_to_aim = event.hat
                             self.control_setting_screen.deactivate_aim_btns()
                             self.control_setting_screen.activate_hat_aim_btn()
+                            self.control_setting_screen.deactivate_mouse_aim_btn()
                         #Move with hat activate
                         elif (action == controlSettingScreen.SelectedUI.MOVE_WITH_HAT and
                              not event.hat == self.use_hat_to_move):
