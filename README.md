@@ -22,11 +22,27 @@ Controlls
 
 ![controlls](doc/source/controlls.png)
 
-Default controlls are shown on image above.
 On game start a control settings screen is shown. It is possible to customize
-game actions and play the game with connected game pad. Make sure the game
-pad is connected and on before starting the game (otherwise pygame can't
-identify the game pad).
+game actions and play the game with connected gamepad. Make sure the
+gamepad is connected and on before starting the game otherwise the game
+can't identify the gamepad. *Sometimes it takes a second till the imput is
+reassigned.* ESC key exits the game and ENTER key is for pause. BACKSPACE
+resets/reloads the game.
+
+**Control suggestions:**
+* Default (are shown on image above):
+  - *aim*: mouse move
+  - *attack*: mouseclick
+  - *movement*: A W D keys
+  - in settings screen toggle "use default settings"
+* Game pad with double joysticks:
+  - *aim* and *attack*: one stick
+  - *movement*: other stick
+  - in settings screen assign stick tilts to every player action
+* Game pad with hat:
+  - *aim* and *attack*: one hat
+  - *movement*: same hat
+  - in settings screen toggle "use hat to move" and "use hat to aim" with the same hat
 
 Used Libraries
 --------
@@ -46,7 +62,7 @@ After pulling the repository, you can run the game using the following commands:
 
 As the game was mainly developed on Debian-like systems, those commands
 assume Python and apt-get to be available. If you run the game on non-Debian
-Operating Systems, you won't be able to run the first command. Thus, you
+operating system, you won't be able to run the first command. Thus, you
 will need to install [PyGame](https://pygame.org/download.shtml)
 (used library) and [pip](https://pypi.python.org/pypi/pip/)
 (installer for the pytmx and pyscroll) from other sources.

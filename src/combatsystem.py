@@ -35,6 +35,9 @@ class CombatSystem():
         :param event: occured event
         :type event: events.Event
         """
+        if isinstance(event, events.ResetWorld):
+            self.reset_the_world = True
+            self.update()
         if not self.world.game_paused:
             if isinstance(event, events.TickEvent):
                 self.update()
@@ -43,8 +46,6 @@ class CombatSystem():
                     self.execute_attack(event.entity_ID, event.attack_Nr, event.spawn_attack_pos, event.attack_dir)
             elif isinstance(event, events.RemoveEntityFromTheGame):
                 self.world.to_remove.append(event.entity_ID)
-            elif isinstance(event, events.ResetWorld):
-                self.reset_the_world = True
 
     def update(self):
         """Update all particle emitters, remove dead objects and execute attacks."""
@@ -58,10 +59,10 @@ class CombatSystem():
         self.check_projectile_collision()
         self.remove_dead_entities()
         if self.reset_the_world:
-            self.event_manager.paused = True
+            self.world.game_paused = True
             self.world.reset_the_world()
             self.reset_the_world = False
-            self.event_manager.paused = False
+            self.world.game_paused = False
 
     def check_projectile_collision(self):
         """Checks for collision between projectiles and other objects."""

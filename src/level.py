@@ -5,26 +5,27 @@
 """
 
 import os
+import pygame
 import pyscroll
 import pytmx.util_pygame as pytmx
 
 class Level(object):
-    """Loads and stores level data from a TMX file.
+    """ Loads and stores level data from a TMX file.
     
     :Attributes:
-        - *tmx_data*: tmx data
-        - *map_data*: map data
+        - *tmx_data* (pytmx.TiledMap): tmx data
+        - *map_data* (pyscroll.data.TiledMapData): map data
     """
 
     def __init__(self):
         filename = self.get_map('level.tmx')
-        #load data from pyTMX
+        # Load data from pyTMX
         self.tmx_data = pytmx.load_pygame(filename, pixelalpha=True)
-        #create new data source for pyScroll
+        # Create new data source for pyScroll
         self.map_data = pyscroll.data.TiledMapData(self.tmx_data)
 
     def get_map(self, filename):
-        """Simple helper function to merge the file name and the directory name.
+        """ Simple helper function to merge the file name and the directory name.
         
         :param filename: file name of TMX file
         :type filename: string
