@@ -8,10 +8,13 @@
 import pygame
 from random import randrange, choice
 
-MAX_STARS  = 124 # number of stars
-STAR_SPEED1 = 0.3 # speed of stars in pixel
-STAR_SPEED2 = 0.6
-STAR_SPEED3 = 0.9
+MAX_STARS1 = 80 # number of stars for each layer
+MAX_STARS2 = 30
+MAX_STARS3 = 14
+
+STAR_DELAY1 = 0 # speed of stars for parallax effect
+STAR_DELAY2 = 0.1 # star with small number is more far away 
+STAR_DELAY3 = 0.15 # actual star speed is calculated like: camera_speed/star_delay
 
 STAR_COLOR1 = (55,40,137) # RGD color of stars
 STAR_COLOR2 = (80,70,137)
@@ -30,7 +33,7 @@ class Star():
     :Attribute:
         - *x_pos* (number): x position in game world in pixel
         - *y_pos* (number): y position in game world in pixel
-        - *speed* (number): speed delay for parallax effect
+        - *speed* (number): speed for parallax effect
         - *size* (number): size in pixel
         - *color* (pygame.Color): RGB color
     """
@@ -44,13 +47,12 @@ class Star():
         """
         self.x_pos = x_pos
         self.y_pos = y_pos
-        self.speed = self.get_random_star_speed()
-        self.size = choice([1,2,3])
+        self.speed = 0
+        self.size = 1
         self.color = (255,255,255)
-        self.determine_and_set_color()
 
     def reset(self, x_pos, y_pos):
-        """ Reset star.
+        """ Reset star position.
         
         :param x_pos: new x position in pixel
         :type x_pos: number
@@ -59,22 +61,6 @@ class Star():
         """
         self.x_pos = x_pos
         self.y_pos = y_pos
-        self.speed = self.get_random_star_speed()
-        self.size = choice([1,2,3])
-        self.determine_and_set_color()
-
-    def get_random_star_speed(self):
-        """ Helper to get random speed for a star. """
-        return choice([STAR_SPEED1,STAR_SPEED2,STAR_SPEED3])
-
-    def determine_and_set_color(self):
-        """ Star color depends on its parallax speed. """
-        if self.speed == STAR_SPEED1:
-          self.color = STAR_COLOR1
-        elif self.speed == STAR_SPEED2:
-          self.color = STAR_COLOR2
-        elif self.speed == STAR_SPEED3:
-          self.color = STAR_COLOR3
 
 class ParallaxStarfield():
     """ Parallax starfield.
@@ -98,15 +84,32 @@ class ParallaxStarfield():
         self.init_stars(screen)
 
     def init_stars(self, screen):
-      """ Create the starfield.
-      
-      :param screen: on this screen starfield will be displayed
-      :type screen: pygame.Surface
-      """
-      for i in range(MAX_STARS):
-        star = Star(randrange(0, screen.get_width()-1),
-                    randrange(0, screen.get_height()-1))
-        self.stars.append(star)
+        """ Create the starfield.
+
+        :param screen: on this screen starfield will be displayed
+        :type screen: pygame.Surface
+        """
+        for i in range(MAX_STARS1):
+            star = Star(randrange(0, screen.get_width()-1),
+                        randrange(0, screen.get_height()-1))
+            star.color = STAR_COLOR1
+            star.speed = STAR_DELAY1
+            star.size = 1
+            self.stars.append(star)
+        for i in range(MAX_STARS2):
+            star = Star(randrange(0, screen.get_width()-1),
+                        randrange(0, screen.get_height()-1))
+            star.color = STAR_COLOR2
+            star.speed = STAR_DELAY2
+            star.size = 2
+            self.stars.append(star)
+        for i in range(MAX_STARS3):
+            star = Star(randrange(0, screen.get_width()-1),
+                        randrange(0, screen.get_height()-1))
+            star.color = STAR_COLOR3
+            star.speed = STAR_DELAY3
+            star.size = 3
+            self.stars.append(star)
 
     def move(self, center_x, center_y):
         """ Update stars.
@@ -114,14 +117,14 @@ class ParallaxStarfield():
         Considers that camera is moving in the game world and
         updates star position according camera position and
         delay/parallax speed of star.
-        :param center_x: x position of the camera
-        :param center_y: y position of the camera
+        :param center_x: x position of the camera in world coords
+        :param center_y: y position of the camera in world coords
         """
         old_center_x = self.center_x
         old_center_y = self.center_y
-        diff_x = 0 # delt
+        diff_x = 0
         diff_y = 0
-        # determine offset of moved camera (camera is centered on player)
+        # determine offset of moved camera
         if (old_center_x != center_x):
             diff_x = old_center_x-center_x
             self.center_x = center_x
@@ -129,18 +132,9 @@ class ParallaxStarfield():
             diff_y = old_center_y-center_y
             self.center_y = center_y
         for star in self.stars:
-            # d_x and d_y store the offset of moved (and centered) camera
-            # plus velocity for parallax
-            d_x = diff_x
-            if diff_x < 0:
-                d_x -= star.speed
-            elif diff_x > 0:
-                d_x += star.speed
-            d_y = diff_y
-            if diff_y < 0:
-                d_y -= star.speed
-            elif diff_y > 0:
-                d_y += star.speed
+            # calculate star speed 
+            d_x = diff_x * star.speed
+            d_y = diff_y * star.speed
             star.x_pos += d_x
             star.y_pos += d_y
             # If the star hit the border, reset it.

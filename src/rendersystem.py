@@ -82,18 +82,15 @@ class RenderSystem(object):
         :param dt: CPU tick
         :type dt: int
         """
-        # First update and draw the starfield
-        # to update the starfield we need the players position
-        # because camera is centered on player
-        player_image_position = self.world.appearance[self.world.player].rect
-        self.star_field.move(player_image_position.x, player_image_position.y)
-        self.star_field.draw()
-        # Update game objects
         self.update()
         self.group.update(dt)
         # Center the map/screen on the player
         self.group.center(self.world.collider[self.world.player].center)
-        # Draw the level and all other sprites
+        # After camera is centered move starfield
+        self.star_field.move(self.map_layer.view_rect.centerx,
+                             self.map_layer.view_rect.centery)
+        # Draw
+        self.star_field.draw()
         self.group.draw(self.screen)
         pygame.display.flip()
 
