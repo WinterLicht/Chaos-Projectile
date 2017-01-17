@@ -4,7 +4,10 @@
     :platform: Unix, Windows
     :synopsis: The main game module contains CPUSpiner to control CPU-ticks and the main game loop.
 """
+# Screen strech preventing from here:
+# https://bitbucket.org/pygame/pygame/src/faa5879a7e6bfe10e4e5c79d04a3d2fb65d74a62/examples/prevent_display_stretching.py?fileviewer=file-view-default
 
+import os, sys
 import pygame
 import events
 import gameworld
@@ -52,13 +55,27 @@ class CPUSpinner:
 
 if __name__ == "__main__":
     """Main program loop."""
+    if os.name == "nt" and sys.getwindowsversion()[0] >= 6:
+        print "os: Windows Vista or newer"
+        # Ensure that ctypes is installed. It is included with Python 2.5 and newer,
+        # but Python 2.4 users must install ctypes manually.
+        try:
+            import ctypes
+        except ImportError:
+            print('install ctypes from http://sourceforge.net/projects/ctypes/files/ctypes')
+            raise
+        user32 = ctypes.windll.user32
+        # disable the screen stretching
+        user32.SetProcessDPIAware()
+    
+    RESOLUTION = (800, 600)
     #Initialize PyGame and create an game window 
     pygame.init()
     pygame.font.init()
     pygame.display.set_caption('Chaos Projectile')
     pygame.mouse.set_visible(True)
-    #screen = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
-    screen = pygame.display.set_mode((800, 600), pygame.NOFRAME | pygame.FULLSCREEN)# | pygame.HWSURFACE)
+    #screen = pygame.display.set_mode(RESOLUTION, pygame.RESIZABLE)
+    screen = pygame.display.set_mode(RESOLUTION, pygame.NOFRAME | pygame.FULLSCREEN)# | pygame.HWSURFACE)
 
     #Create event manager
     evManager = events.EventManager()
