@@ -44,26 +44,37 @@ resets/reloads the game.
   - *movement*: same hat
   - in settings screen toggle "use hat to move" and "use hat to aim" with the same hat
 
+Run the game
+--------
+Please note the [release](https://github.com/WinterLicht/Chaos-Projectile/releases)
+button.
+There you can find executables for Linux and Windows. The game must not
+be installed. Simply unpack the .zip and run the executable. Linux users should make
+the file "Chaos-Projectile" executable. For that you can use the following command:
+`chmod +x Chaos-Projectile` and start the game with `./Chaos-Projectile`.
+To uninstall just delete the directory.
+
 Used Libraries
 --------
-
-- Pygame:  http://www.pygame.org/news.html
+- pygame:  http://www.pygame.org/news.html
 - PyTMX:  https://github.com/bitcraft/pytmx
 - pyscroll:  https://github.com/bitcraft/pyscroll
 - uses and contains FreeSans font
 
-Run the game
+Compiling from source
 --------
-After pulling the repository, you can run the game using the following commands:
-- apt-get install python-pygame python-pip 
-- pip install pytmx pyscroll
-- cd src
-- python game.py
+After pulling the repository, you can *run* the game using the following commands:
+    apt-get install python-pygame python-pip 
+    pip install pytmx pyscroll
+    cd src
+    python game.py
+Or *compile* the game with:
+    python setup.py build
 
 As the game was mainly developed on Debian-like systems, those commands
 assume Python and apt-get to be available. If you run the game on non-Debian
 operating system, you won't be able to run the first command. Thus, you
-will need to install [PyGame](https://pygame.org/download.shtml)
+will need to install [pygame](https://pygame.org/download.shtml)
 (used library) and [pip](https://pypi.python.org/pypi/pip/)
 (installer for the pytmx and pyscroll) from other sources.
 
@@ -71,9 +82,8 @@ will need to install [PyGame](https://pygame.org/download.shtml)
 
 Developers
 --------
-
 - Code by Anna Dorokhova is licensed under [GNU GPLv3](http://www.gnu.org/licenses/gpl-3.0.html)
--  2D game art assets by Anna Dorokhova are licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+- 2D game art assets by Anna Dorokhova are licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 - Leveldesign and balancing by Maik Helfrich [GNU GPLv3](http://www.gnu.org/licenses/gpl-3.0.html)
 
 ![screenshot](doc/source/screenshot3.png)
