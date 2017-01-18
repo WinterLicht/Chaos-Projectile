@@ -48,7 +48,7 @@ class RenderSystem(object):
         #Players image position is actually camera position
         player_image_position = self.world.appearance[self.world.player].rect
         #Parallax background
-        self.star_field = parallaxStarfield.ParallaxStarfield(self.screen,
+        self.star_field = parallaxStarfield.ParallaxStarfield(w, h,
                                                               player_image_position.x,
                                                               player_image_position.y)
 
@@ -90,7 +90,7 @@ class RenderSystem(object):
         self.star_field.move(self.map_layer.view_rect.centerx,
                              self.map_layer.view_rect.centery)
         # Draw
-        self.star_field.draw()
+        self.star_field.draw(self.screen)
         self.group.draw(self.screen)
         pygame.display.flip()
 

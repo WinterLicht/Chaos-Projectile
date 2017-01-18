@@ -66,46 +66,45 @@ class ParallaxStarfield():
     """ Parallax starfield.
 
     :Attributes:
-        - *screen* (pygame.Surface): game screen, where the field is drawn
+        - *screen_w*: game screen width
+        - *screen_h*: game screen height
         - *center_x*: x position of the camera
         - *center_y*: y position of the camera
     """
-    def __init__(self, screen, center_x, center_y):
+    def __init__(self, screen_w, screen_h, center_x, center_y):
         """
-        :param screen: game screen, where the field is drawn
-        :type: pygame.Surface
+        :param screen_w: game screen width
+        :param screen_h: game screen height
         :param center_x: x position of the camera
         :param center_y: y position of the camera
         """
-        self.screen = screen
+        self.screen_w = screen_w
+        self.screen_h = screen_h
         self.stars = []
         self.center_x = center_x
         self.center_y = center_y
-        self.init_stars(screen)
+        self.init_stars()
 
-    def init_stars(self, screen):
+    def init_stars(self):
         """ Create the starfield.
-
-        :param screen: on this screen starfield will be displayed
-        :type screen: pygame.Surface
         """
         for i in range(MAX_STARS1):
-            star = Star(randrange(0, screen.get_width()-1),
-                        randrange(0, screen.get_height()-1))
+            star = Star(randrange(0, self.screen_w-1),
+                        randrange(0, self.screen_h-1))
             star.color = STAR_COLOR1
             star.speed = STAR_DELAY1
             star.size = 1
             self.stars.append(star)
         for i in range(MAX_STARS2):
-            star = Star(randrange(0, screen.get_width()-1),
-                        randrange(0, screen.get_height()-1))
+            star = Star(randrange(0, self.screen_w-1),
+                        randrange(0, self.screen_h-1))
             star.color = STAR_COLOR2
             star.speed = STAR_DELAY2
             star.size = 2
             self.stars.append(star)
         for i in range(MAX_STARS3):
-            star = Star(randrange(0, screen.get_width()-1),
-                        randrange(0, screen.get_height()-1))
+            star = Star(randrange(0, self.screen_w-1),
+                        randrange(0, self.screen_h-1))
             star.color = STAR_COLOR3
             star.speed = STAR_DELAY3
             star.size = 3
@@ -140,22 +139,25 @@ class ParallaxStarfield():
             # If the star hit the border, reset it.
             # The one long expression is needed, when player enters teleport.
             # It resets star on area that is as large as the screen 
-            if star.y_pos >= self.screen.get_height():
-                star.reset(randrange(0,self.screen.get_width()-1),
-                           0 if abs(diff_y < self.screen.get_height()) else randrange(0,self.screen.get_height()-1))
+            if star.y_pos >= self.screen_h:
+                star.reset(randrange(0,self.screen_w-1),
+                           0 if abs(diff_y < self.screen_h) else randrange(0,self.screen_h-1))
             elif star.y_pos < 0:
-                star.reset(randrange(0, self.screen.get_width()-1),
-                           self.screen.get_height()-1 if abs(diff_y < self.screen.get_height()) else randrange(0,self.screen.get_height()-1))
-            if star.x_pos >= self.screen.get_width():
-                star.reset(0 if abs(diff_x < self.screen.get_width()) else randrange(0,self.screen.get_width()-1),
-                           randrange(0,self.screen.get_height()-1))
+                star.reset(randrange(0, self.screen_w-1),
+                           self.screen_h-1 if abs(diff_y <self.screen_h) else randrange(0,self.screen_h-1))
+            if star.x_pos >= self.screen_w:
+                star.reset(0 if abs(diff_x < self.screen_w) else randrange(0,self.screen_w-1),
+                           randrange(0,self.screen_h-1))
             elif star.x_pos < 0:
-                star.reset(self.screen.get_width()-1 if abs(diff_x < self.screen.get_width()) else randrange(0,self.screen.get_width()-1),
-                           randrange(0,self.screen.get_height()-1))
+                star.reset(self.screen_w-1 if abs(diff_x < self.screen_w) else randrange(0,self.screen_w-1),
+                           randrange(0,self.screen_h-1))
 
-    def draw(self):
-        """ Display starfield on screen. """
-        self.screen.fill(SKY_COLOR)
+    def draw(self, screen):
+        """ Display starfield on screen. 
+        :param screen: game screen, where starfield should be drawn
+        :type screen: pygame.Surface
+        """
+        screen.fill(SKY_COLOR)
         for star in self.stars:
-            self.screen.fill(star.color,
+            screen.fill(star.color,
                              (star.x_pos, star.y_pos, star.size, star.size))
