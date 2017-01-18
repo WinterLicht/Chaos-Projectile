@@ -50,11 +50,11 @@ Please note the [release](https://github.com/WinterLicht/Chaos-Projectile/releas
 button.
 There you can find executables for Linux and Windows. The game must not
 be installed. Simply unpack the .zip and run the executable. Linux users should make
-the file "Chaos-Projectile" executable. For that you can use the following command:
+the file "Chaos-Projectile" executable. For that you can use the following command
 `chmod +x Chaos-Projectile` and start the game with `./Chaos-Projectile`.
 To uninstall just delete the directory.
 
-Used Libraries
+Used libraries
 --------
 - pygame:  http://www.pygame.org/news.html
 - PyTMX:  https://github.com/bitcraft/pytmx
@@ -64,12 +64,19 @@ Used Libraries
 Compiling from source
 --------
 After pulling the repository, you can *run* the game using the following commands:
-    apt-get install python-pygame python-pip 
-    pip install pytmx pyscroll
-    cd src
-    python game.py
+
+```
+apt-get install python-pygame python-pip 
+pip install pytmx pyscroll
+cd src
+python game.py
+```
+
 Or *compile* the game with:
-    python setup.py build
+
+```
+python setup.py build
+```
 
 As the game was mainly developed on Debian-like systems, those commands
 assume Python and apt-get to be available. If you run the game on non-Debian
