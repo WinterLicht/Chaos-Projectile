@@ -96,7 +96,7 @@ class InputController:
         self.use_mouse_to_aim_and_fire = False
         self.use_hat_to_aim = -1
         self.use_hat_to_move = -1
-        self.use_default_controls = False
+        self.use_default_controls = True
         self.controls_ready = False
         self.control_setting_screen = controlSettingScreen.ControlSettingScreen(screen)
         #Register game pads that are connected

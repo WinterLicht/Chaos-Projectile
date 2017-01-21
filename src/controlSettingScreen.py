@@ -66,7 +66,7 @@ class ControlSettingScreen():
         #Selection icon
         self.selectedIm = pygame.sprite.Sprite()
         self.selectedIm.image = pygame.image.load("data/ui_selected.png").convert_alpha()
-        self.selectedIm.rect = self.selectedIm.image.get_rect(center = (70, 199))
+        self.selectedIm.rect = self.selectedIm.image.get_rect(center = (590, 399)) #default controls
         self.icon_list.add(self.selectedIm)
         #Jump icon
         self.jumpIm = pygame.sprite.Sprite()
@@ -126,7 +126,6 @@ class ControlSettingScreen():
         self.defaultIm.image = pygame.image.load("data/ui_default.png").convert()
         self.defaultIm.rect = self.defaultIm.image.get_rect(center = (590, 399))
         self.icon_list.add(self.defaultIm)
-        self.toggle_default_btn()
         #Done icon
         self.doneIm = pygame.sprite.Sprite()
         self.doneIm.image = pygame.Surface([214, 64])
@@ -134,7 +133,7 @@ class ControlSettingScreen():
         self.doneIm.image.set_alpha(0)
         self.doneIm.rect = self.doneIm.image.get_rect(center = (666, 522))
         self.icon_list.add(self.doneIm)
-        self.currently_selected = SelectedUI.JUMP
+        self.currently_selected = SelectedUI.USE_DEFAULT_CONTROLS
 
     def hit_ui_element(self, (x, y)):
         """Returns enum of hit UI element or none if mouse hits no UI.
